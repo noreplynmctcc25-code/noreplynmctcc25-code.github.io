@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drive access test</title>
+<style>
+@font-face{font-family:Inter;font-weight:100 900;font-display:swap;src:url(inter.woff2) format("woff2")}
+:root{--bg:#f3f5fa;--card:#fff;--ink:#0f1f3d;--mut:#64708a;--line:#dfe4ee;--pri:#8a5a3b;--ok:#1e8a5a;--bad:#c93a3a;--warn:#b7791f}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1220;--card:#131c2f;--ink:#e8edf7;--mut:#93a0ba;--line:#243049;--ok:#4cc38a;--bad:#ff7b7b;--warn:#e0a100}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:46rem;margin:0 auto;padding:1rem 1rem 3rem}
+h1{font-size:1.5rem;margin:.6rem 0 .2rem;letter-spacing:-.02em}
+h2{font-size:1.05rem;margin:0 0 .6rem}
+p{margin:.3rem 0}.mut{color:var(--mut)}.sm{font-size:.85rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem;margin:1rem 0}
+label{display:block;font-size:.74rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin:.7rem 0 .25rem}
+input{width:100%;font:inherit;color:inherit;background:transparent;border:1px solid var(--line);border-radius:10px;padding:.5rem .7rem}
+input:focus{outline:2px solid var(--pri);outline-offset:-1px}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;margin:.7rem 0 .2rem;align-items:center}
+button{font:inherit;font-weight:550;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.5rem .85rem;cursor:pointer}
+button.pri{background:var(--pri);border-color:var(--pri);color:#fff}
+button:hover{border-color:var(--pri)}
+.who{font-size:.85rem;padding:.2rem .65rem;border-radius:999px;background:color-mix(in srgb,var(--mut) 15%,transparent)}
+.log{margin-top:.7rem;display:grid;gap:.5rem}
+.it{border:1px solid var(--line);border-radius:10px;padding:.55rem .75rem;font-size:.9rem}
+.it b{display:block}.it .d{color:var(--mut);font-size:.82rem;margin-top:.15rem;white-space:pre-wrap;word-break:break-word}
+.it.ok{border-left:4px solid var(--ok)}.it.bad{border-left:4px solid var(--bad)}.it.info{border-left:4px solid var(--warn)}
+code{background:color-mix(in srgb,var(--mut) 15%,transparent);padding:.05rem .35rem;border-radius:6px;font-size:.85em}
+ol{margin:.3rem 0 .3rem 1.2rem;padding:0}
+</style>
+</head><body><main>
+<h1>Drive access test</h1>
+<p class="mut">Checks whether a department head's account can read a file a teacher shares, using only the narrow <code>drive.file</code> permission the Class Record app already uses. Nothing here touches your real class records.</p>
+
+<div class="card">
+<h2>Setup</h2>
+<label>Google OAuth Client ID</label><input id="cid" placeholder="123456789-abc.apps.googleusercontent.com" autocomplete="off">
+<label>API key (only needed for test C, the Google file picker)</label><input id="key" placeholder="AIza..." autocomplete="off">
+<label>Project number (only for test C)</label><input id="app" placeholder="e.g. 123456789" inputmode="numeric" autocomplete="off">
+<p class="mut sm">Host this page on the same site as the app so the Client ID's authorised JavaScript origin already matches. The Client ID is shared with the app if it is stored in the same browser.</p>
+<div class="row"><button class="pri" id="bin">Sign in with Google</button><span class="who" id="who">Not signed in</span><button id="bout">Switch account</button></div>
+</div>
+
+<div class="card">
+<h2>Teacher account</h2>
+<p class="mut sm">Sign in as the teacher, then run these in order.</p>
+<div class="row"><button id="t1">1. Create test file</button></div>
+<label>Department head's Gmail</label><input id="mail" type="email" placeholder="head@gmail.com" autocomplete="off">
+<div class="row"><button id="t2">2. Share it (read only)</button></div>
+<div class="log" id="logT"></div>
+</div>
+
+<div class="card">
+<h2>Department head's account</h2>
+<p class="mut sm">Press <b>Switch account</b> above and sign in as the head. Paste the file ID shown by the teacher's step 1.</p>
+<label>File ID</label><input id="fid" placeholder="File ID from step 1" autocomplete="off">
+<div class="row"><button id="h1">A. List shared files</button><button id="h2">B. Open by file ID</button><button id="h3">C. Choose with the file picker</button></div>
+<p class="mut sm">After C succeeds, reload this page, sign in as the head again and run A and B again. That shows whether the access stays.</p>
+<div class="log" id="logH"></div>
+</div>
+</main>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js" async defer></script>
+<script>
+const $=s=>document.querySelector(s),SC='openid email https://www.googleapis.com/auth/drive.file',D='https://www.googleapis.com/drive/v3/';
+let tok='',who='';
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k)||'';localStorage.setItem(k,v)}catch(_){return ''}};
+$('#cid').value=ls('cid');$('#key').value=ls('tst.key');$('#app').value=ls('tst.app');$('#mail').value=ls('tst.mail');$('#fid').value=ls('tst.fid');
+const save=()=>{ls('cid',$('#cid').value.trim());ls('tst.key',$('#key').value.trim());ls('tst.app',$('#app').value.trim());ls('tst.mail',$('#mail').value.trim());ls('tst.fid',$('#fid').value.trim())};
+document.querySelectorAll('input').forEach(i=>i.addEventListener('change',save));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function log(box,kind,title,detail){const d=document.createElement('div');d.className='it '+kind;d.innerHTML=`<b>${esc(title)}</b>${detail?`<div class="d">${esc(detail)}</div>`:''}`;$(box).prepend(d)}
+const need=()=>tok?true:(alert('Sign in first.'),false);
+async function api(url,o={}){const r=await fetch(url,{...o,headers:{Authorization:'Bearer '+tok,...(o.headers||{})}});const t=await r.text();let j=null;try{j=JSON.parse(t)}catch(_){}return{ok:r.ok,status:r.status,text:t,json:j}}
+const err=r=>r.json&&r.json.error?`${r.status} ${r.json.error.message||''}`:`${r.status}`;
+
+function signin(){save();const cid=$('#cid').value.trim();
+ if(!/^\d+-[\w]+\.apps\.googleusercontent\.com$/.test(cid))return alert('Enter a valid Client ID first.');
+ if(typeof google==='undefined'||!google.accounts)return alert('Google sign-in script has not loaded yet. Check your connection and try again.');
+ google.accounts.oauth2.initTokenClient({client_id:cid,scope:SC,callback:async r=>{
+  if(r.error)return alert('Sign-in failed: '+r.error);
+  tok=r.access_token;const u=await(await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+tok}})).json();
+  who=u.email||'';$('#who').textContent='Signed in: '+who}}).requestAccessToken({prompt:'select_account'})}
+$('#bin').onclick=signin;
+$('#bout').onclick=()=>{if(tok&&google.accounts)google.accounts.oauth2.revoke(tok,()=>{});tok='';who='';$('#who').textContent='Not signed in';signin()};
+
+/* TEACHER 1: create a small file the app owns */
+$('#t1').onclick=async()=>{if(!need())return;
+ const b='b'+Date.now(),meta={name:'DBME-access-test.json',mimeType:'application/json'},body=JSON.stringify({test:'department head access',from:who,at:new Date().toISOString()});
+ const r=await api('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b},body:`--${b}\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(meta)}\r\n--${b}\r\nContent-Type: application/json\r\n\r\n${body}\r\n--${b}--`});
+ if(r.ok){$('#fid').value=r.json.id;save();log('#logT','ok','Step 1 passed: file created','File ID: '+r.json.id+'\nCopy this ID to the head\'s test.')}
+ else log('#logT','bad','Step 1 failed',err(r))};
+
+/* TEACHER 2: share it, read only, no notification email */
+$('#t2').onclick=async()=>{if(!need())return;save();const id=$('#fid').value.trim(),em=$('#mail').value.trim();
+ if(!id||!em)return alert('Create the file first and enter the head\'s Gmail.');
+ const r=await api(D+'files/'+id+'/permissions?sendNotificationEmail=false',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({role:'reader',type:'user',emailAddress:em})});
+ r.ok?log('#logT','ok','Step 2 passed: shared with '+em,'The head account can now be tested.'):log('#logT','bad','Step 2 failed',err(r))};
+
+/* HEAD A: what can the app see? */
+$('#h1').onclick=async()=>{if(!need())return;
+ const a=await api(D+'files?q='+encodeURIComponent('sharedWithMe and trashed=false')+'&fields=files(id,name)&pageSize=50');
+ if(!a.ok)return log('#logH','bad','A failed (shared with me)',err(a));
+ const n=a.json.files.length;
+ log('#logH',n?'ok':'info','A: '+n+' file(s) found in "shared with me"',n?a.json.files.map(f=>f.name+'  ('+f.id+')').join('\n'):'None. With this permission the app cannot list files shared by others, which is the expected result. Use B or C.');
+ const b=await api(D+'files?q='+encodeURIComponent('trashed=false')+'&fields=files(id,name,ownedByMe)&pageSize=50');
+ if(b.ok)log('#logH','info','A2: '+b.json.files.length+' file(s) visible to the app in total',b.json.files.map(f=>f.name+(f.ownedByMe?' (mine)':' (shared)')).join('\n')||'None')};
+
+/* HEAD B: open the shared file directly by its ID */
+$('#h2').onclick=async()=>{if(!need())return;const id=$('#fid').value.trim();if(!id)return alert('Paste the file ID.');save();
+ const m=await api(D+'files/'+id+'?fields=id,name,owners(emailAddress)');
+ if(!m.ok)return log('#logH','bad','B failed: cannot open the file by ID',err(m)+'\n404 or 403 means this permission does not allow it on its own. Try C.');
+ const c=await api(D+'files/'+id+'?alt=media');
+ c.ok?log('#logH','ok','B passed: file opened by ID','Owner: '+((m.json.owners||[])[0]||{}).emailAddress+'\nContent: '+c.text.slice(0,160)):log('#logH','bad','B: found it but could not read it',err(c))};
+
+/* HEAD C: Google file picker grants per-file access */
+$('#h3').onclick=()=>{if(!need())return;save();const key=$('#key').value.trim(),app=$('#app').value.trim();
+ if(!key||!app)return alert('Enter the API key and project number in Setup first.');
+ if(typeof gapi==='undefined')return alert('Google picker script has not loaded yet.');
+ gapi.load('picker',()=>{
+  const shared=new google.picker.DocsView(google.picker.ViewId.DOCS).setOwnedByMe(false).setIncludeFolders(true).setMode(google.picker.DocsViewMode.LIST),
+        all=new google.picker.DocsView(google.picker.ViewId.DOCS).setIncludeFolders(true).setMode(google.picker.DocsViewMode.LIST);
+  new google.picker.PickerBuilder().addView(shared).addView(all).setOAuthToken(tok).setDeveloperKey(key).setAppId(app)
+   .enableFeature(google.picker.Feature.MULTISELECT_ENABLED).setCallback(async d=>{
+    if(d.action!==google.picker.Action.PICKED)return;
+    for(const f of d.docs){
+     const c=await api(D+'files/'+f.id+'?alt=media');
+     c.ok?log('#logH','ok','C passed: picked and read "'+f.name+'"','File ID: '+f.id+'\nContent: '+c.text.slice(0,160)):log('#logH','bad','C: picked "'+f.name+'" but could not read it',err(c));
+     $('#fid').value=f.id;save()}}).build().setVisible(true)})};
+</script>
+</body></html>
