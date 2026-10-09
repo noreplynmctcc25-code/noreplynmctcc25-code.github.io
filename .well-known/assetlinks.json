@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.noreplynmctcc25_code.twa",
+        "sha256_cert_fingerprints": ["78:CA:DE:52:FA:95:D2:8F:2F:99:B5:67:07:31:44:47:99:15:31:BA:C1:72:90:33:B3:D9:B7:AA:69:D5:B8:7F"]
+      }
+    }]
