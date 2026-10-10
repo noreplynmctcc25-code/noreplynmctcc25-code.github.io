@@ -1298,7 +1298,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER=171,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER=172,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests'].includes(N.view))view=N.view}catch(_){}
@@ -3878,7 +3878,7 @@ document.addEventListener('click',async e=>{if((pop||tp)&&!e.target.closest('nav
  case'delrow':{const S=c.scales[d.k];if(S.length>1){S.splice(d.i,1);mark(c);render()}return}
  case'guest':localStorage.guest=1;return render();
  case'signin':return signin();
- case'signout':delete localStorage['eclass.nav'];U='';tok=null;delete localStorage.user;delete localStorage.tok;delete localStorage.gn;delete localStorage.fn;delete localStorage.pic;delete localStorage.picd;delete localStorage.guest;return render();
+ case'signout':{/* v172: confirm before signing out */const n=pendN(),go=()=>{delete localStorage['eclass.nav'];U='';tok=null;delete localStorage.user;delete localStorage.tok;delete localStorage.gn;delete localStorage.fn;delete localStorage.pic;delete localStorage.picd;delete localStorage.guest;render()};return tbConfirm('Sign out?',(n?'<b>'+n+' change'+(n==1?'':'s')+' on this device '+(n==1?'has':'have')+' not synced to Google Drive yet.</b> They stay saved on this device and will sync the next time you sign in here.<br><br>':'')+'Your records stay on this device. Sign in again to sync with Google Drive.','Sign out',go)}
  case'sync':return sync(1);
  case'devs':{const dv=DEVS(),me=DEV,ls=+localStorage['eclass.ls']||0,tm=x=>x?new Date(x).toLocaleString([],{dateStyle:'medium',timeStyle:'short'}):'never',E=Object.entries(dv).sort((p,q)=>q[1].at-p[1].at),tot=v=>Object.values(v.sum||{}).reduce((a,c)=>a+TERMS.reduce((z,[t])=>z+(c[t]||0),0),0),top=Math.max(0,...E.map(([,v])=>tot(v))),cf=jget('eclass.cf',[]);
   const rows=E.map(([k,v])=>`<tr><td><b>${esc(v.n||k)}</b>${k==me?' <span class=chip>this device</span>':''}${tot(v)==top&&top?' <span class="chip ok">most complete</span>':''}</td><td>${tm(v.at)}</td><td>${v.pend||0}</td>${TERMS.map(([t])=>`<td>${Object.values(v.sum||{}).reduce((a,c)=>a+(c[t]||0),0)}</td>`).join('')}</tr>`).join('');
