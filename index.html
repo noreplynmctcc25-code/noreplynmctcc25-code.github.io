@@ -1327,6 +1327,11 @@ body.gspin #tabs{animation:gspn .9s cubic-bezier(.16,1,.3,1) .25s both}
 .past td,.past th{white-space:nowrap;font-variant-numeric:tabular-nums}.padot{display:inline-block;width:.6rem;height:.6rem;border-radius:50%;margin-right:.4rem;vertical-align:middle}
 .pains ul{margin:.3rem 0 0;padding-left:1.1rem;display:grid;gap:.4rem;font-size:.9rem;line-height:1.45}.card.pains{margin-bottom:.9rem;border-left:4px solid var(--p)}
 @media(prefers-reduced-motion:reduce){.pal,.paar,.pad,.pabb,.pab,.pabx,.pahk i{animation:none!important;stroke-dashoffset:0;opacity:1}.paar{opacity:.12}}
+/* v175: Compare scope + cumulative charts */
+.cmpsc{margin-bottom:.2rem}.cmpsc .seg{flex-wrap:wrap}
+.cmppk b{display:block;margin-bottom:.5rem}.cmpch{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.4rem}.cmpch button{border-radius:999px;padding:.4rem .8rem;font-size:.85rem}.cmpch button.on{background:color-mix(in srgb,var(--p) 14%,var(--card));border-color:var(--p);color:var(--p);font-weight:650}.cmpch button .i{width:.95rem;height:.95rem}
+.cmpbd{opacity:.09}.cmpbl{font-size:10.5px;font-weight:700;letter-spacing:.02em}.cmpbn{font-size:10.5px;font-weight:700;fill:currentColor}.cmpbk{margin-top:.2rem}
+@media(max-width:899px){.cmpsc .seg{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.cmpsc .seg button{justify-content:center;padding-left:.3rem;padding-right:.3rem}}
 /* v168: Tests header: the + Test button sits in the middle of its card */
 .tbh .bar{align-items:center}
 /* v168: sharper web view. Sticky bars are solid (no frosted blur showing the text behind them), and the page-entry motion no longer scales text */
@@ -1351,7 +1356,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER=174,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER=175,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests'].includes(N.view))view=N.view}catch(_){}
@@ -3653,8 +3658,8 @@ function paLine(labels,series,al,area){const W=paW(),H=mob()?230:260,L=40,R=12,T
   g+=`<path d="${d}" fill=none stroke="${s.col}" stroke-width=2.6 stroke-linejoin=round stroke-linecap=round class=pal style="animation-delay:${k*.15}s" />`;
   P.forEach((p,i)=>{if(p)g+=`<circle cx=${p[0].toFixed(1)} cy=${p[1].toFixed(1)} r=3.8 fill="var(--card)" stroke="${s.col}" stroke-width=2.2 class=pad style="animation-delay:${.5+i*.04}s"><title>${esc(s.name)} · week of ${esc(labels[i])}: ${paF(s.vals[i])}%</title></circle>`})});
  return `<svg class=pac viewBox="0 0 ${W} ${H}" role=img aria-label="${esc(al)}">${g}</svg>${paLeg(series)}`}
-function paBars(labels,series,al){const W=paW(),H=mob()?230:260,L=40,R=12,T=14,B=30,iw=W-L-R,n=labels.length,bw=iw/Math.max(1,n),x=i=>L+bw*(i+.5),{g:ax,y}=paAxes(W,H,L,R,T,B,labels,x);let g=ax;const m=series.length,gw=bw*.78,w=gw/m;
- labels.forEach((lb,i)=>series.forEach((s,k)=>{const v=s.vals[i];if(v==null)return;const x0=x(i)-gw/2+k*w,h=y(0)-y(v);g+=`<rect x=${(x0+.6).toFixed(1)} y=${y(v).toFixed(1)} width=${Math.max(1,w-1.2).toFixed(1)} height=${Math.max(0,h).toFixed(1)} rx=${Math.min(3,w/3).toFixed(1)} fill="${s.col}" class=pab style="animation-delay:${i*.04+k*.03}s"><title>${esc(s.name)} · week of ${esc(lb)}: ${paF(v)}%</title></rect>`}));
+function paBars(labels,series,al,pre='week of '){const W=paW(),H=mob()?230:260,L=40,R=12,T=14,B=30,iw=W-L-R,n=labels.length,bw=iw/Math.max(1,n),x=i=>L+bw*(i+.5),{g:ax,y}=paAxes(W,H,L,R,T,B,labels,x);let g=ax;const m=series.length,gw=bw*.78,w=gw/m;
+ labels.forEach((lb,i)=>series.forEach((s,k)=>{const v=s.vals[i];if(v==null)return;const x0=x(i)-gw/2+k*w,h=y(0)-y(v);g+=`<rect x=${(x0+.6).toFixed(1)} y=${y(v).toFixed(1)} width=${Math.max(1,w-1.2).toFixed(1)} height=${Math.max(0,h).toFixed(1)} rx=${Math.min(3,w/3).toFixed(1)} fill="${s.col}" class=pab style="animation-delay:${i*.04+k*.03}s"><title>${esc(s.name)} · ${pre}${esc(lb)}: ${paF(v)}%</title></rect>`}));
  return `<svg class=pac viewBox="0 0 ${W} ${H}" role=img aria-label="${esc(al)}">${g}</svg>${paLeg(series)}`}
 function paRange(G){const W=paW(),rh=mob()?34:36,L=mob()?96:150,R=16,T=10,H=T+G.length*rh+28,iw=W-L-R,x=v=>L+v/100*iw;let g='';[0,25,50,75,100].forEach(v=>g+=`<line x1=${x(v)} x2=${x(v)} y1=${T} y2=${H-24} class=pag /><text x=${x(v)} y=${H-8} text-anchor=middle class=pat>${v}%</text>`);
  G.forEach((s,k)=>{const cy=T+k*rh+rh/2,nm=s.name.length>(mob()?13:22)?s.name.slice(0,mob()?12:21)+'…':s.name;g+=`<text x=${L-8} y=${cy+4} text-anchor=end class=pan>${esc(nm)}</text>`;if(s.min==null)return;
@@ -3782,7 +3787,7 @@ const cmpKey=c=>secShort((c.meta||{}).section)||'(no section)',cmpYK=c=>[aOf(c),
 cmpLab=c=>{const k=cmpKey(c),o=cmpCl.filter(x=>x!==c);if(!o.some(x=>cmpKey(x)==k))return k;const y=cmpYK(c);return o.some(x=>cmpYK(x)==y)?y+' · '+sOf(c):y};
 const secLab=c=>`<b>${esc(cmpLab(c))}</b><br><small class=mut>${esc([aOf(c),sOf(c)].filter(Boolean).join(' · '))}</small>`;
 const bestIdx=(a,hiBetter)=>{let b=-1;a.forEach((v,i)=>{if(v!=null&&(b<0||(hiBetter?v>a[b]:v<a[b])))b=i});return b};
-function cmpV(){const G=groupsOf();
+function cmpCourseV(){const G=groupsOf();
  if(!G.length)return `<div class="card empty"><span class="ic big">${I('grid')}</span><h2>Nothing to compare yet</h2><p class=mut>Create classes with a course number. Classes that share a course number are compared here.</p></div>`;
  if(!G.some(x=>x.k==ck))ck='';
  const g=G.find(x=>x.k==ck);
@@ -3816,6 +3821,64 @@ function cmpV(){const G=groupsOf();
  <div class=card><h2>${I('cal')}Attendance rate</h2>${bars(I0.map(x=>x.att),x=>x*100,x=>Math.round(x*100)+'%',bT)}</div>
  <div class=card><h2>${I('trend')}Across the periods</h2>${trendSvg(c0,tr)}<div class=gts>${tr.map(x=>`<span class=ck><i style="display:inline-block;width:.9rem;height:.25rem;border-radius:2px;background:${x.col}"></i>${esc(x.name)}</span>`).join('')}</div><p class=nte>Average grade of each section. ${c0.hi?'Higher':'Lower'} is better, so the best grade is at the top.</p></div>
  <div class=card><h2>${I('layers')}Components · ${tl}</h2><div class="wrap free"><table><tr><th class=nm>Component</th>${cl.map(c=>`<th>${esc(cmpLab(c))}</th>`).join('')}</tr>${CIDS.map(id=>{const a=cav(id);return `<tr><td class=nm><b>${esc(cnm(id))}</b></td>${rowV(a,bestIdx(a,true))}</tr>${subs(id).map(s=>`<tr><td class=nm><span class=mut>&nbsp;&nbsp;↳ ${esc(s.n)}</span></td>${rowV(s.v,bestIdx(s.v,true))}</tr>`).join('')}`}).join('')}</table></div><p class=nte>Average score as a percentage of the possible score. Sub-sections are listed only where at least two sections use the same name. Green marks the highest.</p></div>`}
+/* ---------- v175: Compare scope (same course, picked classes, all classes) + cumulative statistics with grading-period shading ---------- */
+let cmpSc=localStorage['eclass.cmpsc']||'course',cmpPk=(()=>{try{return JSON.parse(localStorage['eclass.cmppk']||'[]')}catch(_){return[]}})();
+const PBC={prelim:'#0ea5e9',midterm:'#f59e0b',final:'#8b5cf6'};
+function cmpV(){const L=live().filter(c=>c.students.length),seg=`<div class="bar cmpsc"><div class=seg role=tablist aria-label="What to compare">${[['course','Same course'],['pick','Pick classes'],['all','All classes']].map(([v,l])=>`<button data-a=cmpsc data-val=${v} class="${cmpSc==v?'pri':''}" role=tab aria-selected=${cmpSc==v}>${l}</button>`).join('')}</div></div>`;
+ if(cmpSc=='course'){cmpCl=[];const h=cmpCourseV(),cl=cmpCl.length>1||(cmpCl.length==1&&ck)?cmpCl:[];return seg+h+(cl.length?cmpAn(cl,'course'):'')}
+ const hd=`<div class=bar><div><h2>${I('chart')}Compare</h2><span class=mut>High-level, cumulative from the first class meeting to the latest. Averages and counts only; no student names.</span></div></div>`;
+ if(!L.length)return seg+hd+`<div class="card empty"><span class="ic big">${I('grid')}</span><h2>No classes with students yet</h2></div>`;
+ let cl=L;if(cmpSc=='pick'){cmpPk=cmpPk.filter(id=>L.some(c=>c.id==id));cl=L.filter(c=>cmpPk.includes(c.id))}
+ const pick=cmpSc=='pick'?`<div class="card cmppk"><b>Choose the classes to compare</b><div class=cmpch>${L.map(c=>`<button data-a=cmppk data-id=${c.id} class="${cmpPk.includes(c.id)?'on':''}" aria-pressed=${cmpPk.includes(c.id)}>${cmpPk.includes(c.id)?I('check'):''}${esc(cname(c))}</button>`).join('')}</div><small class=mut>${cl.length} selected${cl.length<2?' · pick at least two':''}</small></div>`:'';
+ if(!cl.length)return seg+hd+pick;
+ return seg+hd+pick+cmpAn(cl,cmpSc)}
+function cmpAgg(c){const U=c.students.filter(u=>!u.drop),W={},TR={},nw=k=>W[k]??={p:0,l:0,n:0,s:0,sn:0},addR=(t,d)=>{const k=paWk(d),r=TR[t]??={a:k,b:k};if(k<r.a)r.a=k;if(k>r.b)r.b=k};
+ const AU={};U.forEach(u=>AU[u.id]={p:0,n:0});
+ sessOf(c).forEach(e=>{if(!e.d)return;addR(e.t,e.d);const w=nw(paWk(e.d));U.forEach(u=>{const v=((c.terms[e.t].sc[u.id]||{})[e.s.id]||[])[e.i];w.n++;AU[u.id].n++;if(v=='P'||v=='L'){w.p++;AU[u.id].p++}if(v=='L')w.l++})});
+ const per={};let given=0,done=0;
+ TERMS.forEach(([t])=>{const T=c.terms[t];T.comps.forEach(cp=>cp.subs.forEach(s=>{if(s.att)return;s.items.forEach((x,i)=>{const m=+x.m;if(!(m>0))return;const vs=[];U.forEach(u=>{const v=((T.sc[u.id]||{})[s.id]||[])[i];if(hv(v)&&!isNaN(+v)){const p=Math.max(0,Math.min(100,+v/m*100));vs.push(p);(per[u.id]??=[]).push(p)}});if(!vs.length)return;given+=U.length;done+=vs.length;if(x.d){addR(t,x.d);const w=nw(paWk(x.d));vs.forEach(p=>{w.s+=p;w.sn++})}})}))});
+ const sa=U.map(u=>per[u.id]?avg(per[u.id]):null),sv=sa.filter(x=>x!=null),aa=U.map(u=>AU[u.id].n?AU[u.id].p/AU[u.id].n*100:null);
+ let P=0,N=0,Lt=0;Object.values(W).forEach(w=>{P+=w.p;N+=w.n;Lt+=w.l});
+ const risk=U.filter((u,i)=>aa[i]!=null&&sa[i]!=null&&aa[i]<75&&sa[i]<60).length,inf=secInfo(c,'last');
+ return{c,U,W,TR,att:N?P/N*100:null,late:N?Lt/N*100:null,sc:avg(sv),sd:sdv(sv),comp:given?done/given*100:null,risk,sess:sessOf(c).length,drops:c.students.length-U.length,inf}}
+function cmpLine(K,series,bands,al){const W=paW(),H=mob()?240:280,L=40,R=12,T=22,B=30,iw=W-L-R,ih=H-T-B,n=K.length,st=n<2?iw:iw/(n-1),x=i=>L+(n<2?iw/2:i*st);
+ const vals=series.flatMap(s=>s.vals).filter(v=>v!=null),y0=vals.length?Math.max(0,Math.min(60,Math.floor((Math.min(...vals)-5)/10)*10)):0,y=v=>T+ih-(v-y0)/(100-y0)*ih,stp=100-y0<=50?10:100-y0<=80?20:25;let g='';
+ bands.forEach(b=>{const a=K.indexOf(b.a),z=K.indexOf(b.b);if(a<0||z<0)return;const xa=Math.max(L,x(a)-st/2),xz=Math.min(W-R,x(z)+st/2);g+=`<rect x=${xa.toFixed(1)} y=${T} width=${Math.max(2,xz-xa).toFixed(1)} height=${ih} fill="${b.col}" class=cmpbd /><text x=${((xa+xz)/2).toFixed(1)} y=${T-7} text-anchor=middle class=cmpbl fill="${b.col}">${b.lab}</text>`});
+ for(let v=y0;v<=100;v+=stp)g+=`<line x1=${L} x2=${W-R} y1=${y(v)} y2=${y(v)} class=pag /><text x=${L-6} y=${y(v)+4} text-anchor=end class=pat>${v}%</text>`;
+ const lab=K.map(paWl),sk=Math.max(1,Math.ceil(n/(mob()?5:9)));lab.forEach((l,i)=>{if(i%sk==0||i==n-1)g+=`<text x=${x(i).toFixed(1)} y=${H-9} text-anchor=middle class=pat>${esc(l)}</text>`});
+ series.forEach((s,k)=>{let d='',on=0;s.vals.forEach((v,i)=>{if(v==null)return;d+=(on?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1);on=1});g+=`<path d="${d}" fill=none stroke="${s.col}" stroke-width=2.6 stroke-linejoin=round stroke-linecap=round class=pal style="animation-delay:${k*.12}s" />`;
+  const li=s.vals.reduce((a,v,i)=>v!=null?i:a,-1);if(li>=0)g+=`<circle cx=${x(li).toFixed(1)} cy=${y(s.vals[li]).toFixed(1)} r=4.5 fill="${s.col}" class=pad style="animation-delay:1.2s"><title>${esc(s.name)} · up to week of ${esc(lab[li])}: ${paF(s.vals[li])}%</title></circle>`;
+  s.vals.forEach((v,i)=>{if(v!=null&&i!=li)g+=`<circle cx=${x(i).toFixed(1)} cy=${y(v).toFixed(1)} r=7 fill=transparent><title>${esc(s.name)} · up to week of ${esc(lab[i])}: ${paF(v)}%</title></circle>`})});
+ return `<svg class=pac viewBox="0 0 ${W} ${H}" role=img aria-label="${esc(al)}">${g}</svg>${paLeg(series)}`}
+function cmpBub(A){const W=paW(),H=mob()?280:320,L=44,R=14,T=16,B=38,iw=W-L-R,ih=H-T-B,P=A.filter(a=>a.att!=null&&a.sc!=null);if(!P.length)return'<p class=mut>Not enough attendance and scores yet.</p>';
+ const lo=a=>Math.max(0,Math.min(60,Math.floor((Math.min(...a)-8)/10)*10)),x0=lo(P.map(a=>a.att)),y0=lo(P.map(a=>a.sc)),x=v=>L+(v-x0)/(100-x0)*iw,y=v=>T+ih-(v-y0)/(100-y0)*ih,tk=a=>{const s=100-a<=50?10:20,o=[];for(let v=a;v<100;v+=s)o.push(v);o.push(100);return o};let g='';
+ tk(y0).forEach(v=>g+=`<line x1=${L} x2=${W-R} y1=${y(v)} y2=${y(v)} class=pag /><text x=${L-6} y=${y(v)+4} text-anchor=end class=pat>${v}%</text>`);tk(x0).forEach(v=>g+=`<line x1=${x(v)} x2=${x(v)} y1=${T} y2=${T+ih} class=pag /><text x=${x(v)} y=${T+ih+16} text-anchor=middle class=pat>${v}%</text>`);
+ g+=`<text x=${L+iw/2} y=${H-4} text-anchor=middle class=pan>Attendance</text><text transform="translate(12 ${T+ih/2}) rotate(-90)" text-anchor=middle class=pan>Average score</text>`;
+ const mx=Math.max(...P.map(a=>a.U.length),1);P.forEach((a,k)=>{const r=8+14*Math.sqrt(a.U.length/mx),cx=x(a.att),cy=y(a.sc);g+=`<g class=pabb style="animation-delay:${k*.06}s"><circle cx=${cx.toFixed(1)} cy=${cy.toFixed(1)} r=${r.toFixed(1)} fill="${a.col}" fill-opacity=.3 stroke="${a.col}" stroke-width=2><title>${esc(cname(a.c))} — attendance ${paF(a.att)}%, average score ${paF(a.sc)}%, ${a.U.length} students</title></circle><text x=${cx.toFixed(1)} y=${(cy-r-4).toFixed(1)} text-anchor=middle class=cmpbn>${esc(cmpShort(a.c))}</text></g>`});
+ return `<svg class=pac viewBox="0 0 ${W} ${H}" role=img aria-label="Attendance against average score, one bubble per class">${g}</svg><p class="mut pafn">One bubble per class · bubble size = number of active students.</p>`}
+const cmpShort=c=>{const s=secShort(c.meta.section||'');const n=String(c.meta.subj||'').trim();return (n+(s?' '+s:'')).slice(0,18)};
+function cmpAn(cl,sc){const A=cl.map((c,k)=>({...cmpAgg(c),col:PAC[k%PAC.length]})),K=[...new Set(A.flatMap(a=>Object.keys(a.W)))].sort();
+ const ttl=sc=='course'?'Cumulative statistics for these sections':sc=='all'?'All classes · cumulative statistics':'Selected classes · cumulative statistics';
+ if(!K.length)return `<div class=pahd><h2>${I('trend')}${ttl}</h2></div><div class="card empty"><p class=mut>Mark attendance and enter dated scores to see the cumulative charts.</p></div>`;
+ const bands=TERMS.map(([t,l])=>{const R=A.map(a=>a.TR[t]).filter(Boolean);if(!R.length)return null;return{a:R.reduce((m,r)=>r.a<m?r.a:m,R[0].a),b:R.reduce((m,r)=>r.b>m?r.b:m,R[0].b),lab:l,col:PBC[t]}}).filter(Boolean);
+ const att=A.map(a=>({name:cmpShort(a.c),col:a.col,vals:(()=>{let p=0,n=0;return K.map(k=>{const w=a.W[k];if(w){p+=w.p;n+=w.n}return n?p/n*100:null})})()})),
+  scr=A.map(a=>({name:cmpShort(a.c),col:a.col,vals:(()=>{let s=0,n=0;return K.map(k=>{const w=a.W[k];if(w){s+=w.s;n+=w.sn}return n?s/n:null})})()}));
+ const ins=[],ok=A.filter(a=>a.att!=null),okS=A.filter(a=>a.sc!=null);
+ if(ok.length>1){const b=ok.reduce((m,a)=>a.att>m.att?a:m),w=ok.reduce((m,a)=>a.att<m.att?a:m);ins.push(`Best overall attendance: <b>${esc(cname(b.c))}</b> (${paF(b.att)}%); lowest: <b>${esc(cname(w.c))}</b> (${paF(w.att)}%), a gap of ${paF(b.att-w.att)} points.`)}
+ if(okS.length>1){const b=okS.reduce((m,a)=>a.sc>m.sc?a:m),w=okS.reduce((m,a)=>a.sc<m.sc?a:m);ins.push(`Highest average score: <b>${esc(cname(b.c))}</b> (${paF(b.sc)}%); lowest: <b>${esc(cname(w.c))}</b> (${paF(w.sc)}%).`)}
+ scr.forEach((s,k)=>{const v=s.vals.filter(x=>x!=null);if(v.length>=4){const h=Math.floor(v.length/2),d=v[v.length-1]-v[h-1];if(Math.abs(d)>=2)ins.push(`<b>${esc(cname(A[k].c))}</b>: cumulative average ${d>0?'climbing':'slipping'} (${d>0?'+':'−'}${paF(Math.abs(d))} points since mid-way).`)}});
+ const rk=A.filter(a=>a.risk).sort((a,b)=>b.risk/b.U.length-a.risk/a.U.length);if(rk.length)ins.push(`Most students needing attention (attendance below 75% and average below 60%): <b>${esc(cname(rk[0].c))}</b> with ${rk[0].risk} of ${rk[0].U.length}.`);
+ const lc=A.filter(a=>a.comp!=null).sort((a,b)=>a.comp-b.comp)[0];if(lc&&lc.comp<90)ins.push(`Lowest completion of scored work: <b>${esc(cname(lc.c))}</b> (${paF(lc.comp)}% of expected scores entered).`);
+ const bars=paBars(A.map(a=>cmpShort(a.c)),[{name:'Attendance',col:'#10b981',vals:A.map(a=>a.att)},{name:'Average score',col:'var(--p)',vals:A.map(a=>a.sc)},{name:'Completion',col:'#f59e0b',vals:A.map(a=>a.comp)}],'Overall figures per class','');
+ const tbl=`<div class="wrap free"><table class=past><tr><th style="text-align:left">Class</th><th>Students</th><th>Drops</th><th>Sessions</th><th>Attendance</th><th>Late</th><th>Avg score</th><th>SD</th><th>Completion</th><th>Needs attention</th><th>Latest grade avg</th><th>Passing</th></tr>${A.map(a=>`<tr><td style="text-align:left"><i class=padot style="background:${a.col}"></i><b>${esc(cname(a.c))}</b></td><td>${a.U.length}</td><td>${a.drops}</td><td>${a.sess}</td><td><b>${paF(a.att)}%</b></td><td>${paF(a.late)}%</td><td><b>${paF(a.sc)}%</b></td><td>${paF(a.sd)}</td><td>${paF(a.comp)}%</td><td>${a.risk}</td><td>${a.inf.n?g1(a.inf.avg):'—'}</td><td>${a.inf.pass==null?'—':Math.round(a.inf.pass*100)+'%'}</td></tr>`).join('')}</table></div>`;
+ const bl=bands.length?`<div class="paleg cmpbk">${bands.map(b=>`<span><i style="background:${b.col};opacity:.45"></i>${b.lab} period</span>`).join('')}</div>`:'';
+ return `<div class=pahd><h2>${I('trend')}${ttl}</h2><span class=mut>${A.length} class${A.length==1?'':'es'} · from the week of ${paWl(K[0])} to the week of ${paWl(K[K.length-1])} · each point is the running total up to that week · dropped students left out</span></div>
+ ${ins.length?`<div class="card pa pains"><h3>${I('info')}Highlights</h3><ul>${ins.map(t=>`<li>${t}</li>`).join('')}</ul></div>`:''}
+ <div class=pag2><div class="card pa wide"><h3>${I('cal')}Cumulative attendance</h3><p class=mut>Share of students present (on time or late) from the first session up to each week. Shaded areas are the grading periods.</p>${cmpLine(K,att,bands,'Cumulative attendance by class')}${bl}</div>
+ <div class="card pa wide"><h3>${I('trend')}Cumulative average score</h3><p class=mut>Average of every scored column (as a percentage of its total) from the start up to each week.</p>${cmpLine(K,scr,bands,'Cumulative average score by class')}${bl}</div>
+ <div class="card pa"><h3>${I('chart')}Overall figures</h3><p class=mut>Start to latest, per class.</p>${bars}</div>
+ <div class="card pa"><h3>${I('users')}Attendance and scores by class</h3><p class=mut>Where each class sits overall.</p>${cmpBub(A)}</div>
+ <div class="card pa wide"><h3>${I('grid')}Summary table</h3><p class=mut>Needs attention = attendance below 75% and average score below 60%. Latest grade average and Passing use the grade sheet's latest period.</p>${tbl}</div></div>`}
 
 /* ---------- print and CSV export for Performance and Compare ---------- */
 const pq=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"',csvOut=(rows,name)=>dl('\ufeff'+rows.map(r=>r.map(pq).join(',')).join('\r\n'),name,'text/csv;charset=utf-8'),
@@ -4132,6 +4195,8 @@ document.addEventListener('click',async e=>{if((pop||tp)&&!e.target.closest('nav
  case'openp':cur=d.id;gf='';view='perf';ps='ov';psid='';return render();
  case'ps':ps=d.val;psid='';return keep();
  case'psp':psp=d.val;return keep();
+ case'cmpsc':cmpSc=d.val;localStorage['eclass.cmpsc']=cmpSc;return keep();
+ case'cmppk':{const i=cmpPk.indexOf(d.id);if(i>=0)cmpPk.splice(i,1);else cmpPk.push(d.id);localStorage['eclass.cmppk']=JSON.stringify(cmpPk);return keep()}
  case'pst':psid=d.id;render();scrollTo(0,0);return;
  case'pback':psid='';return keep();
  case'prn':return prn(d.pt,d.k);
