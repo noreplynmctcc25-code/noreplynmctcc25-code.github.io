@@ -1,4 +1,4 @@
-const V='eclass-v170',A=['./','index.html','manifest.json','logo.png','city-seal.jpg','icon-192.png','icon-512.png','icon-maskable-192.png','icon-maskable-512.png','apple-touch-icon.png','favicon-32.png','schools/tcc.png','inter.woff2'];
+const V='eclass-v171',A=['./','index.html','manifest.json','logo.png','city-seal.jpg','icon-192.png','icon-512.png','icon-maskable-192.png','icon-maskable-512.png','apple-touch-icon.png','favicon-32.png','schools/tcc.png','inter.woff2'];
 const O=['mammoth.min.js','pdf.min.js','pdf.worker.min.js','templates/eclass-dbme.xlsx'];
 const T=5000; /* network timeout (ms) before falling back to the cache */
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(A).then(()=>Promise.allSettled(O.map(u=>c.add(u))))));self.skipWaiting()});

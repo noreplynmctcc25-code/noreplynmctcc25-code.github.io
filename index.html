@@ -1239,6 +1239,41 @@ body.mdo{overflow:hidden;overscroll-behavior:none}
 /* v170: long dialogs (e.g. Sync details with many devices or saved copies) scroll inside the screen, so OK stays reachable */
 #mdl>.md:not(.cf):not(.tbpm){max-height:calc(100vh - 2rem);max-height:calc(100dvh - 2rem);overflow:auto}
 #mdl>.md:has(.syd){max-width:min(46rem,94vw);width:94%}.syd{max-width:100%;overflow-x:auto}.syd table{min-width:100%}.syd td,.syd th{white-space:nowrap}.syd td:first-child{white-space:normal;min-width:10rem}
+/* v171: home class cards: student total (and drops) beside the course title */
+.hc.cc .hct{display:flex;align-items:center;gap:.5rem;min-width:0;width:100%}.hc.cc .hct>small{flex:0 1 auto;min-width:0}
+.hc.cc .hcn{flex:none;display:inline-flex;align-items:center;gap:.25rem;padding:.12rem .5rem;border-radius:999px;font-size:.74rem;font-weight:700;line-height:1.3;color:var(--pri);background:color-mix(in srgb,var(--pri) 12%,transparent);white-space:nowrap;font-variant-numeric:tabular-nums}
+.hc.cc .hcn .i{width:.9rem;height:.9rem}.hc.cc .hcn i{font-style:normal;font-weight:600;color:var(--bad,#c53030)}
+/* v171: opening animation */
+#gsp{position:fixed;inset:0;z-index:100000;display:grid;place-items:center;overflow:hidden;background:var(--p,#5b21b6);color:#fff;cursor:pointer;font-family:Inter,system-ui,sans-serif;clip-path:circle(150% at 50% 50%);-webkit-user-select:none;user-select:none}
+#gsp .gspbg i{position:absolute;width:60vmax;height:60vmax;border-radius:50%;filter:blur(60px);opacity:.55;animation:gspb 5s ease-in-out infinite alternate}
+#gsp .gspbg i:nth-child(1){background:var(--sec,#f472b6);top:-28vmax;left:-22vmax}
+#gsp .gspbg i:nth-child(2){background:#22d3ee;bottom:-32vmax;right:-22vmax;animation-delay:-2s}
+#gsp .gspbg i:nth-child(3){background:#facc15;top:35%;left:58%;width:30vmax;height:30vmax;opacity:.32;animation-delay:-3.5s}
+@keyframes gspb{to{transform:translate(6vmax,-5vmax) scale(1.18)}}
+#gsp .gspc{position:relative;display:grid;justify-items:center;gap:.5rem;text-align:center;padding:1rem}
+#gsp .gspi{width:clamp(88px,22vw,132px);aspect-ratio:1;display:grid;place-items:center;background:#fff;color:var(--p,#5b21b6);border-radius:30%;box-shadow:0 18px 45px rgba(0,0,0,.28),inset 0 -6px 0 rgba(0,0,0,.08);animation:gspi 1s cubic-bezier(.34,1.56,.64,1) both}
+#gsp .gspi svg{width:72%;height:auto}
+@keyframes gspi{0%{transform:translateY(-70vh) rotate(-35deg) scale(.6)}55%{transform:translateY(0) rotate(10deg) scale(1.06)}70%{transform:scale(1.14,.84)}85%{transform:rotate(-4deg) scale(.98,1.04)}100%{transform:none}}
+#gsp .gspw{display:flex;align-items:flex-end;font-weight:900;font-size:clamp(3.4rem,16vw,6.4rem);letter-spacing:-.045em;line-height:1;text-shadow:0 6px 0 rgba(0,0,0,.14)}
+#gsp .gspl{display:inline-block;position:relative;animation:gspl .7s cubic-bezier(.34,1.56,.64,1) both,gspj 1.6s ease-in-out infinite;animation-delay:calc(.55s + var(--k)*.08s),calc(1.5s + var(--k)*.12s)}
+@keyframes gspl{0%{opacity:0;transform:translateY(.9em) rotate(-14deg) scale(.35)}100%{opacity:1;transform:none}}
+@keyframes gspj{0%,100%{transform:none}50%{transform:translateY(-.06em) rotate(-3deg)}}
+#gsp .gspd{position:absolute;top:.02em;width:.15em;height:.15em;border-radius:50%;background:var(--sec,#facc15);left:calc(.11em + var(--d)*.25em);box-shadow:0 3px 0 rgba(0,0,0,.15);animation:gspd .65s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(1.05s + var(--d)*.13s)}
+@keyframes gspd{0%{transform:translateY(-2em) scale(0)}70%{transform:translateY(.05em) scale(1.25,.75)}100%{transform:none}}
+#gsp .gspt{margin:.2rem 0 0;font-weight:700;font-size:clamp(1rem,3.8vw,1.25rem);letter-spacing:-.01em}
+#gsp .gspt span,#gsp .gspt em{display:inline-block;animation:gspt .5s cubic-bezier(.34,1.56,.64,1) both}
+#gsp .gspt span:nth-child(1){animation-delay:1.2s}#gsp .gspt span:nth-child(2){animation-delay:1.38s}
+#gsp .gspt em{font-style:normal;background:#fff;color:var(--p,#5b21b6);padding:.08em .5em;border-radius:999px;margin-left:.15em;animation:gspe .6s cubic-bezier(.34,1.56,.64,1) 1.6s both}
+@keyframes gspt{0%{opacity:0;transform:translateY(.8em)}100%{opacity:1;transform:none}}
+@keyframes gspe{0%{opacity:0;transform:scale(.2) rotate(12deg)}100%{opacity:1;transform:rotate(-4deg)}}
+#gsp .gsps{position:absolute;font-size:clamp(1.7rem,6.5vw,2.8rem);filter:drop-shadow(0 6px 10px rgba(0,0,0,.25));animation:gsps .6s cubic-bezier(.34,1.56,.64,1) both,gspf 2s ease-in-out infinite alternate;animation-delay:calc(.85s + var(--k)*.08s),calc(1.5s + var(--k)*.15s)}
+#gsp .gsps:nth-of-type(1){top:14%;left:12%}#gsp .gsps:nth-of-type(2){top:18%;right:13%}#gsp .gsps:nth-of-type(3){bottom:20%;left:10%}#gsp .gsps:nth-of-type(4){bottom:14%;right:16%}#gsp .gsps:nth-of-type(5){top:42%;left:4%}#gsp .gsps:nth-of-type(6){top:46%;right:5%}
+@keyframes gsps{0%{opacity:0;transform:scale(0) rotate(-40deg)}100%{opacity:1;transform:none}}
+@keyframes gspf{to{transform:translateY(-12px) rotate(8deg)}}
+#gsp.out{animation:gspo .65s cubic-bezier(.7,0,.3,1) forwards;pointer-events:none}
+@keyframes gspo{0%{clip-path:circle(150% at 50% 50%)}100%{clip-path:circle(0% at 50% 50%)}}
+@media(prefers-reduced-motion:reduce){#gsp *{animation:none!important}#gsp.out{animation:gspq .35s ease forwards}}
+@keyframes gspq{to{opacity:0}}
 /* v168: Tests header: the + Test button sits in the middle of its card */
 .tbh .bar{align-items:center}
 /* v168: sharper web view. Sticky bars are solid (no frosted blur showing the text behind them), and the page-entry motion no longer scales text */
@@ -1263,7 +1298,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER=170,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER=171,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests'].includes(N.view))view=N.view}catch(_){}
@@ -2660,7 +2695,7 @@ function upcomingCard(){const{t0,by,ks}=upEv(2),all=ks.flatMap(k=>by[k]),shown=i
 function homeV(){const h=new Date().getHours(),g=h<12?'Good morning':h<18?'Good afternoon':'Good evening',n=localStorage.gn||(localStorage.fn||'').split(' ')[0],L=liveS(),ARC=D.classes.filter(x=>!x.d&&x.arch),HL=hList(L,ARC);
  return `<div class=hero>${avImg('avl')}<h1>${g}${n?', '+esc(n):''}!</h1><p>${new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}</p><p>${L.length?'No class selected. Choose a class to open it.':'You have no classes yet.'}</p></div>
  ${L.length?homeStrip(L)+upcomingCard()+dlCard():''}
- ${(L.length||ARC.length)?hBar()+`<div class=cards data-sqc=hc>${HL.map(x=>{const q=clsSum(x);return `<button class="hc cc${x.arch?' harc':''}" style="${clsLook(x)}" data-a=open data-id=${x.id} data-q="${esc([cname(x),x.meta.title,sOf(x),aOf(x)].join(' ').toLowerCase())}"><span class=hcr><span class=ic>${I('book')}</span>${lkChips(x)}</span><b>${esc(cname(x))}</b><small>${esc(x.meta.title)}</small><small>${esc([sOf(x),aOf(x)&&'A.Y. '+aOf(x)].filter(Boolean).join(' · '))}</small><small>${x.students.length} students</small>${q.n?`<span class=hcs data-a=openp data-id=${x.id} title="Open performance"><span>Avg <b>${g1(q.avg)}</b></span><span>${Math.round(q.pass*100)}% passing</span>${q.risk?`<span class=warn><b>${q.risk}</b> at risk</span>`:''}${q.fail?`<span class=bad><b>${q.fail}</b> failing</span>`:''}${spark(x,q.tr)}</span>`:`<small class=mut>No grades yet</small>`}</button>`}).join('')}</div><p class="mut sfe" data-sqe=hc ${HL.length?'hidden':''}>${HL.length?'No classes match your search.':HF=='arch'?'No archived classes.':'No classes in this filter.'}</p>`:`<div class="card empty"><span class="ic big">${I('book')}</span><h3>No classes yet</h3><p class=mut>Create a class first. Every detail is required before it is saved.</p><button class=pri data-a=addclass>${I('plus')}New class</button></div>`}
+ ${(L.length||ARC.length)?hBar()+`<div class=cards data-sqc=hc>${HL.map(x=>{const q=clsSum(x);return `<button class="hc cc${x.arch?' harc':''}" style="${clsLook(x)}" data-a=open data-id=${x.id} data-q="${esc([cname(x),x.meta.title,sOf(x),aOf(x)].join(' ').toLowerCase())}"><span class=hcr><span class=ic>${I('book')}</span>${lkChips(x)}</span><b>${esc(cname(x))}</b><span class=hct><small>${esc(x.meta.title)}</small>${(n=>{const dr=x.students.filter(u=>u.drop).length;return `<span class=hcn title="${n} student${n==1?'':'s'} in total${dr?', '+dr+' dropped':''}">${I('users')}${n}${dr?`<i>· ${dr} drop${dr==1?'':'s'}</i>`:''}</span>`})(x.students.length)}</span><small>${esc([sOf(x),aOf(x)&&'A.Y. '+aOf(x)].filter(Boolean).join(' · '))}</small>${q.n?`<span class=hcs data-a=openp data-id=${x.id} title="Open performance"><span>Avg <b>${g1(q.avg)}</b></span><span>${Math.round(q.pass*100)}% passing</span>${q.risk?`<span class=warn><b>${q.risk}</b> at risk</span>`:''}${q.fail?`<span class=bad><b>${q.fail}</b> failing</span>`:''}${spark(x,q.tr)}</span>`:`<small class=mut>No grades yet</small>`}</button>`}).join('')}</div><p class="mut sfe" data-sqe=hc ${HL.length?'hidden':''}>${HL.length?'No classes match your search.':HF=='arch'?'No archived classes.':'No classes in this filter.'}</p>`:`<div class="card empty"><span class="ic big">${I('book')}</span><h3>No classes yet</h3><p class=mut>Create a class first. Every detail is required before it is saved.</p><button class=pri data-a=addclass>${I('plus')}New class</button></div>`}
  ${C()?'':`<div class=bar style="margin-top:.6rem"><button data-a=cimp>${I('upload')}Import class data</button></div>`}
  ${C()?'':`<div class="bar mo"><button data-a=upd>${I('refresh')}Update app</button><span class=mut>Version ${VER}</span></div>`}`}
 /* ---------- views ---------- */
@@ -4685,4 +4720,13 @@ setTimeout(()=>{try{syllSweep()}catch(_){}},2500);
 try{applyDept()}catch(_){}applyTheme();matchMedia('(prefers-color-scheme:dark)').addEventListener('change',applyTheme);render();
 if(auth)fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+tok}}).then(r=>r.json()).then(p=>{U=localStorage.user=p.email;localStorage.gn=p.given_name||'';localStorage.fn=p.name||'';localStorage.pic=p.picture||'';cachePic(p.picture);localStorage.guest='';render();sync(1)}).catch(()=>toast('Sign-in failed. Check the Client ID and redirect address.'));
 else if(U&&navigator.onLine){if(tok&&Date.now()<exp)sync();else if(!sessionStorage.silent)goAuth(1);else st('Tap Sync now to sign in again')}
+/* ---------- v171: opening animation (once per app launch; tap to skip) ---------- */
+(function(){try{if(sessionStorage['gradu.sp'])return;sessionStorage['gradu.sp']=1}catch(_){}
+ const rm=matchMedia('(prefers-reduced-motion: reduce)').matches,o=document.createElement('div');o.id='gsp';o.setAttribute('aria-hidden','true');
+ const L='grad'.split('').map((ch,k)=>`<span class=gspl style="--k:${k}">${ch}</span>`).join('')+`<span class="gspl gspu" style="--k:4">u<b class=gspd style="--d:0"></b><b class=gspd style="--d:1"></b></span>`,
+  S=['📚','✏️','💯','⭐','🎓','✨'].map((e,k)=>`<span class=gsps style="--k:${k}">${e}</span>`).join('');
+ o.innerHTML=`<div class=gspbg><i></i><i></i><i></i></div>${S}<div class=gspc><div class=gspi>${gIcon('',false)}</div><div class=gspw>${L}</div><p class=gspt><span>class record,</span> <span>but make it</span> <em>fun ✨</em></p></div>`;
+ document.body.appendChild(o);
+ const end=()=>{if(o.classList.contains('out'))return;o.classList.add('out');setTimeout(()=>o.remove(),700)};
+ o.addEventListener('click',end);addEventListener('keydown',end,{once:true});setTimeout(end,rm?600:2700)})();
 </script></body></html>
