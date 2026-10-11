@@ -1304,7 +1304,7 @@ body.gspin #tabs{animation:gspn .9s cubic-bezier(.16,1,.3,1) .25s both}
  #mdl>.md.srpv .sri span{min-width:0;overflow-wrap:anywhere;font-size:.88rem}
  #mdl>.md.srpv h4{margin:1rem 0 .4rem}
  #mdl>.md.srpv .wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
- #mdl>.md.srpv table{font-size:.8rem}#mdl>.md.srpv table td:first-child,#mdl>.md.srpv table th:first-child{position:sticky;left:0;background:var(--card);z-index:1}
+ #mdl>.md.srpv table{font-size:.8rem}#mdl>.md.srpv table td:first-child{position:sticky;left:0;background:var(--card);z-index:3}
  .srfab{left:.75rem;right:.75rem;width:auto;max-width:none}.srfab>button{flex:1;min-width:0}
 }
 /* v174: performance analytics */
@@ -1397,6 +1397,10 @@ td.gsk,.gsk{animation:gsk 2.4s ease forwards}@keyframes gsk{0%{box-shadow:inset 
 .hov{display:grid;grid-template-rows:auto 1fr auto;gap:.4rem}.hovr{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}.hov small{display:block;font-size:.72rem;color:var(--mut)}.hov b{display:block;font-size:1.35rem;font-weight:800}.hovb small:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hov .addc{justify-self:start;min-height:0;padding:.35rem .7rem;font-size:.8rem}
 .hinc ul{margin:.2rem 0 0;padding-left:1rem;font-size:.78rem;line-height:1.35;display:grid;gap:.3rem}.hrow .hinc{grid-column:span 2}
 .hafter{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:.9rem;margin-top:1rem}.hafter>.card{margin:0}
+/* v183: Breakdown of scores: only the Component header (spanning both header rows) stays fixed on the left */
+.srv table.srbk tr:nth-child(2)>th:first-child,.srv .wrap table.srbk tr:nth-child(2)>th:first-child{left:auto;z-index:2;box-shadow:none;background:var(--head)}
+.srv table.srbk tr:nth-child(2)>th.off:first-child{background:color-mix(in srgb,var(--mut) 45%,var(--card))}
+.srv table.srbk th.srk,#mdl>.md.srpv table.srbk th.srk{position:sticky;left:0;top:0;z-index:6;background:var(--head);box-shadow:1px 0 0 var(--line)}
 /* v168: Tests header: the + Test button sits in the middle of its card */
 .tbh .bar{align-items:center}
 /* v168: sharper web view. Sticky bars are solid (no frosted blur showing the text behind them), and the page-entry motion no longer scales text */
@@ -1421,7 +1425,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER=182,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER=183,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests'].includes(N.view))view=N.view}catch(_){}
@@ -4498,7 +4502,7 @@ function srHtml(c,s,upto){
  <div class=sri>${R.info.map(([k,v])=>`<span><small>${k}</small>${esc(v||'—')}</span>`).join('')}</div>
  <h4>Summary of grades</h4><div class=wrap><table class=cmpt><tr><th>Period</th><th>Term grade</th></tr>${T3(R).map(t=>t.off?`<tr><td class=off>${t.lab}</td><td class=off>Not yet released</td></tr>`:`<tr><td>${t.lab}</td><td><b>${f(t.grade)}</b></td></tr>`).join('')}</table></div>
  ${R.rem?`<p>Final remarks: <span class="chip ${R.rem=='PASSED'?'ok':'bad'}">${R.rem}</span></p>`:''}
- <h4>Breakdown of scores</h4><div class=wrap><table class=cmpt><tr><th rowspan=2>Component</th>${T3(R).map(t=>`<th colspan=3 class="${t.off?'off':''}" style="text-align:center">${t.lab}</th>`).join('')}</tr><tr>${T3(R).map(t=>`<th class="${t.off?'off':''}">Count</th><th class="${t.off?'off':''}">Score</th><th class="${t.off?'off':''}"></th>`).join('')}</tr>${R.rows.map(r=>`<tr${r.sub?'':' style="font-weight:600"'}><td>${r.sub?'&nbsp;&nbsp;':''}${esc(r.name)}</td>${T3(R).map((t,ti)=>{const x=r.cells[ti];return t.off?'<td class=off></td><td class=off></td><td class=off></td>':x?`<td>${x.cnt}</td><td>${x.sc}</td><td>${sigHtml(x.lv)}</td>`:'<td></td><td></td><td></td>'}).join('')}</tr>`).join('')}<tr style="font-weight:700"><td>Term grade</td>${T3(R).map(t=>t.off?'<td class=off></td><td class=off></td><td class=off></td>':`<td></td><td>${t.grade==null?'—':f(t.grade)}</td><td></td>`).join('')}</tr></table></div>
+ <h4>Breakdown of scores</h4><div class=wrap><table class="cmpt srbk"><tr><th rowspan=2 class=srk>Component</th>${T3(R).map(t=>`<th colspan=3 class="${t.off?'off':''}" style="text-align:center">${t.lab}</th>`).join('')}</tr><tr>${T3(R).map(t=>`<th class="${t.off?'off':''}">Count</th><th class="${t.off?'off':''}">Score</th><th class="${t.off?'off':''}"></th>`).join('')}</tr>${R.rows.map(r=>`<tr${r.sub?'':' style="font-weight:600"'}><td>${r.sub?'&nbsp;&nbsp;':''}${esc(r.name)}</td>${T3(R).map((t,ti)=>{const x=r.cells[ti];return t.off?'<td class=off></td><td class=off></td><td class=off></td>':x?`<td>${x.cnt}</td><td>${x.sc}</td><td>${sigHtml(x.lv)}</td>`:'<td></td><td></td><td></td>'}).join('')}</tr>`).join('')}<tr style="font-weight:700"><td>Term grade</td>${T3(R).map(t=>t.off?'<td class=off></td><td class=off></td><td class=off></td>':`<td></td><td>${t.grade==null?'—':f(t.grade)}</td><td></td>`).join('')}</tr></table></div>
  <p class=mut style="display:flex;flex-wrap:wrap;gap:.3rem .9rem;align-items:center">${[4,3,2,1].map(l=>`<span>${sigHtml(l)} ${SIGN[l]}</span>`).join('')}</p>
  <p class=mut>${SRNOTE}${T3(R).some(t=>t.off)?' Greyed columns are periods not yet released.':''}</p>
  <p class=mut>${passNote(c)}</p></div>`}
