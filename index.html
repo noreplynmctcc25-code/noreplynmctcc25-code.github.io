@@ -1415,7 +1415,54 @@ td.gsk,.gsk{animation:gsk 2.4s ease forwards}@keyframes gsk{0%{box-shadow:inset 
 }
 @keyframes vin2{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@keyframes vin3{from{opacity:0}to{opacity:1}}
 </style>
-<style>#boot{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;background:#F5F8FC;color:#12263F;font:600 15px/1.2 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;transition:opacity .25s;animation:bootx .3s 20s forwards}html[data-dark] #boot{background:#0f1521;color:#e8edf5}#boot img{width:84px;height:84px;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.18)}#boot i{width:30px;height:30px;border-radius:50%;border:3px solid rgba(127,127,127,.25);border-top-color:#1d4e89;animation:bootr .8s linear infinite}html[data-dark] #boot i{border-top-color:#8fb4ff}#boot.off{opacity:0;pointer-events:none}@keyframes bootr{to{transform:rotate(360deg)}}@keyframes bootx{to{opacity:0;visibility:hidden}}</style></head><body>
+<style>#boot{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;background:#F5F8FC;color:#12263F;font:600 15px/1.2 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;transition:opacity .25s;animation:bootx .3s 20s forwards}html[data-dark] #boot{background:#0f1521;color:#e8edf5}#boot img{width:84px;height:84px;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.18)}#boot i{width:30px;height:30px;border-radius:50%;border:3px solid rgba(127,127,127,.25);border-top-color:#1d4e89;animation:bootr .8s linear infinite}html[data-dark] #boot i{border-top-color:#8fb4ff}#boot.off{opacity:0;pointer-events:none}@keyframes bootr{to{transform:rotate(360deg)}}@keyframes bootx{to{opacity:0;visibility:hidden}}</style>
+<style id=scncss>html.sc-lock,html.sc-lock body{overflow:hidden}
+#scn{position:fixed;inset:0;z-index:2147483100;display:flex;flex-direction:column;background:#0b1220;color:#fff;font:500 14px/1.25 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;touch-action:manipulation;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+#scn *{box-sizing:border-box}
+#scn[hidden],#scn [hidden]{display:none!important}
+.sc-top{display:flex;align-items:center;gap:.6rem;padding:.55rem .7rem;background:#0f1a30;border-bottom:1px solid rgba(255,255,255,.08);flex:none}
+.sc-t{font-size:15px}.sc-sp{flex:1}.sc-st{font-size:12px;color:#9fb3d4;white-space:nowrap}
+.sc-b{appearance:none;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#fff;border-radius:10px;min-height:40px;padding:.45rem .8rem;font:inherit;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.35rem;white-space:nowrap}
+.sc-b:hover{background:rgba(255,255,255,.14)}.sc-b:disabled{opacity:.45;cursor:default}
+.sc-pri{background:#10b981;border-color:#10b981;color:#04281d}.sc-pri:hover{background:#34d399}
+.sc-del{color:#fca5a5}
+.sc-cam{flex:1;min-height:0;position:relative;background:#000;overflow:hidden}
+.sc-cam video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.sc-ov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.sc-hint{position:absolute;left:50%;top:.7rem;transform:translateX(-50%);max-width:92%;background:rgba(0,0,0,.55);padding:.4rem .75rem;border-radius:999px;font-size:12.5px;text-align:center;pointer-events:none}
+.sc-torch{position:absolute;right:.8rem;top:3rem;background:rgba(0,0,0,.5)}
+.sc-cb{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.9rem 1rem calc(.9rem + env(safe-area-inset-bottom,0));background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.sc-cb .sc-b{min-width:92px;background:rgba(0,0,0,.5)}
+.sc-shut{width:72px;height:72px;border-radius:50%;border:5px solid #fff;background:#10b981;box-shadow:0 0 0 3px rgba(0,0,0,.35);cursor:pointer;flex:none}.sc-shut:active{transform:scale(.93);background:#34d399}
+.sc-cam.flash::after{content:"";position:absolute;inset:0;background:#fff;opacity:.75;pointer-events:none}
+.sc-fb{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:1.5rem;text-align:center;background:#0b1220}.sc-fb p{max-width:28rem;color:#cbd5e1;margin:0 0 .4rem}
+.sc-ed{flex:1;min-height:0;display:flex;flex-direction:column}
+.sc-stage{flex:1;min-height:140px;position:relative;background:#05080f;overflow:hidden}
+.sc-e{position:absolute;left:0;top:0;touch-action:none;cursor:crosshair}
+.sc-r{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#05080f}
+.sc-lp{position:absolute;top:8px;width:110px;height:110px;border-radius:50%;box-shadow:0 4px 18px rgba(0,0,0,.6);pointer-events:none}
+.sc-panel{flex:none;max-height:52vh;overflow:auto;overflow-x:hidden;min-width:0;background:#0f1a30;border-top:1px solid rgba(255,255,255,.08);padding:.55rem .7rem calc(.6rem + env(safe-area-inset-bottom,0));display:grid;gap:.55rem}
+.sc-tools{display:flex;gap:.4rem;overflow-x:auto;align-items:center;scrollbar-width:none}.sc-tools::-webkit-scrollbar{display:none}
+.sc-tools .sc-b{min-height:36px;padding:.3rem .65rem;flex:none}
+.sc-seg{display:inline-flex;border:1px solid rgba(255,255,255,.18);border-radius:10px;overflow:hidden;flex:none}
+.sc-seg button{appearance:none;border:0;background:transparent;color:#cbd5e1;font:inherit;font-weight:600;padding:.4rem .6rem;min-height:36px;cursor:pointer;white-space:nowrap}
+.sc-seg button+button{border-left:1px solid rgba(255,255,255,.12)}.sc-seg button.on{background:#10b981;color:#04281d}
+.sc-strip{display:flex;gap:.45rem;overflow-x:auto;padding:.1rem 0 .2rem;scrollbar-width:thin}
+.sc-th{appearance:none;position:relative;flex:none;width:58px;height:76px;border-radius:8px;border:2px solid transparent;background:#1b2845;padding:0;overflow:hidden;cursor:pointer;color:#fff}
+.sc-th.on{border-color:#34d399}.sc-th img{width:100%;height:100%;object-fit:cover;display:block}
+.sc-th span{position:absolute;left:3px;bottom:3px;background:rgba(0,0,0,.65);border-radius:6px;padding:0 5px;font-size:11px;font-weight:700}
+.sc-th i{display:block;width:100%;height:100%;background:linear-gradient(110deg,#1b2845 30%,#27375c 50%,#1b2845 70%);background-size:200% 100%;animation:scsh 1.2s linear infinite}
+.sc-plus{font-size:26px;font-weight:300;display:flex;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,.3);background:transparent}
+@keyframes scsh{to{background-position:-200% 0}}
+.sc-opt{display:grid;gap:.45rem}
+.sc-more>summary{cursor:pointer;color:#9fb3d4;font-size:12.5px;padding:.2rem 0;list-style:none}.sc-more>summary::before{content:'\25B8  '}.sc-more[open]>summary::before{content:'\25BE  '}.sc-more[open]>summary{margin-bottom:.45rem}.sc-more .sc-row{margin-bottom:.45rem}
+.sc-opt{min-width:0}.sc-row{display:flex;align-items:center;gap:.7rem;min-width:0}.sc-row>div,.sc-row>input,.sc-row>select{min-width:0;max-width:100%}.sc-seg{max-width:100%;overflow-x:auto;scrollbar-width:none}.sc-row>span{width:4.6rem;flex:none;color:#9fb3d4;font-size:12.5px}
+.sc-row input[type=range]{flex:1;accent-color:#10b981;min-width:0}
+.sc-row select{flex:1;min-width:0;background:#16233f;color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.45rem .6rem;min-height:36px;font:inherit}
+.sc-act{display:flex;gap:.45rem;flex-wrap:wrap}.sc-act .sc-b{flex:1 1 auto}.sc-act .sc-pri{flex:2 1 9rem}
+@media(max-height:620px){.sc-panel{max-height:60vh}.sc-hint{display:none}}
+@media(min-width:900px){.sc-ed{flex-direction:row}.sc-panel{width:390px;max-height:none;height:100%;border-top:0;border-left:1px solid rgba(255,255,255,.08);align-content:start}.sc-stage{min-height:0}}
+</style></head><body>
 <div id=boot role=status aria-label=Loading><img src=icon-192.png width=84 height=84 alt=""><span>Gradu &middot; Class Record</span><i></i></div>
 <svg width=0 height=0 style="position:absolute" aria-hidden=true><symbol id=i-mail viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol><symbol id=i-users viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol><symbol id=i-book viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol><symbol id=i-layers viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/></symbol><symbol id=i-flag viewBox="0 0 24 24"><path d="M4 22V3M4 4h13l-2 4 2 4H4"/></symbol><symbol id=i-award viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></symbol><symbol id=i-sliders viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol><symbol id=i-plus viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id=i-minus viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id=i-sort viewBox="0 0 24 24"><path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M14 6h7M14 12h5M14 18h3"/></symbol><symbol id=i-shuffle viewBox="0 0 24 24"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22M18 2l4 4-4 4M2 6h1.9c1.5 0 2.9.9 3.6 2.2M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8M18 14l4 4-4 4"/></symbol><symbol id=i-left viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol><symbol id=i-clock viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></symbol><symbol id=i-first viewBox="0 0 24 24"><path d="m17 18-6-6 6-6M7 6v12"/></symbol><symbol id=i-right viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol><symbol id=i-refresh viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-15-6.7L3 8M3 3v5h5M3 12a9 9 0 0 0 15 6.7L21 16M21 21v-5h-5"/></symbol><symbol id=i-download viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol><symbol id=i-printer viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></symbol><symbol id=i-trash viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol><symbol id=i-grid viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></symbol><symbol id=i-phone viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></symbol><symbol id=i-login viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></symbol><symbol id=i-logout viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol><symbol id=i-home viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/></symbol><symbol id=i-palette viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16" cy="10" r="1"/></symbol><symbol id=i-sun viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol><symbol id=i-moon viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol><symbol id=i-monitor viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol><symbol id=i-lock viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id=i-upload viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol><symbol id=i-check viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></symbol><symbol id=i-x viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol><symbol id=i-note viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2"/></symbol><symbol id=i-clip viewBox="0 0 24 24"><path d="m21.4 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></symbol><symbol id=i-file viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></symbol><symbol id=i-quiz viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol><symbol id=i-form viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></symbol><symbol id=i-cal viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></symbol><symbol id=i-chat viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol><symbol id=i-task viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/></symbol><symbol id=i-present viewBox="0 0 24 24"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></symbol><symbol id=i-dots viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></symbol><symbol id=i-filec viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></symbol><symbol id=i-tasks viewBox="0 0 24 24"><path d="m3 17 2 2 4-4M3 7l2 2 4-4M13 6h8M13 12h8M13 18h8"/></symbol><symbol id=i-pencil viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol><symbol id=i-trophy viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.7V17c0 .6-.5 1-1 1.2-1.2.6-2 2-2 3.8M14 14.7V17c0 .6.5 1 1 1.2 1.2.6 2 2 2 3.8"/><path d="M18 2H6v7a6 6 0 0 0 12 0z"/></symbol><symbol id=i-folder viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></symbol><symbol id=i-chart viewBox="0 0 24 24"><path d="M12 20V10M18 20V4M6 20v-4"/></symbol><symbol id=i-dot viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></symbol><symbol id=i-cap viewBox="0 0 24 24"><path d="m22 10-10-5L2 10l10 5 10-5Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol><symbol id=i-info viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol><symbol id=i-alert viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4M12 17h.01"/></symbol><symbol id=i-trend viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></symbol></svg>
 <header id="hd"></header><div id="cb" hidden></div><nav id="tabs"></nav><main id="main"></main><div id="toast"></div><datalist id=dpl><option value="Hospitality Management &amp; Tourism"><option value="Department of Business Management &amp; Entrepreneurship"><option value="Education Major in Math"><option value="Education Major in Science"></datalist><div id=pa></div><div id=mq role=marquee aria-label="Powered by Mr. and Mrs. Condes"><span>Powered by Mr. &amp; Mrs. Condes</span></div>
@@ -1428,7 +1475,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER=185,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER=186,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests'].includes(N.view))view=N.view}catch(_){}
@@ -1777,6 +1824,7 @@ ${scanMat(r,t)}
 </div></div>`;
 const vScan=t=>{const need=[],ok=[];SC.forEach((r,i)=>((r.err||!r.m||r.fl.length)?need:ok).push(scRow(r,i,t)));
  return `<div class=card><h2>Scan answered sheets</h2><p class="mut sm">Upload photos, scans, or a multi-page PDF (one bubble sheet per page). Keep each page flat with all four black corner squares visible. Names are matched to your roster; answers appear in a checking grid. <b>Yellow</b> = blank · outline = review.</p>${t.st.length?'':'<p class=warn>Add your class roster first (Responses tab) so names can be matched.</p>'}
+<div class=row style="margin:0 0 .6rem;gap:.6rem;align-items:center"><button class=pri data-xa=scncam type=button>Scan pages with camera</button><span class="mut sm">Auto-crops each page, brightens the text and makes a compressed PDF.</span></div>
 <label class=dropzone id=dz for=fl>
 <div class=dz-ico aria-hidden=true>
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V6"/><path d="M8 10l4-4 4 4"/><path d="M4 18h16"/></svg>
@@ -2061,6 +2109,7 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
  if(a=='ros'){const nk=s=>nn(s).sort().join(' ');(($('#ros')||{}).value||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean).forEach(l=>{const p=l.split(/[\t,]/).map(z=>z.trim());if(p.length<2)return;const k=nk(p.slice(1).join(' ')),s=t.st.find(z=>nk(z.name.replace(',',' '))==k);if(s){s.sid=p[0];const q=stuOf(s.id);if(q){q.s.sno=p[0];q.c.u=Date.now();ctx.mk(q.c)}}});ctx.c.u=Date.now();fin();return}
  if(a=='psheet'){const l=lay(t);if(l.over){ctx.toast(l.ovE?'The items and essay boxes do not fit on one page. Reduce the items or essay questions.':'Too many items for one sheet ('+l.n+' of '+l.cap+').');return}let p=document.getElementById('tbps');if(!p){p=document.createElement('div');p.id='tbps';document.body.appendChild(p)}p.innerHTML=`<style>@page{size:${l.W}mm ${l.H}mm;margin:0}</style>`+sheetHTML(t);document.body.classList.add('tbp');window.print();return}
  if(a=='print'){window.print();return}
+ if(a=='scncam'){scnOpen({onUse:f=>{const fl=$('#fl');if(!fl)return;const buf=new DataTransfer();[...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'))}});return}
  if(a=='scan'){const fs=[...($('#fl')||{files:[]}).files];if(!fs.length){ctx.toast('Choose one or more sheet images or a PDF first.');return}
   if(ctx.route){if(!(await ctx.route()))return;t=ctx.d}
   try{$('#sst').textContent='Preparing files…';const jobs=await expandFiles(fs);const total=jobs.length;if(!total){ctx.toast('No pages found.');return}
@@ -5234,4 +5283,221 @@ else if(U&&navigator.onLine){if(tok&&Date.now()<exp)sync();else if(!sessionStora
   if(!rm){const M=document.getElementById('main');if(M)[...M.children].forEach((x,k)=>x.style.setProperty('--gi',Math.min(k,8)));document.body.classList.add('gspin');setTimeout(()=>document.body.classList.remove('gspin'),2000)}
   setTimeout(()=>o.remove(),850)};
  o.addEventListener('click',end);addEventListener('keydown',end,{once:true});setTimeout(end,rm?600:3100)})();
+</script>
+<script id=scnjs>/* v186: Gradu Scanner: camera / gallery capture, automatic page detection, perspective crop, contrast clean-up, compressed multi-page PDF */
+(()=>{
+'use strict';
+const D=document,$=(s,r)=>(r||D).querySelector(s),clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const QL={s:{q:.55,m:1500,n:'Small'},b:{q:.72,m:1900,n:'Balanced'},h:{q:.86,m:2400,n:'High'}};
+const PS={orig:null,a4:[595.28,841.89],letter:[612,792],legal:[612,936]};
+const MODES=[['enh','Enhanced'],['gray','Gray'],['bw','B&W'],['orig','Original']];
+let S=null,uid=0;
+const tb=(c,t,q)=>new Promise(r=>c.toBlob(r,t,q)),cvs=(w,h)=>{const c=D.createElement('canvas');c.width=Math.max(1,w);c.height=Math.max(1,h);return c};
+const polyArea=P=>{let a=0;for(let i=0;i<P.length;i++){const p=P[i],q=P[(i+1)%P.length];a+=p.x*q.y-q.x*p.y}return Math.abs(a)/2};
+const inset=(w,h)=>{const m=.04;return[{x:w*m,y:h*m},{x:w*(1-m),y:h*m},{x:w*(1-m),y:h*(1-m)},{x:w*m,y:h*(1-m)}]};
+const toast_=m=>{try{toast(m)}catch(_){}};
+
+/* ---------- image maths ---------- */
+function otsu(h,n){let sum=0;for(let i=0;i<256;i++)sum+=i*h[i];let sB=0,wB=0,mx=-1,t=128;for(let i=0;i<256;i++){wB+=h[i];if(!wB)continue;const wF=n-wB;if(!wF)break;sB+=i*h[i];const mB=sB/wB,mF=(sum-sB)/wF,v=wB*wF*(mB-mF)*(mB-mF);if(v>mx){mx=v;t=i}}return t}
+function boxBlur(a,w,h,r){const t=new Float32Array(a.length),n=2*r+1;
+ for(let y=0;y<h;y++){const o=y*w;let s=0;for(let x=-r;x<=r;x++)s+=a[o+clamp(x,0,w-1)];for(let x=0;x<w;x++){t[o+x]=s/n;s+=a[o+clamp(x+r+1,0,w-1)]-a[o+clamp(x-r,0,w-1)]}}
+ for(let x=0;x<w;x++){let s=0;for(let y=-r;y<=r;y++)s+=t[clamp(y,0,h-1)*w+x];for(let y=0;y<h;y++){a[y*w+x]=s/n;s+=t[clamp(y+r+1,0,h-1)*w+x]-t[clamp(y-r,0,h-1)*w+x]}}
+ return a}
+/* find the page: the largest bright (or dark) blob that is not the whole frame; corners = extreme points of the blob */
+function detect(src,fast){const sw=src.videoWidth||src.width,sh=src.videoHeight||src.height;if(!sw||!sh)return null;
+ const k=Math.min(1,420/Math.max(sw,sh)),w=Math.max(16,Math.round(sw*k)),h=Math.max(16,Math.round(sh*k)),c=cvs(w,h),g=c.getContext('2d',{willReadFrequently:true});g.drawImage(src,0,0,w,h);
+ const px=g.getImageData(0,0,w,h).data,L=new Float32Array(w*h);for(let i=0,j=0;i<L.length;i++,j+=4)L[i]=.299*px[j]+.587*px[j+1]+.114*px[j+2];
+ boxBlur(boxBlur(L,w,h,2),w,h,2);
+ /* take out a straight-line lighting gradient (shadow / window light): fit a plane to log-brightness and divide it away */
+ {let sx=0,sy=0,sxx=0,syy=0,sxy=0,sz=0,sxz=0,syz=0;const n=w*h,cx0=w/2,cy0=h/2;for(let y=0;y<h;y++)for(let x=0;x<w;x++){const X=(x-cx0)/w,Y=(y-cy0)/h,Z=Math.log(L[y*w+x]+8);sx+=X;sy+=Y;sxx+=X*X;syy+=Y*Y;sxy+=X*Y;sz+=Z;sxz+=X*Z;syz+=Y*Z}
+  const M=[[sxx,sxy,sx,sxz],[sxy,syy,sy,syz],[sx,sy,n,sz]];for(let c2=0;c2<3;c2++){let p=c2;for(let r=c2+1;r<3;r++)if(Math.abs(M[r][c2])>Math.abs(M[p][c2]))p=r;[M[c2],M[p]]=[M[p],M[c2]];const d=M[c2][c2];if(Math.abs(d)<1e-9)break;for(let k2=c2;k2<4;k2++)M[c2][k2]/=d;for(let r=0;r<3;r++)if(r!=c2){const f=M[r][c2];for(let k2=c2;k2<4;k2++)M[r][k2]-=f*M[c2][k2]}}
+  const A=M[0][3]||0,B=M[1][3]||0;if(isFinite(A)&&isFinite(B))for(let y=0;y<h;y++)for(let x=0;x<w;x++)L[y*w+x]*=Math.exp(-(A*(x-cx0)/w+B*(y-cy0)/h))}
+ let mn=1e9,mx=-1e9;for(let i=0;i<L.length;i++){if(L[i]<mn)mn=L[i];if(L[i]>mx)mx=L[i]}const sc0=255/Math.max(1,mx-mn);
+ const hist=new Uint32Array(256);for(let i=0;i<L.length;i++)hist[clamp(((L[i]-mn)*sc0)|0,0,255)]++;const T0=otsu(hist,L.length);
+ const cx=(w/2)|0,cy=(h/2)|0;
+ const scan=(T,pol)=>{let best=null;const m=new Uint8Array(w*h);for(let i=0;i<m.length;i++){const v=(L[i]-mn)*sc0;m[i]=(pol>0?v>T:v<=T)?1:0}
+  const lab=new Int32Array(w*h),st=new Int32Array(w*h);let n=0;
+  for(let s0=0;s0<m.length;s0++){if(!m[s0]||lab[s0])continue;n++;let sp=0,area=0,mnS=1e9,mxS=-1e9,mnD=1e9,mxD=-1e9,tl=s0,br=s0,tr=s0,bl=s0,touch=0;st[sp++]=s0;lab[s0]=n;
+   while(sp){const p=st[--sp],x=p%w,y=(p/w)|0;area++;const s=x+y,d=x-y;if(s<mnS){mnS=s;tl=p}if(s>mxS){mxS=s;br=p}if(d>mxD){mxD=d;tr=p}if(d<mnD){mnD=d;bl=p}
+    if(x==0||y==0||x==w-1||y==h-1)touch++;
+    if(x>0&&m[p-1]&&!lab[p-1]){lab[p-1]=n;st[sp++]=p-1}if(x<w-1&&m[p+1]&&!lab[p+1]){lab[p+1]=n;st[sp++]=p+1}
+    if(y>0&&m[p-w]&&!lab[p-w]){lab[p-w]=n;st[sp++]=p-w}if(y<h-1&&m[p+w]&&!lab[p+w]){lab[p+w]=n;st[sp++]=p+w}}
+   const fr=area/(w*h);if(fr<.12||fr>.97)continue;
+   const Q=[tl,tr,br,bl].map(p=>({x:(p%w)+.5,y:((p/w)|0)+.5})),qa=polyArea(Q);if(qa<=0)continue;
+   const rect=Math.min(1,area/qa),ctr=lab[cy*w+cx]==n?1.3:1,sc=Math.pow(rect,5)*Math.min(fr,.8)*ctr*(touch>w*.4?.7:1);
+   if(rect<.6)continue;if(!best||sc>best.sc)best={sc,rect,fr,P:Q.map(p=>({x:p.x/w*sw,y:p.y/h*sh}))}}
+  return best};
+ /* the usual case (bright page on a darker surface) is tried first and accepted when it looks like a clean rectangle; otherwise other thresholds and polarities are searched */
+ let best=scan(T0,1);if(best&&best.rect>.8&&best.fr>.2)return best.P;if(fast)return best?best.P:null;
+ for(const[T,pol]of[[T0,-1],[T0*.88,1],[T0*1.12,1],[T0*.78,1],[T0*1.22,1],[T0*.88,-1],[T0*1.12,-1]]){const r=scan(T,pol);if(r&&(!best||r.sc>best.sc))best=r}
+ return best?best.P:null}
+function solveH(dst,src){const A=[];for(let i=0;i<4;i++){const[x,y]=dst[i],[u,v]=src[i];A.push([x,y,1,0,0,0,-x*u,-y*u,u]);A.push([0,0,0,x,y,1,-x*v,-y*v,v])}
+ for(let c=0;c<8;c++){let p=c;for(let r=c+1;r<8;r++)if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;[A[c],A[p]]=[A[p],A[c]];const d=A[c][c];if(Math.abs(d)<1e-12)return null;for(let k=c;k<9;k++)A[c][k]/=d;for(let r=0;r<8;r++)if(r!=c){const f=A[r][c];if(f)for(let k=c;k<9;k++)A[r][k]-=f*A[c][k]}}
+ return A.map(r=>r[8])}
+/* flatten the page to a rectangle (perspective correction) */
+function warp(bm,quad,maxLong){const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);let ow=Math.max(dist(quad[0],quad[1]),dist(quad[3],quad[2])),oh=Math.max(dist(quad[0],quad[3]),dist(quad[1],quad[2]));
+ const s=Math.min(1,maxLong/Math.max(ow,oh,1));ow=Math.max(8,Math.round(ow*s));oh=Math.max(8,Math.round(oh*s));
+ let sw=bm.width,sh=bm.height,q=quad,src=bm;
+ if(s<.7){const k=Math.min(1,s*1.5);sw=Math.max(8,Math.round(bm.width*k));sh=Math.max(8,Math.round(bm.height*k));const t=cvs(sw,sh);t.getContext('2d').drawImage(bm,0,0,sw,sh);src=t;q=quad.map(p=>({x:p.x*sw/bm.width,y:p.y*sh/bm.height}))}
+ const sc=cvs(sw,sh),sg=sc.getContext('2d',{willReadFrequently:true});sg.drawImage(src,0,0);const sd=sg.getImageData(0,0,sw,sh).data;
+ const oc=cvs(ow,oh),og=oc.getContext('2d'),H=solveH([[0,0],[ow,0],[ow,oh],[0,oh]],q.map(p=>[p.x,p.y]));
+ if(!H){og.drawImage(bm,0,0,ow,oh);return oc}
+ const od=og.createImageData(ow,oh),o=od.data,[a,b,c,d,e,f,g,h]=H,mx=sw-1,my=sh-1;
+ for(let y=0;y<oh;y++){const Y=y+.5;for(let x=0;x<ow;x++){const X=x+.5,den=g*X+h*Y+1;let u=(a*X+b*Y+c)/den-.5,v=(d*X+e*Y+f)/den-.5;u=u<0?0:u>mx?mx:u;v=v<0?0:v>my?my:v;
+  const x0=u|0,y0=v|0,x1=x0<mx?x0+1:x0,y1=y0<my?y0+1:y0,fx=u-x0,fy=v-y0,i00=(y0*sw+x0)*4,i10=(y0*sw+x1)*4,i01=(y1*sw+x0)*4,i11=(y1*sw+x1)*4,w00=(1-fx)*(1-fy),w10=fx*(1-fy),w01=(1-fx)*fy,w11=fx*fy,oi=(y*ow+x)*4;
+  o[oi]=sd[i00]*w00+sd[i10]*w10+sd[i01]*w01+sd[i11]*w11;o[oi+1]=sd[i00+1]*w00+sd[i10+1]*w10+sd[i01+1]*w01+sd[i11+1]*w11;o[oi+2]=sd[i00+2]*w00+sd[i10+2]*w10+sd[i01+2]*w01+sd[i11+2]*w11;o[oi+3]=255}}
+ og.putImageData(od,0,0);return oc}
+/* remove shadows / uneven light, then lift the contrast so text reads clearly */
+function enhance(cv,mode,boost){if(mode=='orig')return cv;const w=cv.width,h=cv.height,g=cv.getContext('2d',{willReadFrequently:true}),id=g.getImageData(0,0,w,h),d=id.data,n=w*h,s=boost/100;
+ const L=new Float32Array(n);for(let i=0,j=0;i<n;i++,j+=4)L[i]=.299*d[j]+.587*d[j+1]+.114*d[j+2];
+ const b=Math.max(6,Math.round(Math.max(w,h)/48)),gw=Math.ceil(w/b),gh=Math.ceil(h/b),G=new Float32Array(gw*gh);
+ for(let y=0;y<h;y++){const r=((y/b)|0)*gw,o=y*w;for(let x=0;x<w;x++){const gi=r+((x/b)|0);if(L[o+x]>G[gi])G[gi]=L[o+x]}}
+ boxBlur(G,gw,gh,1);
+ const lo=10+60*s,hi=255-40*s,sp=255/Math.max(1,hi-lo),F=new Float32Array(n);
+ for(let y=0;y<h;y++){const gy=clamp(y/b-.5,0,gh-1),y0=gy|0,y1=Math.min(gh-1,y0+1),fy=gy-y0;for(let x=0;x<w;x++){const gx=clamp(x/b-.5,0,gw-1),x0=gx|0,x1=Math.min(gw-1,x0+1),fx=gx-x0,
+   B=(G[y0*gw+x0]*(1-fx)+G[y0*gw+x1]*fx)*(1-fy)+(G[y1*gw+x0]*(1-fx)+G[y1*gw+x1]*fx)*fy;F[y*w+x]=255/Math.max(B,60)}}
+ if(mode=='enh'){for(let i=0,j=0;i<n;i++,j+=4){const f=F[i];for(let c=0;c<3;c++){const v=(d[j+c]*f-lo)*sp;d[j+c]=v<0?0:v>255?255:v}}}
+ else{const V=new Uint8Array(n),hist=new Uint32Array(256);for(let i=0;i<n;i++){const v=(L[i]*F[i]-lo)*sp;V[i]=v<0?0:v>255?255:v;hist[V[i]]++}
+  if(mode=='gray'){for(let i=0,j=0;i<n;i++,j+=4){d[j]=d[j+1]=d[j+2]=V[i]}}
+  else{const T=clamp(otsu(hist,n)+(s-.5)*70,40,235);for(let i=0,j=0;i<n;i++,j+=4){d[j]=d[j+1]=d[j+2]=V[i]>T?255:0}}}
+ g.putImageData(id,0,0);return cv}
+
+/* ---------- PDF writer (JPEG pages, no library) ---------- */
+function buildPdf(P,size,title){const te=new TextEncoder(),parts=[],off=[];let len=0;const add=x=>{const u=typeof x=='string'?te.encode(x):x;parts.push(u);len+=u.length};
+ const obj=(n,body)=>{off[n]=len;add(n+' 0 obj\n');add(body);add('\nendobj\n')};
+ add('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');const N=P.length,kids=[];
+ for(let i=0;i<N;i++)kids.push((3+i*3)+' 0 R');
+ obj(1,'<</Type/Catalog/Pages 2 0 R>>');obj(2,'<</Type/Pages/Kids['+kids.join(' ')+']/Count '+N+'>>');
+ P.forEach((p,i)=>{const pn=3+i*3,cn=pn+1,im=pn+2;let pw,ph,iw,ih,x,y;const fs=PS[size];
+  if(!fs){const land=p.w>p.h,k=land?Math.min(842/p.w,595/p.h):Math.min(595/p.w,842/p.h);pw=iw=p.w*k;ph=ih=p.h*k;x=y=0}
+  else{const land=p.w>p.h,W=land?fs[1]:fs[0],H=land?fs[0]:fs[1],k=Math.min(W/p.w,H/p.h);pw=W;ph=H;iw=p.w*k;ih=p.h*k;x=(W-iw)/2;y=(H-ih)/2}
+  const f=v=>(+v).toFixed(2),cs='q '+f(iw)+' 0 0 '+f(ih)+' '+f(x)+' '+f(y)+' cm /Im0 Do Q';
+  obj(pn,'<</Type/Page/Parent 2 0 R/MediaBox[0 0 '+f(pw)+' '+f(ph)+']/Resources<</XObject<</Im0 '+im+' 0 R>>>>/Contents '+cn+' 0 R>>');
+  obj(cn,'<</Length '+cs.length+'>>\nstream\n'+cs+'\nendstream');
+  off[im]=len;add(im+' 0 obj\n<</Type/XObject/Subtype/Image/Width '+p.w+'/Height '+p.h+'/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length '+p.j.length+'>>\nstream\n');add(p.j);add('\nendstream\nendobj\n')});
+ const info=3+N*3,ts=String(title||'Scan').replace(/[()\\]/g,'');
+ const dt=new Date(),z=n=>String(n).padStart(2,'0'),cd='D:'+dt.getFullYear()+z(dt.getMonth()+1)+z(dt.getDate())+z(dt.getHours())+z(dt.getMinutes())+z(dt.getSeconds());
+ obj(info,'<</Title('+ts+')/Producer(Gradu Scanner)/CreationDate('+cd+')>>');
+ const xo=len,total=info+1;let x='xref\n0 '+total+'\n0000000000 65535 f \n';for(let i=1;i<total;i++)x+=String(off[i]).padStart(10,'0')+' 00000 n \n';
+ add(x+'trailer\n<</Size '+total+'/Root 1 0 R/Info '+info+' 0 R>>\nstartxref\n'+xo+'\n%%EOF\n');
+ return new Blob(parts,{type:'application/pdf'})}
+
+/* ---------- page store ---------- */
+const bmOf=async b=>{try{return await createImageBitmap(b,{imageOrientation:'from-image'})}catch(_){try{return await createImageBitmap(b)}catch(__){const im=new Image(),u=URL.createObjectURL(b);im.src=u;await im.decode();return im}}};
+async function addSource(src,sw,sh){const k=Math.min(1,2400/Math.max(sw,sh)),w=Math.round(sw*k),h=Math.round(sh*k),c=cvs(w,h);c.getContext('2d').drawImage(src,0,0,w,h);
+ const q=detect(c),found=!!q,pg={id:++uid,blob:await tb(c,'image/jpeg',.9),w,h,quad:q||inset(w,h),auto:found};S.pages.push(pg);thumb(pg);return pg}
+async function addFiles(fs){for(const f of fs){if(!/^image\//.test(f.type)&&!/\.(jpe?g|png|webp|heic)$/i.test(f.name))continue;try{const bm=await bmOf(f);await addSource(bm,bm.width,bm.height);bm.close&&bm.close()}catch(e){console.error(e);toast_('Could not open '+f.name)}}}
+async function thumb(pg){try{const bm=await bmOf(pg.blob),k=Math.min(1,520/Math.max(bm.width,bm.height)),sm=cvs(Math.round(bm.width*k),Math.round(bm.height*k));sm.getContext('2d').drawImage(bm,0,0,sm.width,sm.height);bm.close&&bm.close();
+ const o=enhance(warp(sm,pg.quad.map(p=>({x:p.x*k,y:p.y*k})),170),S?S.mode:'enh',S?S.boost:50);pg.th=o.toDataURL('image/jpeg',.6);strip()}catch(_){}}
+async function rotate(pg,cw){const bm=await bmOf(pg.blob),w=bm.width,h=bm.height,c=cvs(h,w),g=c.getContext('2d');if(cw){g.translate(h,0);g.rotate(Math.PI/2)}else{g.translate(0,w);g.rotate(-Math.PI/2)}g.drawImage(bm,0,0);bm.close&&bm.close();
+ const Q=pg.quad,m=cw?p=>({x:h-p.y,y:p.x}):p=>({x:p.y,y:w-p.x});pg.quad=cw?[m(Q[3]),m(Q[0]),m(Q[1]),m(Q[2])]:[m(Q[1]),m(Q[2]),m(Q[3]),m(Q[0])];
+ pg.blob=await tb(c,'image/jpeg',.9);pg.w=h;pg.h=w}
+
+/* ---------- UI ---------- */
+function build(){const r=D.createElement('div');r.id='scn';r.setAttribute('role','dialog');r.setAttribute('aria-modal','true');r.setAttribute('aria-label','Scan documents');
+ r.innerHTML=`<div class=sc-top><button class=sc-b data-scn=close aria-label=Close>&#x2715;</button><b class=sc-t>Scan documents</b><span class=sc-sp></span><span class=sc-st role=status></span></div>
+<div class=sc-cam hidden><video playsinline muted autoplay></video><canvas class=sc-ov></canvas><div class=sc-hint>Lay the page flat. A green outline means the page edges were found.</div>
+ <button class="sc-b sc-torch" data-scn=torch hidden>Light</button>
+ <div class=sc-cb><label class="sc-b sc-gal" title="Choose photos">Photos<input type=file accept="image/*" multiple hidden data-scn=gal></label><button class=sc-shut data-scn=shut aria-label="Take photo"></button><button class="sc-b sc-done" data-scn=done>Done</button></div>
+ <div class=sc-fb hidden><p>The camera is not available here. You can still take a photo with your phone's camera app or choose photos you already have.</p>
+  <label class="sc-b sc-pri">Take a photo<input type=file accept="image/*" capture=environment hidden data-scn=gal></label><label class=sc-b>Choose photos<input type=file accept="image/*" multiple hidden data-scn=gal></label></div></div>
+<div class=sc-ed hidden>
+ <div class=sc-stage><canvas class=sc-e></canvas><canvas class=sc-r hidden></canvas><canvas class=sc-lp width=220 height=220 hidden></canvas></div>
+ <div class=sc-panel>
+  <div class=sc-tools><div class=sc-seg data-seg=view><button data-scn=vcrop class=on>Crop</button><button data-scn=vres>Result</button></div>
+   <button class=sc-b data-scn=auto>Auto crop</button><button class=sc-b data-scn=rl aria-label="Rotate left">&#x21BA;</button><button class=sc-b data-scn=rr aria-label="Rotate right">&#x21BB;</button><button class=sc-b data-scn=ml aria-label="Move earlier">&#x25C0;</button><button class=sc-b data-scn=mr aria-label="Move later">&#x25B6;</button><button class="sc-b sc-del" data-scn=del aria-label="Delete page">Delete</button></div>
+  <div class=sc-strip></div>
+  <div class=sc-opt><div class=sc-row><span>Look</span><div class=sc-seg data-seg=mode></div></div>
+   <details class=sc-more><summary>Contrast and PDF options</summary>
+   <div class=sc-row><span>Contrast</span><input type=range min=0 max=100 value=50 data-scn=boost aria-label=Contrast></div>
+   <div class=sc-row><span>PDF size</span><div class=sc-seg data-seg=q></div></div>
+   <div class=sc-row><span>Page</span><select data-scn=size aria-label="PDF page size"><option value=orig>Same as photo</option><option value=a4>A4</option><option value=letter>Letter</option><option value=legal>Long bond (8.5 x 13 in)</option></select></div></details></div>
+  <div class=sc-act><button class=sc-b data-scn=add>+ Add page</button><button class=sc-b data-scn=share hidden>Share</button><button class=sc-b data-scn=use hidden>Use for reading</button><button class="sc-b sc-pri" data-scn=save>Save PDF</button></div>
+ </div></div>`;
+ const mode=$('[data-seg=mode]',r),q=$('[data-seg=q]',r);MODES.forEach(([k,l])=>{const b=D.createElement('button');b.dataset.scn='mode';b.dataset.v=k;b.textContent=l;mode.appendChild(b)});
+ Object.entries(QL).forEach(([k,o])=>{const b=D.createElement('button');b.dataset.scn='q';b.dataset.v=k;b.textContent=o.n;q.appendChild(b)});
+ if(!(S.opt&&S.opt.onUse))$('[data-scn=use]',r).remove();
+ return r}
+const R=s=>$(s,S.root),status=t=>{const e=R('.sc-st');if(e)e.textContent=t||''};
+function setTitle(){R('.sc-t').textContent='Scan documents'+(S.pages.length?' \u00B7 '+S.pages.length+' page'+(S.pages.length>1?'s':''):'')}
+function sync(){R('.sc-seg[data-seg=mode]').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v==S.mode));R('.sc-seg[data-seg=q]').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v==S.q));R('[data-scn=boost]').value=S.boost;R('[data-scn=size]').value=S.size;
+ R('[data-scn=boost]').disabled=S.mode=='orig';R('[data-scn=vcrop]').classList.toggle('on',S.view=='crop');R('[data-scn=vres]').classList.toggle('on',S.view=='res');setTitle()}
+function strip(){if(!S||!S.root)return;const st=R('.sc-strip');if(!st)return;st.innerHTML=S.pages.map((p,i)=>`<button class="sc-th${i==S.cur?' on':''}" data-i=${i} aria-label="Page ${i+1}">${p.th?`<img src="${p.th}" alt="">`:'<i></i>'}<span>${i+1}</span></button>`).join('')+'<button class="sc-th sc-plus" data-scn=add aria-label="Add page">+</button>';const on=st.querySelector('.on');if(on&&on.scrollIntoView)on.scrollIntoView({block:'nearest',inline:'nearest'})}
+
+/* camera */
+async function camStart(){const cam=R('.sc-cam');cam.hidden=false;R('.sc-ed').hidden=true;S.mode_='cam';setTitle();camLabels();
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){R('.sc-fb').hidden=false;return}
+ try{S.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:3840},height:{ideal:2160}},audio:false});const v=R('video');v.srcObject=S.stream;await v.play().catch(()=>{});R('.sc-fb').hidden=true;
+  const tr=S.stream.getVideoTracks()[0],cap=tr.getCapabilities?tr.getCapabilities():{};R('[data-scn=torch]').hidden=!cap.torch;
+  S.tick=setInterval(live,380)}catch(e){console.warn(e);R('.sc-fb').hidden=false}}
+function camStop(){clearInterval(S.tick);S.tick=0;if(S.stream){S.stream.getTracks().forEach(t=>t.stop());S.stream=null}const v=R('video');if(v)v.srcObject=null}
+function camLabels(){const d=R('[data-scn=done]');d.textContent=S.pages.length?'Done ('+S.pages.length+')':'Cancel'}
+function live(){const v=R('video'),ov=R('.sc-ov');if(!v||v.readyState<2||!v.videoWidth)return;const cw=ov.clientWidth,ch=ov.clientHeight,dpr=Math.min(2,devicePixelRatio||1);if(ov.width!=cw*dpr||ov.height!=ch*dpr){ov.width=cw*dpr;ov.height=ch*dpr}
+ const g=ov.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,cw,ch);const q=detect(v,1);S.liveQ=q;if(!q)return;
+ const k=Math.min(cw/v.videoWidth,ch/v.videoHeight),ox=(cw-v.videoWidth*k)/2,oy=(ch-v.videoHeight*k)/2;g.beginPath();q.forEach((p,i)=>{const x=ox+p.x*k,y=oy+p.y*k;i?g.lineTo(x,y):g.moveTo(x,y)});g.closePath();g.fillStyle='rgba(52,211,153,.18)';g.fill();g.lineWidth=3;g.strokeStyle='#34d399';g.stroke()}
+async function shoot(){const v=R('video');if(!v||!v.videoWidth||S.busy)return;S.busy=1;try{const c=cvs(v.videoWidth,v.videoHeight);c.getContext('2d').drawImage(v,0,0);const cam=R('.sc-cam');cam.classList.add('flash');setTimeout(()=>cam.classList.remove('flash'),120);if(navigator.vibrate)navigator.vibrate(20);
+  await addSource(c,c.width,c.height);S.cur=S.pages.length-1;camLabels();setTitle()}finally{S.busy=0}}
+
+/* editor */
+async function openEditor(i){camStop();S.cur=clamp(i==null?S.cur:i,0,S.pages.length-1);R('.sc-cam').hidden=true;R('.sc-ed').hidden=false;S.mode_='ed';sync();strip();await loadCur()}
+async function loadCur(){const pg=S.pages[S.cur];if(!pg)return;if(S.bm&&S.bm.close)S.bm.close();S.bm=await bmOf(pg.blob);S.handle=-1;layout();if(S.view=='res')await showRes();else draw()}
+function geom(){const c=R('.sc-e'),st=R('.sc-stage'),w=st.clientWidth,h=st.clientHeight,pg=S.pages[S.cur],dpr=Math.min(2,devicePixelRatio||1);if(!pg)return null;
+ const pad=18,k=Math.min((w-pad*2)/pg.w,(h-pad*2)/pg.h),ox=(w-pg.w*k)/2,oy=(h-pg.h*k)/2;return{c,w,h,k,ox,oy,dpr,pg}}
+function layout(){const G=geom();if(!G)return;const{c,w,h,dpr}=G;c.style.width=w+'px';c.style.height=h+'px';c.width=Math.round(w*dpr);c.height=Math.round(h*dpr)}
+function draw(){const G=geom();if(!G||!S.bm)return;const{c,w,h,k,ox,oy,dpr,pg}=G,g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,w,h);
+ g.drawImage(S.bm,ox,oy,pg.w*k,pg.h*k);g.fillStyle='rgba(8,12,22,.55)';g.fillRect(ox,oy,pg.w*k,pg.h*k);
+ const Q=pg.quad.map(p=>({x:ox+p.x*k,y:oy+p.y*k}));g.save();g.beginPath();Q.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.closePath();g.clip();g.drawImage(S.bm,ox,oy,pg.w*k,pg.h*k);g.restore();
+ g.beginPath();Q.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.closePath();g.lineWidth=2.5;g.strokeStyle='#34d399';g.stroke();
+ Q.forEach((p,i)=>{g.beginPath();g.arc(p.x,p.y,i==S.handle?15:11,0,7);g.fillStyle='rgba(255,255,255,.95)';g.fill();g.lineWidth=3;g.strokeStyle='#10b981';g.stroke()})}
+function lens(i){const G=geom(),lp=R('.sc-lp');if(!G||!S.bm||i<0){lp.hidden=true;return}const pg=G.pg,p=pg.quad[i],g=lp.getContext('2d'),R_=lp.width,z=3,sr=R_/z/2;lp.hidden=false;
+ const left=(G.ox+p.x*G.k)<G.w/2;lp.style.left=left?'auto':'8px';lp.style.right=left?'8px':'auto';
+ g.clearRect(0,0,R_,R_);g.save();g.beginPath();g.arc(R_/2,R_/2,R_/2-2,0,7);g.clip();g.fillStyle='#000';g.fillRect(0,0,R_,R_);g.drawImage(S.bm,p.x-sr,p.y-sr,sr*2,sr*2,0,0,R_,R_);g.restore();
+ g.strokeStyle='#34d399';g.lineWidth=2;g.beginPath();g.moveTo(R_/2-14,R_/2);g.lineTo(R_/2+14,R_/2);g.moveTo(R_/2,R_/2-14);g.lineTo(R_/2,R_/2+14);g.stroke();g.beginPath();g.arc(R_/2,R_/2,R_/2-2,0,7);g.lineWidth=3;g.strokeStyle='#fff';g.stroke()}
+let rt=0;async function showRes(){const pg=S.pages[S.cur];if(!pg)return;const tk=++rt;status('Preparing…');await new Promise(r=>setTimeout(r,0));const bm=S.bm||await bmOf(pg.blob);if(tk!=rt)return;
+ const o=enhance(warp(bm,pg.quad,1500),S.mode,S.boost),rc=R('.sc-r');rc.width=o.width;rc.height=o.height;rc.getContext('2d').drawImage(o,0,0);if(tk==rt)status('')}
+function setView(v){S.view=v;R('.sc-e').hidden=v=='res';R('.sc-r').hidden=v!='res';sync();if(v=='res')showRes();else{layout();draw()}}
+async function refreshLook(){thumbAll();if(S.view=='res')showRes()}
+let tt=0;function thumbAll(){clearTimeout(tt);tt=setTimeout(async()=>{for(const p of S.pages)await thumb(p)},250)}
+function pointer(e){const G=geom();if(!G)return null;const r=G.c.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top,G}}
+function wire(){const r=S.root,e=R('.sc-e');
+ e.addEventListener('pointerdown',ev=>{if(S.view!='crop')return;const P=pointer(ev);if(!P)return;const{G}=P;let bi=-1,bd=44*44;G.pg.quad.forEach((q,i)=>{const dx=G.ox+q.x*G.k-P.x,dy=G.oy+q.y*G.k-P.y,d=dx*dx+dy*dy;if(d<bd){bd=d;bi=i}});if(bi<0)return;S.handle=bi;S.dragOff={x:G.ox+G.pg.quad[bi].x*G.k-P.x,y:G.oy+G.pg.quad[bi].y*G.k-P.y};e.setPointerCapture(ev.pointerId);ev.preventDefault();draw();lens(bi)});
+ e.addEventListener('pointermove',ev=>{if(S.handle<0)return;const P=pointer(ev);if(!P)return;const{G}=P,x=(P.x+S.dragOff.x-G.ox)/G.k,y=(P.y+S.dragOff.y-G.oy)/G.k;G.pg.quad[S.handle]={x:clamp(x,0,G.pg.w),y:clamp(y,0,G.pg.h)};G.pg.auto=false;draw();lens(S.handle)});
+ const up=()=>{if(S.handle<0)return;S.handle=-1;lens(-1);draw();thumb(S.pages[S.cur])};e.addEventListener('pointerup',up);e.addEventListener('pointercancel',up);
+ r.addEventListener('change',async ev=>{const t=ev.target;if(t.dataset.scn=='gal'){const fs=[...t.files];t.value='';if(!fs.length)return;status('Reading photos…');await addFiles(fs);status('');S.cur=S.pages.length-1;if(S.pages.length)await openEditor(S.cur);return}
+  if(t.dataset.scn=='boost'){S.boost=+t.value;refreshLook()}if(t.dataset.scn=='size')S.size=t.value});
+ r.addEventListener('input',ev=>{if(ev.target.dataset.scn=='boost'){S.boost=+ev.target.value;refreshLook()}});
+ r.addEventListener('click',async ev=>{const b=ev.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.scn;
+  if(b.classList.contains('sc-th')&&b.dataset.i!=null){S.cur=+b.dataset.i;strip();return loadCur()}
+  if(a=='close')return close();
+  if(a=='shut')return shoot();
+  if(a=='done'){if(!S.pages.length)return close(true);return openEditor(S.cur)}
+  if(a=='torch'){S.torch=!S.torch;try{await S.stream.getVideoTracks()[0].applyConstraints({advanced:[{torch:S.torch}]})}catch(_){}return}
+  if(a=='add')return camStart();
+  if(a=='vcrop')return setView('crop');if(a=='vres')return setView('res');
+  if(a=='auto'){const pg=S.pages[S.cur],bm=S.bm,q=detect(bm);pg.quad=q||inset(pg.w,pg.h);pg.auto=!!q;if(!q)toast_('Could not find the page edges. Drag the corners instead.');draw();thumb(pg);if(S.view=='res')showRes();return}
+  if(a=='rl'||a=='rr'){status('Rotating…');await rotate(S.pages[S.cur],a=='rr');status('');await loadCur();thumb(S.pages[S.cur]);return}
+  if(a=='ml'||a=='mr'){const i=S.cur,j=i+(a=='mr'?1:-1);if(j<0||j>=S.pages.length)return;[S.pages[i],S.pages[j]]=[S.pages[j],S.pages[i]];S.cur=j;strip();return}
+  if(a=='del'){if(!confirm('Delete page '+(S.cur+1)+'?'))return;S.pages.splice(S.cur,1);if(!S.pages.length)return camStart();S.cur=Math.min(S.cur,S.pages.length-1);sync();strip();return loadCur()}
+  if(a=='mode'){S.mode=b.dataset.v;sync();return refreshLook()}
+  if(a=='q'){S.q=b.dataset.v;sync();return}
+  if(a=='save'||a=='share'||a=='use')return output(a)});
+ addEventListener('resize',onResize);D.addEventListener('keydown',onKey,true)}
+function onResize(){if(!S||S.mode_!='ed')return;layout();S.view=='crop'?draw():0}
+function onKey(e){if(!S)return;if(e.key=='Escape'){e.stopPropagation();close()}}
+async function output(a){if(!S.pages.length||S.busy)return;S.busy=1;const bs=S.root.querySelectorAll('.sc-act button');bs.forEach(x=>x.disabled=true);
+ try{const O=QL[S.q],P=[];for(let i=0;i<S.pages.length;i++){status('Page '+(i+1)+' of '+S.pages.length+'…');await new Promise(r=>setTimeout(r,0));const pg=S.pages[i],bm=await bmOf(pg.blob),o=enhance(warp(bm,pg.quad,O.m),S.mode,S.boost);bm.close&&bm.close();const bl=await tb(o,'image/jpeg',O.q);P.push({w:o.width,h:o.height,j:new Uint8Array(await bl.arrayBuffer())})}
+  const d=new Date(),z=n=>String(n).padStart(2,'0'),name='Scan-'+d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+'-'+z(d.getHours())+z(d.getMinutes())+'.pdf',pdf=buildPdf(P,S.size,name.replace('.pdf','')),mb=(pdf.size/1048576).toFixed(pdf.size>1048576*10?0:1);
+  const file=new File([pdf],name,{type:'application/pdf'});
+  if(a=='use'&&S.opt.onUse){const fn=S.opt.onUse;close(true);fn(file);toast_('Scan added: '+P.length+' page'+(P.length>1?'s':'')+', '+mb+' MB');return}
+  if(a=='share'){try{await navigator.share({files:[file],title:name});status('')}catch(e){if(e&&e.name!='AbortError')toast_('Sharing is not available. Use Save PDF.')}}
+  else{const u=URL.createObjectURL(pdf),l=D.createElement('a');l.href=u;l.download=name;D.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);toast_('Saved '+name+' ('+P.length+' page'+(P.length>1?'s':'')+', '+mb+' MB)')}
+  status(P.length+' page'+(P.length>1?'s':'')+' \u00B7 '+mb+' MB')}
+ catch(e){console.error(e);toast_('Could not make the PDF.');status('')}
+ finally{if(S){S.busy=0;bs.forEach(x=>x.disabled=false)}}}
+function close(force){if(!S)return;if(!force&&S.pages.length&&!confirm('Discard '+S.pages.length+' scanned page'+(S.pages.length>1?'s':'')+'?'))return;camStop();removeEventListener('resize',onResize);D.removeEventListener('keydown',onKey,true);if(S.bm&&S.bm.close)S.bm.close();S.root.remove();D.documentElement.classList.remove('sc-lock');S=null}
+
+window.scnOpen=function(opt){if(D.getElementById('scn'))return;S={pages:[],cur:0,q:'b',size:'orig',mode:'enh',boost:50,view:'crop',opt:opt||{},handle:-1};
+ S.root=build();D.body.appendChild(S.root);if(innerWidth>=900&&innerHeight>=700)R('.sc-more').open=true;D.documentElement.classList.add('sc-lock');wire();sync();strip();camStart()};
+window.scnApi={detect,warp,enhance,buildPdf,solveH};
+})();
 </script></body></html>
