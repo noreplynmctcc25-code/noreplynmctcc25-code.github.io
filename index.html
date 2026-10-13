@@ -2179,7 +2179,7 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
   const dlg=document.createElement('dialog'),frame=document.createElement('iframe');
   dlg.setAttribute('aria-label','Scan test sheets');
   dlg.style.cssText='width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#0b1020;overflow:hidden';
-  frame.title='Gradu document scanner';frame.allow='camera';frame.src='scanner/index.html?mode=test&filename='+encodeURIComponent(fileBase);
+  frame.title='Gradu document scanner';frame.allow='camera; autoplay';frame.src='scanner/index.html?mode=test&filename='+encodeURIComponent(fileBase);
   frame.style.cssText='display:block;width:100%;height:100%;border:0';
   dlg.appendChild(frame);dlg.addEventListener('close',()=>dlg.remove());
   const receive=async e=>{
