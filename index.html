@@ -2155,11 +2155,27 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
  if(a=='print'){window.print();return}
  if(a=='scnlib'){scnOpen({lib:1,classData:c,tag:ctx.d&&(ctx.d.name||ctx.d.n||ctx.d.title)||'',onUse:f=>{const fl=$('#fl');if(!fl)return;const buf=new DataTransfer();[...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'))}});return}
  if(a=='scncam'){
-  if(!(await tbRoute(c,t)))return;
+  try{if(!(await tbRoute(c,t)))return}catch(error){console.error(error);ctx.toast('Could not prepare the scanner. Please try again.');return}
   const sections=tbSecSel(c),term=(TERMS.find(x=>x[0]==t.term)||[,''])[1],component=(tbTg(c,t.term).find(x=>x.tg==tbTgOf(c,t))||{}).l||'',subject=c.meta.subj||c.meta.course||'Course',
    sectionNames=sections.map(x=>String(x.meta.section||'').trim()||cname(x)).filter(Boolean),
    fileBase=([term,component,subject].filter(Boolean).join(' ')+(sectionNames.length?'-'+sectionNames.join('_'):'')).replace(/[<>:"/\\|?*\x00-\x1F]/g,'-').replace(/\s+/g,' ').replace(/[. ]+$/,'').slice(0,180)||'Scan',
    fileTag=[term,component,subject].filter(Boolean).join(' · ');
+  const useTestScan=async(f,details)=>{
+   const fl=$('#fl');if(!fl){ctx.toast('Test Scan is no longer available.');return}
+   if(f.name!=fileBase+'.pdf')f=new File([f],fileBase+'.pdf',{type:'application/pdf'});
+   const buf=new DataTransfer();[...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'));
+   try{
+    const id=uid(),now=Date.now();
+    await fput(id,f);
+    (c.scans??=[]).push({id,name:fileBase,size:f.size,type:'application/pdf',pages:details&&Number.isInteger(details.pages)&&details.pages>0?details.pages:1,t:now,u:now,tag:fileTag,th:details&&typeof details.thumbnail=='string'?details.thumbnail:''});
+    mark(c);
+    const saved=document.querySelector('[data-xa=scnlib]');if(saved)saved.textContent='Saved scans ('+scnCount(c)+')';
+   }catch(error){console.error(error);ctx.toast('The scan was added for reading but could not be saved to this class.')}
+  };
+  if(location.protocol=='file:'){
+   try{scnOpen({tag:fileTag,classData:c,onUse:useTestScan})}catch(error){console.error(error);ctx.toast('Could not open the scanner. Refresh the app and try again.')}
+   return
+  }
   const dlg=document.createElement('dialog'),frame=document.createElement('iframe');
   dlg.setAttribute('aria-label','Scan test sheets');
   dlg.style.cssText='width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#0b1020;overflow:hidden';
@@ -2172,20 +2188,12 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
    if(d.type=='gradu-test-scan-close'){dlg.close();return}
    if(d.type=='gradu-test-scan-error'){dlg.close();ctx.toast('Could not return the scan to Test Scan. Please try again.');return}
    if(d.type!='gradu-test-scan-result'||!(d.buffer instanceof ArrayBuffer)||!d.buffer.byteLength)return;
-   const fl=$('#fl');if(!fl){dlg.close();ctx.toast('Test Scan is no longer available.');return}
-   const f=new File([d.buffer],typeof d.name=='string'?d.name:'Scan.pdf',{type:'application/pdf'}),buf=new DataTransfer();
-   const id=uid(),now=Date.now(),pages=Number.isInteger(d.pages)&&d.pages>0?d.pages:1;
-   try{
-    await fput(id,f);
-    (c.scans??=[]).push({id,name:fileBase,size:f.size,type:'application/pdf',pages,t:now,u:now,tag:fileTag,th:typeof d.thumbnail=='string'?d.thumbnail:''});
-    mark(c);
-    const saved=document.querySelector('[data-xa=scnlib]');if(saved)saved.textContent='Saved scans ('+scnCount(c)+')';
-   }catch(error){console.error(error);ctx.toast('The scan was added for reading but could not be saved to this class.')}
-   [...fl.files].forEach(x=>buf.items.add(x));fl.files=buf.files;fl.dispatchEvent(new Event('change'));dlg.close();
+   const f=new File([d.buffer],typeof d.name=='string'?d.name:'Scan.pdf',{type:'application/pdf'});
+   await useTestScan(f,{pages:d.pages,thumbnail:d.thumbnail});dlg.close();
   };
   window.addEventListener('message',receive);
   dlg.addEventListener('close',()=>window.removeEventListener('message',receive),{once:true});
-  document.body.appendChild(dlg);dlg.showModal();return
+  try{document.body.appendChild(dlg);dlg.showModal()}catch(error){console.error(error);window.removeEventListener('message',receive);dlg.remove();ctx.toast('Could not open the scanner. Refresh the app and try again.')}return
  }
  if(a=='scan'){const fs=[...($('#fl')||{files:[]}).files];if(!fs.length){ctx.toast('Choose one or more sheet images or a PDF first.');return}
   if(ctx.route){if(!(await ctx.route()))return;t=ctx.d}

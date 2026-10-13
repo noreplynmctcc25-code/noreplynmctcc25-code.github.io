@@ -1,4 +1,4 @@
-const CACHE = 'clearscan-v5';
+const CACHE = 'clearscan-v6';
 const FILES = ['./', './index.html', './app.css', './scanner.css', './app.js', './tools.js', './storage.js', './scanner-engine.js', './manifest.json', '../pdf.min.js', '../pdf.worker.min.js', '../inter.woff2', '../icon-192.png', '../icon-512.png'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('clearscan-') && key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
