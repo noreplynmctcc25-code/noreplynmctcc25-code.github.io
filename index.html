@@ -34,7 +34,7 @@ html.gsw body>*:not(#gsp){visibility:hidden!important}
 .gi-once .gi-eR{animation:giW 1.2s ease-in-out both}.gi-once .gi-wk{animation:giWk 1.2s ease-in-out both}.gi-once .gi-hat{animation:giH 1.2s ease-in-out both}.gi-once .gi-tas{animation:giT 1.2s ease-in-out both}.gi-once .gi-th{animation:giThumb 1.2s ease-in-out both}.gi-once .gi-ok{animation:giOkay 1.2s ease-in-out both}
 .gico.gi-live:hover .gi-hat,.gico.gi-live:active .gi-hat{animation:giH .9s ease-in-out 1}
 .gwmw,.gspww{position:relative}
-.gwmw::after,#gsp .gspww::after{content:"zZz";position:absolute;right:12%;top:-.22em;color:currentColor;font:700 .58em/1 system-ui,sans-serif;opacity:0;animation:gwSleep 6s ease-in-out infinite;pointer-events:none}
+.gwmw::after,#gsp .gspww::after{content:"zZz";position:absolute;right:7%;top:-.72em;color:currentColor;font:700 .58em/1 system-ui,sans-serif;opacity:0;animation:gwSleep 6s ease-in-out infinite;pointer-events:none}
 .gwmw .gwm circle,#gsp .gspw circle{fill:currentColor;transform-box:fill-box;transform-origin:50% 50%;animation:gwWake 6s ease-in-out infinite}#gsp .gspw circle{fill:#fff}
 @media(prefers-reduced-motion:reduce){.gwmw::after,#gsp .gspww::after,.gwmw .gwm circle,#gsp .gspw circle{animation:none!important}}
 @media(prefers-reduced-motion:reduce){.gi-live,.gi-live *,.gi-once *{animation:none!important}}
@@ -1077,7 +1077,7 @@ html.thx,html.thx *{transition:background-color .3s ease,color .3s ease,border-c
 .sclg.sm{width:2rem;height:2rem}
 .bdv{width:1px;height:1.9rem;background:currentColor;opacity:.35;flex:none}
 .gmark{display:flex;align-items:center;gap:.45rem;min-width:0}
-.gico{width:2.1rem;height:2.1rem;flex:none}
+.gico{width:2.1rem;height:2.1rem;flex:none;overflow:visible}
 .gwmw{display:flex;flex-direction:column;line-height:1;min-width:0}
 .gwm{height:1.55rem;width:auto;display:block}
 .gsub{font-size:.66rem;font-weight:650;letter-spacing:.04em;opacity:.85;margin-top:.15rem;white-space:nowrap}
@@ -1283,7 +1283,7 @@ body.mdo{overflow:hidden;overscroll-behavior:none}
 @keyframes gspfi{to{opacity:1}}
 #gsp .gspc{position:relative;display:flex;align-items:center;gap:clamp(.7rem,2.4vw,1.1rem);transform:translateX(var(--sx,0));animation:gspi2 .9s cubic-bezier(.16,1,.3,1) .85s forwards}
 #gsp .gspi{position:relative;flex:none;width:clamp(68px,17vw,108px);aspect-ratio:1;display:grid;place-items:center;color:#fff;animation:gspi1 1s linear both}
-#gsp .gspi svg{width:100%;height:100%;filter:drop-shadow(0 10px 22px rgba(0,0,0,.28))}
+#gsp .gspi svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 10px 22px rgba(0,0,0,.28))}
 #gsp .gspi::before,#gsp .gspi::after{content:"";position:absolute;inset:-6%;border-radius:50%;border:2px solid rgba(255,255,255,.55);opacity:0;animation:gspr 1.1s cubic-bezier(.2,.7,.2,1) .35s}
 #gsp .gspi::after{animation-delay:.55s;border-color:color-mix(in srgb,var(--sec,#a78bfa) 70%,#fff)}
 @keyframes gspi1{0%{transform:translateY(46px) scale(.2) rotate(-28deg);opacity:0;filter:blur(10px);animation-timing-function:cubic-bezier(.2,.8,.3,1)}38%{transform:translateY(-10px) scale(1.12) rotate(6deg);opacity:1;filter:blur(0);animation-timing-function:cubic-bezier(.5,0,.5,1)}55%{transform:translateY(3px) scale(.94,1.06) rotate(-3deg);animation-timing-function:cubic-bezier(.5,0,.5,1)}72%{transform:translateY(-2px) scale(1.03,.97) rotate(1deg);animation-timing-function:cubic-bezier(.5,0,.5,1)}86%{transform:scale(.995,1.005)}100%{transform:none}}
@@ -1521,7 +1521,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER=191,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER=192,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests'].includes(N.view))view=N.view}catch(_){}
@@ -2781,7 +2781,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)try{applyT
 addEventListener('focus',()=>{try{applyTheme()}catch(_){}});
 try{matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{try{applyTheme()}catch(_){}})}catch(_){}
 const gPh=()=>{const t=performance.now()/1000,f=n=>(-(t%n)).toFixed(2)+'s';return`--ga:${f(9)};--gb:${f(5.3)};--gc:${f(4.2)};--gd:${f(6)}`};
-const gIcon=(cls='',tile=false,lab='Gradu')=>tile?`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="0 0 1024 1024" role=img aria-label="${lab}"><rect width=1024 height=1024 rx=230 fill="var(--p)"/><g style="color:var(--sec)">${G_ICONG}</g></svg>`:`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="150 120 724 760" role=img aria-label="${lab}">${G_ICONG}<g transform="translate(512,0)" fill="currentColor"><g class=gi-th><path d="M-350 633 L-350 585 Q-350 560 -332 560 Q-314 560 -314 585 L-314 600 L-286 600 Q-265 600 -271 620 L-282 649 Q-287 664 -304 664 L-334 664 Q-350 662 -350 646Z"/></g><g class=gi-ok><path d="M300 625 Q300 604 319 604 Q338 604 338 625 L338 638 Q350 646 347 664 L341 683 Q337 695 323 695 L297 695 Q286 695 282 683 L273 660 Q268 645 284 639 L300 639Z"/><circle cx="319" cy="579" r="25" fill="none" stroke="currentColor" stroke-width="12"/></g></g></svg>`;
+const gIcon=(cls='',tile=false,lab='Gradu')=>tile?`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="0 0 1024 1024" role=img aria-label="${lab}"><rect width=1024 height=1024 rx=230 fill="var(--p)"/><g style="color:var(--sec)">${G_ICONG}</g></svg>`:`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="90 120 844 760" role=img aria-label="${lab}">${G_ICONG}<g transform="translate(512,0)" fill="currentColor"><g class=gi-th><path d="M-350 633 L-350 585 Q-350 560 -332 560 Q-314 560 -314 585 L-314 600 L-286 600 Q-265 600 -271 620 L-282 649 Q-287 664 -304 664 L-334 664 Q-350 662 -350 646Z"/></g><g class=gi-ok><path d="M300 625 Q300 604 319 604 Q338 604 338 625 L338 638 Q350 646 347 664 L341 683 Q337 695 323 695 L297 695 Q286 695 282 683 L273 660 Q268 645 284 639 L300 639Z"/><circle cx="319" cy="579" r="25" fill="none" stroke="currentColor" stroke-width="12"/></g></g></svg>`;
 const gWord=(cls='',tag=false)=>`<svg class="${cls}" viewBox="${tag?'44 86 522 244':'44 86 522 188'}" role=img aria-label="Gradu" fill="currentColor">${G_WMG}${tag?G_TAG:''}</svg>`;
 
 /* ---------- schools (add an entry and a logo file to add a school) ---------- */
