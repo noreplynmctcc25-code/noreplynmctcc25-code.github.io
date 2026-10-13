@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="A private, browser-based document scanner with page cleanup and PDF tools.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="../icon-192.png">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="scanner.css">
+  <title>Scan · Documents</title>
+</head>
+<body>
+  <div class="mobile-app">
+    <header class="home-header">
+      <div class="top-line">
+        <button class="icon-button account-button" data-tab="me" aria-label="Open profile">
+          <span class="avatar">S</span>
+        </button>
+        <button class="folder-title" data-tab="docs" aria-label="All documents">
+          <span class="folder-title-main">All docs</span><span class="chevron">⌄</span>
+        </button>
+        <span class="top-spacer"></span>
+        <button class="icon-button" id="searchToggle" aria-label="Search documents">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        </button>
+        <button class="icon-button view-toggle" id="viewToggle" aria-label="Change document layout">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg>
+        </button>
+      </div>
+      <label class="search-box" id="searchBox">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        <input id="searchInput" type="search" placeholder="Search documents" autocomplete="off">
+        <button id="clearSearch" type="button" aria-label="Clear search" hidden>×</button>
+      </label>
+      <div class="folder-subline"><span>Recently scanned</span><button id="sortButton" class="sort-button">Date added <span>⌄</span></button></div>
+    </header>
+
+    <main class="app-content">
+      <section id="docsView" class="app-view">
+        <div class="quick-grid" aria-label="Create a scan">
+          <button class="quick-action primary-action" id="captureBtn">
+            <span class="quick-icon camera-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l1.5-2h7L17 7h3a1 1 0 0 1 1 1v11H3V8a1 1 0 0 1 1-1Z"></path><circle cx="12" cy="13" r="4"></circle></svg></span>
+            <span>Scan</span>
+          </button>
+          <button class="quick-action" id="importBtn">
+            <span class="quick-icon import-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5"></path><path d="M5 13v6h14v-6"></path></svg></span>
+            <span>Import</span>
+          </button>
+          <button class="quick-action" id="idModeBtn">
+            <span class="quick-icon id-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8" cy="11" r="2"></circle><path d="M5 16c.5-1.5 1.5-2.2 3-2.2s2.5.7 3 2.2m3-5h4m-4 3h4"></path></svg></span>
+            <span>ID card</span>
+          </button>
+          <button class="quick-action" id="pdfToolsBtn">
+            <span class="quick-icon pdf-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"></path><path d="M14 3v5h5M8.5 15h7m-7 3h7"></path></svg></span>
+            <span>PDF tools</span>
+          </button>
+        </div>
+
+        <section class="recent-section">
+          <div class="section-title-row">
+            <div><h1>Recent</h1><p id="recentSubtitle">Your scans will appear here</p></div>
+            <button class="text-button" id="savedBtn">View all <span class="count" id="savedCount">0</span></button>
+          </div>
+          <div class="recent-grid" id="recentList"></div>
+          <div class="empty-state" id="emptyState">
+            <div class="empty-art" aria-hidden="true">
+              <div class="empty-sheet"><i></i><i></i><i></i><i></i></div>
+              <span class="empty-lens"><b></b></span>
+            </div>
+            <h2>No scans yet</h2>
+            <p>Capture a page or import a file to create your first document.</p>
+            <button class="text-button empty-cta" id="emptyScanBtn">Start scanning <span>→</span></button>
+          </div>
+        </section>
+        <input id="fileInput" type="file" accept="image/*,application/pdf,.pdf" multiple hidden>
+      </section>
+
+      <section id="toolsView" class="app-view" hidden>
+        <div class="page-heading"><p class="eyebrow">WORKBENCH</p><h1>Tools</h1><p>Organize pages and prepare documents for sharing or printing.</p></div>
+        <div class="tools-list">
+          <button class="tool-row" data-tool="merge"><span class="tool-tile teal"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v5h5M4 7v14h11M10 12h6m-6 3h6"></path></svg></span><span><b>Merge or split PDF</b><small>Combine files, separate pages, or rearrange a scan</small></span><span class="row-arrow">›</span></button>
+          <button class="tool-row" data-tool="id"><span class="tool-tile blue"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8" cy="11" r="2"></circle><path d="M5 16c.5-1.5 1.5-2.2 3-2.2s2.5.7 3 2.2m3-5h4m-4 3h4"></path></svg></span><span><b>ID &amp; passport print</b><small>Place card scans and passport photos on A4</small></span><span class="row-arrow">›</span></button>
+          <button class="tool-row" data-tool="book"><span class="tool-tile violet"><svg viewBox="0 0 24 24"><path d="M12 5c-2-2-5-2.5-8-1v15c3-1.5 6-1 8 1m0-15c2-2 5-2.5 8-1v15c-3-1.5-6-1-8 1m0-15v15"></path></svg></span><span><b>Book &amp; whiteboard</b><small>Split a spread or improve board contrast</small></span><span class="row-arrow">›</span></button>
+          <button class="tool-row" data-tool="count"><span class="tool-tile orange"><svg viewBox="0 0 24 24"><circle cx="7" cy="7" r="2"></circle><circle cx="17" cy="7" r="2"></circle><circle cx="7" cy="17" r="2"></circle><circle cx="17" cy="17" r="2"></circle><path d="M12 3v18M3 12h18"></path></svg></span><span><b>Count &amp; measure</b><small>Mark items or measure against a known length</small></span><span class="row-arrow">›</span></button>
+          <button class="tool-row" data-tool="ai"><span class="tool-tile pink"><svg viewBox="0 0 24 24"><path d="m12 2 1.7 6.3L20 10l-6.3 1.7L12 18l-1.7-6.3L4 10l6.3-1.7L12 2Zm7 13 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z"></path></svg></span><span><b>AI cleanup</b><small>Advanced removal needs compatible model files</small></span><span class="row-arrow">›</span></button>
+        </div>
+        <div class="info-card"><span class="info-mark">i</span><p>Camera capture, image adjustments, cropping, and PDF creation run in your browser. Saved scans stay in this browser on this device.</p></div>
+      </section>
+
+      <section id="meView" class="app-view" hidden>
+        <div class="page-heading"><p class="eyebrow">LOCAL PROFILE</p><h1>Me</h1><p>Your scans are stored on this device.</p></div>
+        <div class="profile-card"><div class="profile-avatar">S</div><div><b>Scanner user</b><small>Browser-only library</small></div></div>
+        <button class="profile-row" id="profileSavedBtn"><span>Saved scans</span><b id="profileSavedCount">0</b><span class="row-arrow">›</span></button>
+        <div class="info-card"><span class="info-mark">✓</span><p>Documents remain in this browser profile. Download a PDF to keep a separate copy or move it to another device.</p></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item active" data-tab="docs"><span class="nav-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h12v16H7zM4 7v14h12"></path><path d="M10 8h6m-6 4h6m-6 4h4"></path></svg></span><span>Docs</span></button>
+      <button class="nav-item" data-tab="tools"><span class="nav-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg></span><span>Tools</span></button>
+      <button class="nav-scan" id="navScan" aria-label="Scan"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l1.5-2h7L17 7h3a1 1 0 0 1 1 1v11H3V8a1 1 0 0 1 1-1Z"></path><circle cx="12" cy="13" r="4"></circle></svg></span></button>
+      <button class="nav-item" data-tab="me"><span class="nav-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c.5-3.2 2.8-5 7-5s6.5 1.8 7 5"></path></svg></span><span>Me</span></button>
+      <button class="nav-item nav-files" id="navFiles"><span class="nav-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6zM3 7v14h12"></path><path d="M9 8h6m-6 4h6m-6 4h4"></path></svg></span><span>Saved</span></button>
+    </nav>
+  </div>
+
+  <dialog id="quickTool" class="quick-tool">
+    <form method="dialog" class="quick-head"><div><p class="eyebrow" id="quickEyebrow">CAMERA TOOLS</p><h2 id="quickTitle">Count &amp; measure</h2></div><button class="close-tool" aria-label="Close">×</button></form>
+    <div class="quick-body">
+      <div class="quick-actions"><button class="button button-quiet" id="countMode">Count</button><button class="button button-quiet" id="measureMode">Measure</button><label class="button button-secondary">Choose photo<input id="toolPhoto" type="file" accept="image/*" hidden></label><label id="knownLengthWrap" class="known-length" hidden>Known reference length <span><input id="knownLength" type="number" min="0.01" step="any" value="10"> cm</span></label><button class="button button-quiet" id="undoMark">Undo mark</button><button class="button button-quiet" id="clearMarks">Clear</button></div>
+      <div class="tool-stage" id="toolStage"><canvas id="toolCanvas"></canvas><div id="toolEmpty">Choose a photo to begin.</div></div>
+      <p class="tool-instruction" id="toolInstruction">Choose a photo. Tap each object to count it.</p>
+      <div class="tool-readout"><span id="toolCount">0 marked</span><span id="toolMeasure"></span></div>
+    </div>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="storage.js"></script>
+  <script src="app.js"></script>
+  <script src="tools.js"></script>
+  <script src="scanner-engine.js"></script>
+</body>
+</html>

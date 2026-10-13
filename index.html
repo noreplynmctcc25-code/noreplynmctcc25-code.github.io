@@ -2154,7 +2154,27 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
  if(a=='psheet'){const l=lay(t);if(l.over){ctx.toast(l.ovE?'The items and essay boxes do not fit on one page. Reduce the items or essay questions.':'Too many items for one sheet ('+l.n+' of '+l.cap+').');return}let p=document.getElementById('tbps');if(!p){p=document.createElement('div');p.id='tbps';document.body.appendChild(p)}p.innerHTML=`<style>@page{size:${l.W}mm ${l.H}mm;margin:0}</style>`+sheetHTML(t);document.body.classList.add('tbp');window.print();return}
  if(a=='print'){window.print();return}
  if(a=='scnlib'){scnOpen({lib:1,tag:ctx.d&&(ctx.d.name||ctx.d.n||ctx.d.title)||'',onUse:f=>{const fl=$('#fl');if(!fl)return;const buf=new DataTransfer();[...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'))}});return}
- if(a=='scncam'){scnOpen({tag:ctx.d&&(ctx.d.name||ctx.d.n||ctx.d.title)||'',onUse:f=>{const fl=$('#fl');if(!fl)return;const buf=new DataTransfer();[...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'))}});return}
+ if(a=='scncam'){
+  const dlg=document.createElement('dialog'),frame=document.createElement('iframe');
+  dlg.setAttribute('aria-label','Scan test sheets');
+  dlg.style.cssText='width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#0b1020;overflow:hidden';
+  frame.title='Gradu document scanner';frame.allow='camera';frame.src='scanner/index.html?mode=test';
+  frame.style.cssText='display:block;width:100%;height:100%;border:0';
+  dlg.appendChild(frame);dlg.addEventListener('close',()=>dlg.remove());
+  const receive=e=>{
+   if(e.origin!==location.origin||e.source!==frame.contentWindow)return;
+   const d=e.data||{};
+   if(d.type=='gradu-test-scan-close'){dlg.close();return}
+   if(d.type=='gradu-test-scan-error'){dlg.close();ctx.toast('Could not return the scan to Test Scan. Please try again.');return}
+   if(d.type!='gradu-test-scan-result'||!(d.buffer instanceof ArrayBuffer)||!d.buffer.byteLength)return;
+   const fl=$('#fl');if(!fl){dlg.close();ctx.toast('Test Scan is no longer available.');return}
+   const f=new File([d.buffer],typeof d.name=='string'?d.name:'Scan.pdf',{type:'application/pdf'}),buf=new DataTransfer();
+   [...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'));dlg.close();
+  };
+  window.addEventListener('message',receive);
+  dlg.addEventListener('close',()=>window.removeEventListener('message',receive),{once:true});
+  document.body.appendChild(dlg);dlg.showModal();return
+ }
  if(a=='scan'){const fs=[...($('#fl')||{files:[]}).files];if(!fs.length){ctx.toast('Choose one or more sheet images or a PDF first.');return}
   if(ctx.route){if(!(await ctx.route()))return;t=ctx.d}
   try{$('#sst').textContent='Preparing files…';const jobs=await expandFiles(fs);const total=jobs.length;if(!total){ctx.toast('No pages found.');return}
