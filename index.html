@@ -1519,7 +1519,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER=202,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER=203,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests'].includes(N.view))view=N.view}catch(_){}
@@ -2155,7 +2155,7 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
  if(a=='print'){window.print();return}
  if(a=='scnlib'){scnOpen({lib:1,classData:c,tag:ctx.d&&(ctx.d.name||ctx.d.n||ctx.d.title)||'',onUse:f=>{const fl=$('#fl');if(!fl)return;const buf=new DataTransfer();[...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'))}});return}
  if(a=='scncam'){
-  try{if(!(await tbRoute(c,t)))return}catch(error){console.error(error);ctx.toast('Could not prepare the scanner. Please try again.');return}
+  try{if(!(await tbRoute(c,t)))return}catch(error){console.error(error);ctx.toast('Could not open the section selector. Scanning will continue with the current section selection.')}
   const sections=tbSecSel(c),term=(TERMS.find(x=>x[0]==t.term)||[,''])[1],component=(tbTg(c,t.term).find(x=>x.tg==tbTgOf(c,t))||{}).l||'',subject=c.meta.subj||c.meta.course||'Course',
    sectionNames=sections.map(x=>String(x.meta.section||'').trim()||cname(x)).filter(Boolean),
    fileBase=([term,component,subject].filter(Boolean).join(' ')+(sectionNames.length?'-'+sectionNames.join('_'):'')).replace(/[<>:"/\\|?*\x00-\x1F]/g,'-').replace(/\s+/g,' ').replace(/[. ]+$/,'').slice(0,180)||'Scan',
@@ -2188,8 +2188,16 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
    if(d.type=='gradu-test-scan-close'){dlg.close();return}
    if(d.type=='gradu-test-scan-error'){dlg.close();ctx.toast('Could not return the scan to Test Scan. Please try again.');return}
    if(d.type!='gradu-test-scan-result'||!(d.buffer instanceof ArrayBuffer)||!d.buffer.byteLength)return;
-   const f=new File([d.buffer],typeof d.name=='string'?d.name:'Scan.pdf',{type:'application/pdf'});
-   await useTestScan(f,{pages:d.pages,thumbnail:d.thumbnail});dlg.close();
+   const fl=$('#fl');if(!fl){dlg.close();ctx.toast('Test Scan is no longer available.');return}
+   const f=new File([d.buffer],typeof d.name=='string'?d.name:'Scan.pdf',{type:'application/pdf'}),buf=new DataTransfer();
+   const id=uid(),now=Date.now(),pages=Number.isInteger(d.pages)&&d.pages>0?d.pages:1;
+   try{
+    await fput(id,f);
+    (c.scans??=[]).push({id,name:fileBase,size:f.size,type:'application/pdf',pages,t:now,u:now,tag:fileTag,th:typeof d.thumbnail=='string'?d.thumbnail:''});
+    mark(c);
+    const saved=document.querySelector('[data-xa=scnlib]');if(saved)saved.textContent='Saved scans ('+scnCount(c)+')';
+   }catch(error){console.error(error);ctx.toast('The scan was added for reading but could not be saved to this class.')}
+   [...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'));dlg.close();
   };
   window.addEventListener('message',receive);
   dlg.addEventListener('close',()=>window.removeEventListener('message',receive),{once:true});
@@ -5563,6 +5571,7 @@ function build(){const r=D.createElement('div');r.id='scn';r.setAttribute('role'
  <button class="sc-b sc-torch" data-scn=torch hidden>Light</button>
  <div class=sc-cb><label class="sc-b sc-gal" title="Choose photos">Photos<input type=file accept="image/*" multiple hidden data-scn=gal></label><button class=sc-shut data-scn=shut aria-label="Take photo"></button><button class="sc-b sc-done" data-scn=done>Done</button></div>
  <div class=sc-fb hidden><p>The camera is not available here. You can still take a photo with your phone's camera app or choose photos you already have.</p>
+  <button class="sc-b" type=button data-scn=retry>Try camera again</button>
   <label class="sc-b sc-pri">Take a photo<input type=file accept="image/*" capture=environment hidden data-scn=gal></label><label class=sc-b>Choose photos<input type=file accept="image/*" multiple hidden data-scn=gal></label></div></div>
 <div class=sc-ed hidden>
  <div class=sc-stage><canvas class=sc-e></canvas><canvas class=sc-r hidden></canvas><canvas class=sc-lp width=220 height=220 hidden></canvas>
@@ -5595,14 +5604,22 @@ function strip(){if(!S||!S.root)return;const st=R('.sc-strip');if(!st)return;st.
 function show(w){S.mode_=w;R('.sc-cam').hidden=w!='cam';R('.sc-ed').hidden=w!='ed';R('.sc-lib').hidden=w!='lib';R('.sc-vw').hidden=true;setTitle()}
 
 /* camera */
-async function camStart(){camStop();show('cam');camLabels();
- if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){R('.sc-fb').hidden=false;return}
- try{S.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:3840},height:{ideal:2160}},audio:false});if(!S||S.mode_!='cam'){camStop();return}const v=R('video');v.srcObject=S.stream;await v.play().catch(()=>{});R('.sc-fb').hidden=true;
-  const tr=S.stream.getVideoTracks()[0],cap=tr.getCapabilities?tr.getCapabilities():{};R('[data-scn=torch]').hidden=!cap.torch;
-  S.tick=setInterval(live,320)}catch(e){console.warn(e);if(S)R('.sc-fb').hidden=false}}
+function cameraErrorText(e){if(e&&['NotAllowedError','SecurityError'].includes(e.name))return'Camera permission is blocked. Allow camera access for this page in your browser settings, then try again. You can also take or choose a photo below.';
+ if(e&&e.name=='NotFoundError')return'No camera was found. Connect or enable a camera, or take or choose a photo below.';
+ if(e&&e.name=='NotReadableError')return'The camera could not start. It may be in use by another app; close that app and try again, or take or choose a photo below.';
+ return'The camera could not start. Check browser camera permission and try again, or take or choose a photo below.'}
+async function camStart(){camStop();show('cam');camLabels();const state=S,fb=R('.sc-fb'),message=fb.querySelector('p');
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){message.textContent='Camera access is unavailable in this browser or page. You can still take or choose a photo below.';fb.hidden=false;return}
+ let stream;
+ try{try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:3840},height:{ideal:2160}},audio:false})}
+  catch(e){if(!e||!['OverconstrainedError','ConstraintNotSatisfiedError','TypeError'].includes(e.name))throw e;console.info('Camera constraints unavailable; retrying with default video settings',e);stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false})}
+  if(S!==state||state.mode_!='cam'){stream.getTracks().forEach(t=>t.stop());return}
+  state.stream=stream;const v=R('video');v.srcObject=stream;await v.play().catch(()=>{});if(S!==state||state.mode_!='cam'){stream.getTracks().forEach(t=>t.stop());return}fb.hidden=true;
+  const tr=stream.getVideoTracks()[0],cap=tr&&tr.getCapabilities?tr.getCapabilities():{};R('[data-scn=torch]').hidden=!cap.torch;
+  state.tick=setInterval(live,320)}catch(e){console.warn(e);if(S===state){message.textContent=cameraErrorText(e);fb.hidden=false}}}
 function camStop(){if(!S)return;clearInterval(S.tick);S.tick=0;if(S.stream){S.stream.getTracks().forEach(t=>t.stop());S.stream=null}const v=S.root&&R('video');if(v)v.srcObject=null}
 function camLabels(){const d=R('[data-scn=done]');d.textContent=S.pages.length?'Done ('+S.pages.length+')':'Cancel'}
-function live(){const v=R('video'),ov=R('.sc-ov');if(!v||v.readyState<2||!v.videoWidth)return;const cw=ov.clientWidth,ch=ov.clientHeight,dpr=Math.min(2,devicePixelRatio||1);if(ov.width!=cw*dpr||ov.height!=ch*dpr){ov.width=cw*dpr;ov.height=ch*dpr}
+function live(){if(!S||S.mode_!='cam')return;const v=R('video'),ov=R('.sc-ov');if(!v||v.readyState<2||!v.videoWidth)return;const cw=ov.clientWidth,ch=ov.clientHeight,dpr=Math.min(2,devicePixelRatio||1);if(ov.width!=cw*dpr||ov.height!=ch*dpr){ov.width=cw*dpr;ov.height=ch*dpr}
  const g=ov.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,cw,ch);const q=detect(v,1);S.liveQ=q;if(!q)return;
  const k=Math.min(cw/v.videoWidth,ch/v.videoHeight),ox=(cw-v.videoWidth*k)/2,oy=(ch-v.videoHeight*k)/2;g.beginPath();q.forEach((p,i)=>{const x=ox+p.x*k,y=oy+p.y*k;i?g.lineTo(x,y):g.moveTo(x,y)});g.closePath();g.fillStyle='rgba(52,211,153,.18)';g.fill();g.lineWidth=3;g.strokeStyle='#34d399';g.stroke()}
 async function shoot(){const v=R('video');if(!v||!v.videoWidth||S.busy)return;S.busy=1;try{const c=cvs(v.videoWidth,v.videoHeight);c.getContext('2d').drawImage(v,0,0);const cam=R('.sc-cam');cam.classList.add('flash');setTimeout(()=>cam.classList.remove('flash'),120);if(navigator.vibrate)navigator.vibrate(20);
@@ -5670,6 +5687,7 @@ function wire(){const r=S.root,e=R('.sc-e'),st=R('.sc-stage');
   if(b.classList.contains('sc-th')&&b.dataset.i!=null){const i=+b.dataset.i;return go(i,i>S.cur?1:-1)}
   if(a=='close')return close();
   if(a=='shut')return shoot();
+  if(a=='retry')return camStart();
   if(a=='done'){if(!S.pages.length)return close(true);return openEditor(S.cur)}
   if(a=='torch'){S.torch=!S.torch;try{await S.stream.getVideoTracks()[0].applyConstraints({advanced:[{torch:S.torch}]})}catch(_){}return}
   if(a=='add')return camStart();

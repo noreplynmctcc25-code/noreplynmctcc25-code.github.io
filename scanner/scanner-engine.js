@@ -179,6 +179,7 @@ function build(){const r=D.createElement('div');r.id='scn';r.setAttribute('role'
  <div class=sc-modes aria-label="Capture mode"><button class=on data-scn=cam-mode data-v=doc>Document</button><button data-scn=cam-mode data-v=id>ID card</button><button data-scn=cam-mode data-v=book>Book</button><button data-scn=cam-mode data-v=board>Board</button></div>
  <div class=sc-cb><label class="sc-b sc-gal" title="Choose photos or PDF">Photos / PDF<input type=file accept="image/*,application/pdf,.pdf" multiple hidden data-scn=gal></label><button class=sc-shut data-scn=shut aria-label="Take photo"></button><button class="sc-b sc-done" data-scn=done>Done</button></div>
  <div class=sc-fb hidden><p>The camera is not available here. You can still take a photo with your phone's camera app or choose photos you already have.</p>
+  <button class="sc-b" type=button data-scn=retry>Try camera again</button>
   <label class="sc-b sc-pri">Take a photo<input type=file accept="image/*" capture=environment hidden data-scn=gal></label><label class=sc-b>Choose photos<input type=file accept="image/*" multiple hidden data-scn=gal></label></div></div>
 <div class=sc-ed hidden>
  <div class=sc-stage><canvas class=sc-e></canvas><canvas class=sc-r hidden></canvas><canvas class=sc-lp width=220 height=220 hidden></canvas>
@@ -212,14 +213,22 @@ function strip(){if(!S||!S.root)return;const st=R('.sc-strip');if(!st)return;st.
 function show(w){S.mode_=w;R('.sc-cam').hidden=w!='cam';R('.sc-ed').hidden=w!='ed';R('.sc-lib').hidden=w!='lib';R('.sc-vw').hidden=true;setTitle()}
 
 /* camera */
-async function camStart(){camStop();show('cam');camLabels();
- if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){R('.sc-fb').hidden=false;return}
- try{S.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:3840},height:{ideal:2160}},audio:false});if(!S||S.mode_!='cam'){camStop();return}const v=R('video');v.srcObject=S.stream;await v.play().catch(()=>{});R('.sc-fb').hidden=true;
-  const tr=S.stream.getVideoTracks()[0],cap=tr.getCapabilities?tr.getCapabilities():{};try{S.imageCapture=typeof ImageCapture=='function'?new ImageCapture(tr):null}catch(_){S.imageCapture=null}R('[data-scn=torch]').hidden=!cap.torch;
-  S.tick=setInterval(live,320)}catch(e){console.warn(e);if(S)R('.sc-fb').hidden=false}}
+function cameraErrorText(e){if(e&&['NotAllowedError','SecurityError'].includes(e.name))return'Camera permission is blocked. Allow camera access for this page in your browser settings, then try again. You can also take or choose a photo below.';
+ if(e&&e.name=='NotFoundError')return'No camera was found. Connect or enable a camera, or take or choose a photo below.';
+ if(e&&e.name=='NotReadableError')return'The camera could not start. It may be in use by another app; close that app and try again, or take or choose a photo below.';
+ return'The camera could not start. Check browser camera permission and try again, or take or choose a photo below.'}
+async function camStart(){camStop();show('cam');camLabels();const state=S,fb=R('.sc-fb'),message=fb.querySelector('p');
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){message.textContent='Camera access is unavailable in this browser or page. You can still take or choose a photo below.';fb.hidden=false;return}
+ let stream;
+ try{try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:3840},height:{ideal:2160}},audio:false})}
+  catch(e){if(!e||!['OverconstrainedError','ConstraintNotSatisfiedError','TypeError'].includes(e.name))throw e;console.info('Camera constraints unavailable; retrying with default video settings',e);stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false})}
+  if(S!==state||state.mode_!='cam'){stream.getTracks().forEach(t=>t.stop());return}
+  state.stream=stream;const v=R('video');v.srcObject=stream;await v.play().catch(()=>{});if(S!==state||state.mode_!='cam'){stream.getTracks().forEach(t=>t.stop());return}fb.hidden=true;
+  const tr=stream.getVideoTracks()[0],cap=tr&&tr.getCapabilities?tr.getCapabilities():{};try{state.imageCapture=tr&&typeof ImageCapture=='function'?new ImageCapture(tr):null}catch(_){state.imageCapture=null}R('[data-scn=torch]').hidden=!cap.torch;
+  state.tick=setInterval(live,320)}catch(e){console.warn(e);if(S===state){message.textContent=cameraErrorText(e);fb.hidden=false}}}
 function camStop(){if(!S)return;clearInterval(S.tick);S.tick=0;S.imageCapture=null;if(S.stream){S.stream.getTracks().forEach(t=>t.stop());S.stream=null}const v=S.root&&R('video');if(v)v.srcObject=null}
 function camLabels(){const d=R('[data-scn=done]');d.textContent=S.pages.length?'Done ('+S.pages.length+')':'Cancel'}
-function live(){const v=R('video'),ov=R('.sc-ov');if(!v||v.readyState<2||!v.videoWidth)return;const cw=ov.clientWidth,ch=ov.clientHeight,dpr=Math.min(2,devicePixelRatio||1);if(ov.width!=cw*dpr||ov.height!=ch*dpr){ov.width=cw*dpr;ov.height=ch*dpr}
+function live(){if(!S||S.mode_!='cam')return;const v=R('video'),ov=R('.sc-ov');if(!v||v.readyState<2||!v.videoWidth)return;const cw=ov.clientWidth,ch=ov.clientHeight,dpr=Math.min(2,devicePixelRatio||1);if(ov.width!=cw*dpr||ov.height!=ch*dpr){ov.width=cw*dpr;ov.height=ch*dpr}
  const g=ov.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,cw,ch);const q=detect(v,1);S.liveQ=q;if(!q)return;
  const k=Math.min(cw/v.videoWidth,ch/v.videoHeight),ox=(cw-v.videoWidth*k)/2,oy=(ch-v.videoHeight*k)/2;g.beginPath();q.forEach((p,i)=>{const x=ox+p.x*k,y=oy+p.y*k;i?g.lineTo(x,y):g.moveTo(x,y)});g.closePath();g.fillStyle='rgba(52,211,153,.18)';g.fill();g.lineWidth=3;g.strokeStyle='#34d399';g.stroke()}
 async function shoot(){const state=S,v=R('video');if(!v||!v.videoWidth||state.busy)return;state.busy=1;let src=null;try{let sw=0,sh=0;if(state.imageCapture){try{const blob=await state.imageCapture.takePhoto();src=await bmOf(blob);sw=src.width;sh=src.height}catch(e){console.debug('Native still capture unavailable; using camera frame',e)}}if(S!==state||state.mode_!='cam')return;if(!src){const c=cvs(v.videoWidth,v.videoHeight);c.getContext('2d').drawImage(v,0,0);src=c;sw=c.width;sh=c.height}const cam=R('.sc-cam');cam.classList.add('flash');setTimeout(()=>cam.classList.remove('flash'),120);if(navigator.vibrate)navigator.vibrate(20);
@@ -301,6 +310,7 @@ function wire(){const r=S.root,e=R('.sc-e'),st=R('.sc-stage');
    return
   }
   if(a=='shut')return shoot();
+  if(a=='retry')return camStart();
   if(a=='done'){if(!S.pages.length)return close(true);return openEditor(S.cur)}
   if(a=='torch'){S.torch=!S.torch;try{await S.stream.getVideoTracks()[0].applyConstraints({advanced:[{torch:S.torch}]})}catch(_){}return}
   if(a=='add')return camStart();

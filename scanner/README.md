@@ -17,7 +17,7 @@ The Test Scan camera action opens this scanner in an in-app dialog. Choosing **S
 - Browser-local saved scan library.
 - PDF.js support for importing an existing PDF as editable scan pages.
 
-Camera access requires HTTPS (or localhost) and a camera permission grant. Image and PDF processing is client-side; saved PDFs remain in this browser profile.
+Camera access requires HTTPS (or localhost) and a camera permission grant. If the browser rejects the preferred camera settings, the scanner retries with basic video settings; if startup still fails, it explains common permission/device problems and offers a retry plus photo-import options. Image and PDF processing is client-side; saved PDFs remain in this browser profile.
 
 ## AI model packs
 
