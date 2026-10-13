@@ -24,8 +24,8 @@ html.gsw body>*:not(#gsp){visibility:hidden!important}
 @keyframes giU{0%,100%{transform:translateY(0)}50%{transform:translateY(-3%)}}
 @keyframes giThumb{0%,38%,100%{opacity:1;transform:rotate(-10deg) translateY(-4px)}48%,88%{opacity:0;transform:rotate(14deg) translateY(8px)}}
 @keyframes giOkay{0%,38%,100%{opacity:0;transform:rotate(12deg) translateY(8px)}48%,88%{opacity:1;transform:rotate(-8deg) translateY(-4px)}}
-@keyframes gwFace{0%,17%{content:"•ᴗ•"}20%,25%{content:"😉"}30%,47%{content:"♡"}52%,78%{content:"…"}82%,100%{content:"zZ"}}
-@keyframes gwHands{0%,30%{content:"👍"}35%,58%{content:"👌"}63%,80%{content:"👏"}85%,100%{content:"👐"}}
+@keyframes gwWake{0%,22%{transform:scaleY(.12)}26%{transform:scaleY(1.8)}31%{transform:scaleY(.72)}38%,100%{transform:scaleY(1)}}
+@keyframes gwSleep{0%,22%{opacity:1;transform:translateY(0) rotate(-8deg)}26%,38%,100%{opacity:0;transform:translateY(-.5rem) rotate(8deg)}}
 .gi-live{animation:giU 6s ease-in-out var(--gd,0s) infinite}
 .gi-live .gi-eR{animation:giW 9s ease-in-out var(--ga,0s) infinite}.gi-live .gi-wk{animation:giWk 9s ease-in-out var(--ga,0s) infinite}
 .gi-live .gi-hat{animation:giH 9s ease-in-out var(--ga,0s) infinite}.gi-live .gi-tas{animation:giT 9s ease-in-out var(--ga,0s) infinite}
@@ -34,9 +34,9 @@ html.gsw body>*:not(#gsp){visibility:hidden!important}
 .gi-once .gi-eR{animation:giW 1.2s ease-in-out both}.gi-once .gi-wk{animation:giWk 1.2s ease-in-out both}.gi-once .gi-hat{animation:giH 1.2s ease-in-out both}.gi-once .gi-tas{animation:giT 1.2s ease-in-out both}.gi-once .gi-th{animation:giThumb 1.2s ease-in-out both}.gi-once .gi-ok{animation:giOkay 1.2s ease-in-out both}
 .gico.gi-live:hover .gi-hat,.gico.gi-live:active .gi-hat{animation:giH .9s ease-in-out 1}
 .gwmw,.gspww{position:relative}
-.gwmw::after,#gsp .gspww::after{content:"•ᴗ•";position:absolute;right:-.35rem;top:-.55rem;font:700 .68rem/1.1 system-ui,sans-serif;color:var(--sec);animation:gwFace 8s steps(1,end) infinite}
-.gwmw::before,#gsp .gspww::before{content:"👍";position:absolute;right:-.65rem;bottom:.25rem;font:1rem/1 system-ui,sans-serif;transform-origin:50% 90%;animation:gwHands 8s steps(1,end) infinite,giH 1.6s ease-in-out infinite}
-@media(prefers-reduced-motion:reduce){.gwmw::before,.gwmw::after,#gsp .gspww::before,#gsp .gspww::after{animation:none!important}}
+.gwmw::after,#gsp .gspww::after{content:"zZz";position:absolute;right:12%;top:-.22em;color:currentColor;font:700 .58em/1 system-ui,sans-serif;opacity:0;animation:gwSleep 6s ease-in-out infinite;pointer-events:none}
+.gwmw .gwm circle,#gsp .gspw circle{fill:currentColor;transform-box:fill-box;transform-origin:50% 50%;animation:gwWake 6s ease-in-out infinite}#gsp .gspw circle{fill:#fff}
+@media(prefers-reduced-motion:reduce){.gwmw::after,#gsp .gspww::after,.gwmw .gwm circle,#gsp .gspw circle{animation:none!important}}
 @media(prefers-reduced-motion:reduce){.gi-live,.gi-live *,.gi-once *{animation:none!important}}
 
 html[data-dark="1"]{--pri:color-mix(in srgb,var(--p) 62%,#fff);--bg:#050506;--card:#121214;--ink:#f2f2f4;--mut:#9b9ba4;--line:#26262b;--head:#1b1b1f;--field:#0e0e10;--hl:#3a3410;--ok:#4cc38a;--bad:#ff7b7b;color-scheme:dark}
@@ -1291,9 +1291,7 @@ body.mdo{overflow:hidden;overscroll-behavior:none}
 @keyframes gspr{0%{opacity:.9;transform:scale(.7)}100%{opacity:0;transform:scale(1.9)}}
 #gsp .gspww{position:relative;display:flex;flex-direction:column;align-items:flex-start;clip-path:inset(-20% 100% -20% 0);animation:gspwr .9s cubic-bezier(.16,1,.3,1) .85s forwards}
 #gsp .gspw{display:block;height:clamp(48px,12.5vw,82px);width:auto;overflow:visible;animation:gspwb 1.1s cubic-bezier(.16,1,.3,1) .85s both}@keyframes gspwb{0%{transform:translateX(-14px) skewX(-8deg);filter:blur(6px);opacity:.4}100%{transform:none;filter:blur(0);opacity:1}}
-#gsp .gspw circle{transform-box:fill-box;transform-origin:50% 100%;animation:gspd .55s cubic-bezier(.34,1.56,.64,1) both}
-#gsp .gspw circle:nth-of-type(1){animation-delay:1.38s}#gsp .gspw circle:nth-of-type(2){animation-delay:1.5s}
-@keyframes gspd{0%{transform:translateY(-140%) scale(0);opacity:0}70%{transform:translateY(8%) scale(1.2,.8);opacity:1}100%{transform:none}}
+#gsp .gspw circle{transform-box:fill-box;transform-origin:50% 50%;animation:gwWake 6s ease-in-out infinite}
 @keyframes gspwr{to{clip-path:inset(-20% -5% -20% 0)}}
 #gsp .gspe{position:absolute;top:-12%;bottom:-12%;left:0;width:3px;border-radius:3px;background:linear-gradient(transparent,#fff 30%,#fff 70%,transparent);box-shadow:0 0 16px 4px color-mix(in srgb,var(--sec,#a78bfa) 70%,#fff);opacity:0;animation:gspem .9s cubic-bezier(.16,1,.3,1) .85s}
 @keyframes gspem{0%{left:0;opacity:1}85%{opacity:1}100%{left:100%;opacity:0}}
@@ -1523,7 +1521,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER=189,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER=190,TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests'].includes(N.view))view=N.view}catch(_){}
@@ -2783,7 +2781,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)try{applyT
 addEventListener('focus',()=>{try{applyTheme()}catch(_){}});
 try{matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{try{applyTheme()}catch(_){}})}catch(_){}
 const gPh=()=>{const t=performance.now()/1000,f=n=>(-(t%n)).toFixed(2)+'s';return`--ga:${f(9)};--gb:${f(5.3)};--gc:${f(4.2)};--gd:${f(6)}`};
-const gIcon=(cls='',tile=false,lab='Gradu')=>tile?`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="0 0 1024 1024" role=img aria-label="${lab}"><rect width=1024 height=1024 rx=230 fill="var(--p)"/><g style="color:var(--sec)">${G_ICONG}</g></svg>`:`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="150 120 724 760" role=img aria-label="${lab}">${G_ICONG}<g transform="translate(512,0)" fill="none" stroke="currentColor" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"><g class=gi-th><path d="M-195 712 Q-248 733 -281 680"/><path d="M-300 654 L-300 607 Q-300 584 -282 584 Q-264 584 -264 607 L-264 618 L-237 618 Q-218 618 -224 637 L-235 668 Q-240 682 -257 682 L-285 682 Q-300 680 -300 654Z"/></g><g class=gi-ok><path d="M195 712 Q248 733 281 680"/><path d="M262 614 Q263 584 290 584 Q317 584 317 614 Q317 641 290 641 Q264 641 262 614Z"/><path d="M290 641 L290 676 M255 674 Q290 699 325 674"/></g></g></svg>`;
+const gIcon=(cls='',tile=false,lab='Gradu')=>tile?`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="0 0 1024 1024" role=img aria-label="${lab}"><rect width=1024 height=1024 rx=230 fill="var(--p)"/><g style="color:var(--sec)">${G_ICONG}</g></svg>`:`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="150 120 724 760" role=img aria-label="${lab}">${G_ICONG}<g transform="translate(512,0)" fill="currentColor"><g class=gi-th><path d="M-350 633 L-350 585 Q-350 560 -332 560 Q-314 560 -314 585 L-314 600 L-286 600 Q-265 600 -271 620 L-282 649 Q-287 664 -304 664 L-334 664 Q-350 662 -350 646Z"/></g><g class=gi-ok><path d="M300 625 Q300 604 319 604 Q338 604 338 625 L338 638 Q350 646 347 664 L341 683 Q337 695 323 695 L297 695 Q286 695 282 683 L273 660 Q268 645 284 639 L300 639Z"/><circle cx="319" cy="579" r="25" fill="none" stroke="currentColor" stroke-width="12"/></g></g></svg>`;
 const gWord=(cls='',tag=false)=>`<svg class="${cls}" viewBox="${tag?'44 86 522 244':'44 86 522 188'}" role=img aria-label="Gradu" fill="currentColor">${G_WMG}${tag?G_TAG:''}</svg>`;
 
 /* ---------- schools (add an entry and a logo file to add a school) ---------- */
