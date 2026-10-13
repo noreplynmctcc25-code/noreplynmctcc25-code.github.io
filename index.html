@@ -2154,7 +2154,7 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
  if(a=='psheet'){const l=lay(t);if(l.over){ctx.toast(l.ovE?'The items and essay boxes do not fit on one page. Reduce the items or essay questions.':'Too many items for one sheet ('+l.n+' of '+l.cap+').');return}let p=document.getElementById('tbps');if(!p){p=document.createElement('div');p.id='tbps';document.body.appendChild(p)}p.innerHTML=`<style>@page{size:${l.W}mm ${l.H}mm;margin:0}</style>`+sheetHTML(t);document.body.classList.add('tbp');window.print();return}
  if(a=='print'){window.print();return}
  if(a=='scnlib'){scnOpen({lib:1,classData:c,tag:ctx.d&&(ctx.d.name||ctx.d.n||ctx.d.title)||'',onUse:f=>{const fl=$('#fl');if(!fl)return;const buf=new DataTransfer();[...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'))}});return}
- if(a=='scncam'){
+ if(a=='scncam'){t=ctx.t||t;
   try{if(!(await tbRoute(c,t)))return}catch(error){console.error(error);ctx.toast('Could not open the section selector. Scanning will continue with the current section selection.')}
   const sections=tbSecSel(c),term=(TERMS.find(x=>x[0]==t.term)||[,''])[1],component=(tbTg(c,t.term).find(x=>x.tg==tbTgOf(c,t))||{}).l||'',subject=c.meta.subj||c.meta.course||'Course',
    sectionNames=sections.map(x=>String(x.meta.section||'').trim()||cname(x)).filter(Boolean),
