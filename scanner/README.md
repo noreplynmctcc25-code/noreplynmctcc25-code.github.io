@@ -4,7 +4,7 @@ The mobile dashboard and capture flow follow the document-library, quick-action,
 
 Standalone browser scanner PWA at `/scanner/`. It reuses the existing Gradu scanner's local image pipeline and PDF writer, with independent UI and local scan storage.
 
-The Test Scan camera action opens this scanner in an in-app dialog. Choosing **Save to Scan tab** saves the PDF to that class's scan library and adds it to the test page upload flow. Its default filename uses the grading period, component, subject code, and selected section names. The Test Scan **Saved scans** button opens that same class library.
+The Test Scan camera action loads this scanner engine and its stylesheet directly into the main app page, so the camera runs in the top-level page instead of an iframe. Choosing **Save to Scan tab** saves the PDF to that class's scan library and adds it to the test page upload flow. Its default filename uses the grading period, component, subject code, and selected section names. The Test Scan **Saved scans** button opens that same class library.
 
 ## Included in this browser build
 

@@ -5,6 +5,7 @@ const D=document,$=(s,r)=>(r||D).querySelector(s),clamp=(v,a,b)=>v<a?a:v>b?b:v;
 const QL={s:{q:.62,m:1600,n:'Small'},b:{q:.82,m:2400,n:'Balanced'},h:{q:.92,m:3200,n:'High'}};
 const testFrame=new URLSearchParams(location.search).get('mode')=='test'&&parent!==window;
 const testFileName=testFrame?new URLSearchParams(location.search).get('filename')||'Scan':'';
+const pdfWorkerSrc=()=>new URL(location.pathname.includes('/scanner/')?'../pdf.worker.min.js':'pdf.worker.min.js',D.baseURI).href;
 const PS={orig:null,a4:[595.28,841.89],letter:[612,792],legal:[612,936],id2:[595.28,841.89],id4:[595.28,841.89]};
 const MODES=[['magic','Magic color'],['bw','B&W 1'],['bw2','B&W 2'],['gray','Grayscale'],['light','Lighten'],['board','Whiteboard'],['super','Super filter'],['orig','Original']];
 let S=null,pgid=0;
@@ -159,16 +160,16 @@ function renderPg(bm,pg,maxLong){return enhance(warp(bm,pg.quad,maxLong),S.mode,
 async function addSource(src,sw,sh,state=S){const k=Math.min(1,3200/Math.max(sw,sh)),w=Math.round(sw*k),h=Math.round(sh*k),c=cvs(w,h);c.getContext('2d').drawImage(src,0,0,w,h);
  const q=detect(c),quad=q||inset(w,h);let rotation=0;if(state.autoRot){try{rotation=orientOf(warp(c,quad,1600))}catch(_){}}
  const blob=await tb(c,'image/jpeg',.95);if(S!==state)return null;const pg={id:++pgid,blob,w,h,quad,auto:!!q,rot:0};turnPage(pg,rotation);state.pages.push(pg);thumb(pg);return pg}
-async function addFiles(fs){for(const f of fs){try{if(f.type=='application/pdf'||/\.pdf$/i.test(f.name)){await loadJs('pdf.min.js');pdfjsLib.GlobalWorkerOptions.workerSrc='../pdf.worker.min.js';const doc=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer()),isEvalSupported:false}).promise;for(let p=1;p<=doc.numPages;p++){status('Importing '+f.name+' · page '+p+' of '+doc.numPages);const page=await doc.getPage(p),base=page.getViewport({scale:1}),scale=Math.min(5.2,3200/Math.max(base.width,base.height)),vp=page.getViewport({scale}),c=cvs(Math.round(vp.width),Math.round(vp.height));await page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;await addSource(c,c.width,c.height)}continue}if(!/^image\//.test(f.type)&&!/\.(jpe?g|png|webp|heic)$/i.test(f.name))continue;const bm=await bmOf(f);await addSource(bm,bm.width,bm.height);bm.close&&bm.close()}catch(e){console.error(e);toast_('Could not open '+f.name)}}}
+async function addFiles(fs){for(const f of fs){try{if(f.type=='application/pdf'||/\.pdf$/i.test(f.name)){await loadJs('pdf.min.js');pdfjsLib.GlobalWorkerOptions.workerSrc=pdfWorkerSrc();const doc=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer()),isEvalSupported:false}).promise;for(let p=1;p<=doc.numPages;p++){status('Importing '+f.name+' · page '+p+' of '+doc.numPages);const page=await doc.getPage(p),base=page.getViewport({scale:1}),scale=Math.min(5.2,3200/Math.max(base.width,base.height)),vp=page.getViewport({scale}),c=cvs(Math.round(vp.width),Math.round(vp.height));await page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;await addSource(c,c.width,c.height)}continue}if(!/^image\//.test(f.type)&&!/\.(jpe?g|png|webp|heic)$/i.test(f.name))continue;const bm=await bmOf(f);await addSource(bm,bm.width,bm.height);bm.close&&bm.close()}catch(e){console.error(e);toast_('Could not open '+f.name)}}}
 async function thumb(pg){try{const bm=await pageBitmap(pg),k=Math.min(1,520/Math.max(pg.w,pg.h)),sm=cvs(Math.round(pg.w*k),Math.round(pg.h*k));sm.getContext('2d').drawImage(bm,0,0,sm.width,sm.height);bm.close&&bm.close();
  const o=renderPg(sm,{quad:pg.quad.map(p=>({x:p.x*k,y:p.y*k}))},170);pg.th=o.toDataURL('image/jpeg',.6);strip()}catch(_){}}
 
 /* ---------- saved scans live in the class data + the app file store, so they sync like other attachments ---------- */
-const cls=()=>{try{return C()}catch(_){return null}};
+const cls=()=>{try{return S&&S.opt.classData||C()}catch(_){return null}};
 const libItems=()=>{const c=cls();return c?(c.scans||[]).filter(x=>!x.del).sort((a,b)=>b.t-a.t):[]};
 const fmtSz=n=>n<1024?n+' B':n<1048576?(n/1024).toFixed(0)+' KB':(n/1048576).toFixed(1)+' MB';
 const fmtDt=t=>new Date(t).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-async function libSave(file,pages,th,name,tag){const c=cls();if(!c)throw new Error('noclass');const id=uid();await fput(id,file);(c.scans??=[]).push({id,name,size:file.size,type:'application/pdf',pages,t:Date.now(),u:Date.now(),tag:tag||'',th:th||''});mark(c);return id}
+async function libSave(file,pages,th,name,tag){const c=S.opt.classData||cls();if(!c)throw new Error('noclass');const id=uid();await fput(id,file);(c.scans??=[]).push({id,name,size:file.size,type:'application/pdf',pages,t:Date.now(),u:Date.now(),tag:tag||'',th:th||''});mark(c);return id}
 async function libBlob(x){return await fget(x.id,x.r,x.type)}
 
 /* ---------- UI ---------- */
@@ -202,6 +203,7 @@ function build(){const r=D.createElement('div');r.id='scn';r.setAttribute('role'
  const mode=$('[data-seg=mode]',r),q=$('[data-seg=q]',r);MODES.forEach(([k,l])=>{const b=D.createElement('button');b.dataset.scn='mode';b.dataset.v=k;b.textContent=l;mode.appendChild(b)});
  Object.entries(QL).forEach(([k,o])=>{const b=D.createElement('button');b.dataset.scn='q';b.dataset.v=k;b.textContent=o.n;q.appendChild(b)});
  if(!(S.opt&&S.opt.onUse))$('[data-scn=use]',r).remove();
+ if(S.opt&&S.opt.onUse){$('[data-scn=app]',r).remove();$('[data-scn=lib]',r).remove();const use=$('[data-scn=use]',r);if(use)use.textContent=S.opt.useLabel||'Use for reading'}
  if(testFrame){$('[data-scn=app]',r).remove();$('[data-scn=lib]',r).remove();const use=$('[data-scn=use]',r);if(use)use.textContent='Save to Scan tab'}
  return r}
 const R=s=>$(s,S.root),status=t=>{const e=R('.sc-st');if(e)e.textContent=t||''};
@@ -273,7 +275,7 @@ function libHtml(){const L=libItems();R('.sc-libs').textContent=L.length?L.lengt
  R('.sc-libl').innerHTML=L.length?L.map(x=>`<div class=sc-li><button class=sc-lt data-scn=la data-la=view data-lid=${x.id} aria-label="Open ${esc(x.name)}">${x.th?`<img src="${x.th}" alt="">`:'<i></i>'}</button><div class=sc-lm><b>${esc(x.name)}</b><small>${x.pages} page${x.pages>1?'s':''} · ${fmtSz(x.size)} · ${fmtDt(x.t)}${x.tag?' · '+esc(x.tag):''}</small><small class=sc-ok>Saved locally in this browser profile</small>
   <div class=sc-lb><button class=sc-b data-scn=la data-la=view data-lid=${x.id}>Open</button>${S.opt.onUse?`<button class=sc-b data-scn=la data-la=use data-lid=${x.id}>Use for reading</button>`:''}<button class=sc-b data-scn=la data-la=split data-lid=${x.id}>Split PDF</button><button class=sc-b data-scn=la data-la=dl data-lid=${x.id}>Download</button><button class=sc-b data-scn=la data-la=ren data-lid=${x.id}>Rename</button><button class="sc-b sc-del" data-scn=la data-la=del data-lid=${x.id}>Delete</button></div></div></div>`).join(''):`<div class=sc-empty><p>No saved scans yet.</p><p class=sc-mut>Scan or import pages, then choose <b>Save to app</b>. Saved PDFs stay in this browser profile.</p></div>`}
 function showLib(){camStop();show('lib');libHtml()}
-async function splitSavedPdf(x,blob){await loadJs('pdf.min.js');pdfjsLib.GlobalWorkerOptions.workerSrc='../pdf.worker.min.js';const doc=await pdfjsLib.getDocument({data:new Uint8Array(await blob.arrayBuffer()),isEvalSupported:false}).promise,base=x.name.replace(/\.pdf$/i,'');for(let p=1;p<=doc.numPages;p++){status('Splitting page '+p+' of '+doc.numPages+'…');const page=await doc.getPage(p),vp=page.getViewport({scale:Math.min(5.2,3000/Math.max(page.getViewport({scale:1}).width,page.getViewport({scale:1}).height))}),c=cvs(Math.round(vp.width),Math.round(vp.height));await page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;const jpg=await tb(c,'image/jpeg',.9),entry={w:c.width,h:c.height,j:new Uint8Array(await jpg.arrayBuffer())},name=base+'-page-'+String(p).padStart(2,'0')+'.pdf',pdf=buildPdf([entry],'orig',name);await libSave(new File([pdf],name,{type:'application/pdf'}),1,c.toDataURL('image/jpeg',.5),name,'Split page')}showLib();toast_('Created '+doc.numPages+' single-page PDFs in Saved scans.')}
+async function splitSavedPdf(x,blob){await loadJs('pdf.min.js');pdfjsLib.GlobalWorkerOptions.workerSrc=pdfWorkerSrc();const doc=await pdfjsLib.getDocument({data:new Uint8Array(await blob.arrayBuffer()),isEvalSupported:false}).promise,base=x.name.replace(/\.pdf$/i,'');for(let p=1;p<=doc.numPages;p++){status('Splitting page '+p+' of '+doc.numPages+'…');const page=await doc.getPage(p),vp=page.getViewport({scale:Math.min(5.2,3000/Math.max(page.getViewport({scale:1}).width,page.getViewport({scale:1}).height))}),c=cvs(Math.round(vp.width),Math.round(vp.height));await page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;const jpg=await tb(c,'image/jpeg',.9),entry={w:c.width,h:c.height,j:new Uint8Array(await jpg.arrayBuffer())},name=base+'-page-'+String(p).padStart(2,'0')+'.pdf',pdf=buildPdf([entry],'orig',name);await libSave(new File([pdf],name,{type:'application/pdf'}),1,c.toDataURL('image/jpeg',.5),name,'Split page')}showLib();toast_('Created '+doc.numPages+' single-page PDFs in Saved scans.')}
 async function libAct(a,id){const c=cls(),x=c&&(c.scans||[]).find(y=>y.id==id&&!y.del);if(!x)return;
  if(a=='ren'){const n=prompt('Rename this scan',x.name);if(n==null||!n.trim())return;x.name=n.trim().slice(0,120);x.u=Date.now();mark(c);libHtml();return}
  if(a=='del'){if(!confirm('Delete "'+x.name+'" from this browser?'))return;fdel(x.id);Object.keys(x).forEach(k=>{if(k!='id')delete x[k]});x.del=1;x.u=Date.now();mark(c);libHtml();setTitle();return}
@@ -356,7 +358,7 @@ function close(force){if(!S)return;if(!force&&S.pages.length&&!confirm('Discard 
 
 window.scnOpen=async function(opt){if(D.getElementById('scn'))return;S={pages:[],cur:0,q:'b',size:'orig',mode:'magic',boost:50,view:'crop',dn:true,autoRot:true,opt:opt||{},handle:-1};
  S.root=build();D.body.appendChild(S.root);if(innerWidth>=900&&innerHeight>=700)R('.sc-more').open=true;D.documentElement.classList.add('sc-lock');wire();sync();strip();if(S.opt.lib)showLib();else if(S.opt.initialFiles){show('ed');status('Importing files…');await addFiles(S.opt.initialFiles);if(S.pages.length)await openEditor(0);else camStart()}else camStart()};
-window.scnCount=()=>libItems().length;
+window.scnCount=classData=>libItems(classData).length;
 window.scnApi={detect,warp,enhance,buildPdf,solveH,orientOf,rotQ,denoise,get state(){return S}};
 if(testFrame)window.scnOpen({onUse:(file,details)=>{file.arrayBuffer().then(buffer=>parent.postMessage({type:'gradu-test-scan-result',name:file.name,pages:details.pages,thumbnail:details.thumbnail,buffer},location.origin,[buffer])).catch(error=>{console.error(error);parent.postMessage({type:'gradu-test-scan-error'},location.origin)})}});
 })();
