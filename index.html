@@ -1868,7 +1868,7 @@ ${scanMat(r,t)}
 </div></div>`;
 const vScan=t=>{const need=[],ok=[];SC.forEach((r,i)=>((r.err||!r.m||r.fl.length)?need:ok).push(scRow(r,i,t)));
  return `<div class=card><h2>Scan answered sheets</h2><p class="mut sm">Upload photos, scans, or a multi-page PDF (one bubble sheet per page). Keep each page flat with all four black corner squares visible. Names are matched to your roster; answers appear in a checking grid. <b>Yellow</b> = blank · outline = review.</p>${t.st.length?'':'<p class=warn>Add your class roster first (Responses tab) so names can be matched.</p>'}
-<div class=row style="margin:0 0 .6rem;gap:.6rem;align-items:center"><button class=pri data-xa=scncam type=button>Scan pages with camera</button><button data-xa=scnlib type=button>Saved scans (${(typeof scnCount=='function'?scnCount():0)})</button><span class="mut sm">Auto-crops each page, brightens the text and makes a compressed PDF.</span></div>
+<div class=row style="margin:0 0 .6rem;gap:.6rem;align-items:center"><button class=pri data-xa=scncam type=button>Scan pages with camera</button><button data-xa=scnlib type=button>Saved scans (${(typeof scnCount=='function'?scnCount(ctx.c):0)})</button><span class="mut sm">Auto-crops each page, brightens the text and makes a compressed PDF.</span></div>
 <label class=dropzone id=dz for=fl>
 <div class=dz-ico aria-hidden=true>
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V6"/><path d="M8 10l4-4 4 4"/><path d="M4 18h16"/></svg>
@@ -2153,15 +2153,20 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
  if(a=='ros'){const nk=s=>nn(s).sort().join(' ');(($('#ros')||{}).value||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean).forEach(l=>{const p=l.split(/[\t,]/).map(z=>z.trim());if(p.length<2)return;const k=nk(p.slice(1).join(' ')),s=t.st.find(z=>nk(z.name.replace(',',' '))==k);if(s){s.sid=p[0];const q=stuOf(s.id);if(q){q.s.sno=p[0];q.c.u=Date.now();ctx.mk(q.c)}}});ctx.c.u=Date.now();fin();return}
  if(a=='psheet'){const l=lay(t);if(l.over){ctx.toast(l.ovE?'The items and essay boxes do not fit on one page. Reduce the items or essay questions.':'Too many items for one sheet ('+l.n+' of '+l.cap+').');return}let p=document.getElementById('tbps');if(!p){p=document.createElement('div');p.id='tbps';document.body.appendChild(p)}p.innerHTML=`<style>@page{size:${l.W}mm ${l.H}mm;margin:0}</style>`+sheetHTML(t);document.body.classList.add('tbp');window.print();return}
  if(a=='print'){window.print();return}
- if(a=='scnlib'){scnOpen({lib:1,tag:ctx.d&&(ctx.d.name||ctx.d.n||ctx.d.title)||'',onUse:f=>{const fl=$('#fl');if(!fl)return;const buf=new DataTransfer();[...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'))}});return}
+ if(a=='scnlib'){scnOpen({lib:1,classData:c,tag:ctx.d&&(ctx.d.name||ctx.d.n||ctx.d.title)||'',onUse:f=>{const fl=$('#fl');if(!fl)return;const buf=new DataTransfer();[...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'))}});return}
  if(a=='scncam'){
+  if(!(await tbRoute(c,t)))return;
+  const sections=tbSecSel(c),term=(TERMS.find(x=>x[0]==t.term)||[,''])[1],component=(tbTg(c,t.term).find(x=>x.tg==tbTgOf(c,t))||{}).l||'',subject=c.meta.subj||c.meta.course||'Course',
+   sectionNames=sections.map(x=>String(x.meta.section||'').trim()||cname(x)).filter(Boolean),
+   fileBase=([term,component,subject].filter(Boolean).join(' ')+(sectionNames.length?'-'+sectionNames.join('_'):'')).replace(/[<>:"/\\|?*\x00-\x1F]/g,'-').replace(/\s+/g,' ').replace(/[. ]+$/,'').slice(0,180)||'Scan',
+   fileTag=[term,component,subject].filter(Boolean).join(' · ');
   const dlg=document.createElement('dialog'),frame=document.createElement('iframe');
   dlg.setAttribute('aria-label','Scan test sheets');
   dlg.style.cssText='width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#0b1020;overflow:hidden';
-  frame.title='Gradu document scanner';frame.allow='camera';frame.src='scanner/index.html?mode=test';
+  frame.title='Gradu document scanner';frame.allow='camera';frame.src='scanner/index.html?mode=test&filename='+encodeURIComponent(fileBase);
   frame.style.cssText='display:block;width:100%;height:100%;border:0';
   dlg.appendChild(frame);dlg.addEventListener('close',()=>dlg.remove());
-  const receive=e=>{
+  const receive=async e=>{
    if(e.origin!==location.origin||e.source!==frame.contentWindow)return;
    const d=e.data||{};
    if(d.type=='gradu-test-scan-close'){dlg.close();return}
@@ -2169,7 +2174,14 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-xa]'
    if(d.type!='gradu-test-scan-result'||!(d.buffer instanceof ArrayBuffer)||!d.buffer.byteLength)return;
    const fl=$('#fl');if(!fl){dlg.close();ctx.toast('Test Scan is no longer available.');return}
    const f=new File([d.buffer],typeof d.name=='string'?d.name:'Scan.pdf',{type:'application/pdf'}),buf=new DataTransfer();
-   [...fl.files].forEach(x=>buf.items.add(x));buf.items.add(f);fl.files=buf.files;fl.dispatchEvent(new Event('change'));dlg.close();
+   const id=uid(),now=Date.now(),pages=Number.isInteger(d.pages)&&d.pages>0?d.pages:1;
+   try{
+    await fput(id,f);
+    (c.scans??=[]).push({id,name:fileBase,size:f.size,type:'application/pdf',pages,t:now,u:now,tag:fileTag,th:typeof d.thumbnail=='string'?d.thumbnail:''});
+    mark(c);
+    const saved=document.querySelector('[data-xa=scnlib]');if(saved)saved.textContent='Saved scans ('+scnCount(c)+')';
+   }catch(error){console.error(error);ctx.toast('The scan was added for reading but could not be saved to this class.')}
+   [...fl.files].forEach(x=>buf.items.add(x));fl.files=buf.files;fl.dispatchEvent(new Event('change'));dlg.close();
   };
   window.addEventListener('message',receive);
   dlg.addEventListener('close',()=>window.removeEventListener('message',receive),{once:true});
@@ -5530,10 +5542,10 @@ async function thumb(pg){try{const bm=await bmOf(pg.blob),k=Math.min(1,520/Math.
 
 /* ---------- saved scans live in the class data + the app file store, so they sync like other attachments ---------- */
 const cls=()=>{try{return C()}catch(_){return null}};
-const libItems=()=>{const c=cls();return c?(c.scans||[]).filter(x=>!x.del).sort((a,b)=>b.t-a.t):[]};
+const libItems=classData=>{const c=classData||S&&S.opt.classData||cls();return c?(c.scans||[]).filter(x=>!x.del).sort((a,b)=>b.t-a.t):[]};
 const fmtSz=n=>n<1024?n+' B':n<1048576?(n/1024).toFixed(0)+' KB':(n/1048576).toFixed(1)+' MB';
 const fmtDt=t=>new Date(t).toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
-async function libSave(file,pages,th,name,tag){const c=cls();if(!c)throw new Error('noclass');const id=uid();await fput(id,file);(c.scans??=[]).push({id,name,size:file.size,type:'application/pdf',pages,t:Date.now(),u:Date.now(),tag:tag||'',th:th||''});mark(c);return id}
+async function libSave(file,pages,th,name,tag){const c=S.opt.classData||cls();if(!c)throw new Error('noclass');const id=uid();await fput(id,file);(c.scans??=[]).push({id,name,size:file.size,type:'application/pdf',pages,t:Date.now(),u:Date.now(),tag:tag||'',th:th||''});mark(c);return id}
 async function libBlob(x){return await fget(x.id,x.r,x.type)}
 
 /* ---------- UI ---------- */
@@ -5619,11 +5631,11 @@ function pointer(e){const G=geom();if(!G)return null;const r=G.c.getBoundingClie
 async function autoDetect(pg){const bm=await bmOf(pg.blob),q=detect(bm);pg.quad=q||inset(pg.w,pg.h);pg.auto=!!q;if(S.autoRot){try{pg.orient=orientOf(warp(bm,pg.quad,1600))}catch(_){}}bm.close&&bm.close();return !!q}
 
 /* saved scans screen */
-function libHtml(){const L=libItems(),on=typeof U!='undefined'&&U;R('.sc-libs').textContent=L.length?L.length+' file'+(L.length>1?'s':''):'';
+function libHtml(){const L=libItems(S.opt.classData),on=typeof U!='undefined'&&U;R('.sc-libs').textContent=L.length?L.length+' file'+(L.length>1?'s':''):'';
  R('.sc-libl').innerHTML=L.length?L.map(x=>`<div class=sc-li><button class=sc-lt data-scn=la data-la=view data-lid=${x.id} aria-label="Open ${esc(x.name)}">${x.th?`<img src="${x.th}" alt="">`:'<i></i>'}</button><div class=sc-lm><b>${esc(x.name)}</b><small>${x.pages} page${x.pages>1?'s':''} · ${fmtSz(x.size)} · ${fmtDt(x.t)}${x.tag?' · '+esc(x.tag):''}</small><small class=${x.r?'sc-ok':'sc-wait'}>${x.r?'Saved in the app and on Google Drive':on?'Saved in the app · uploading to Drive on the next sync':'Saved in the app · sign in with Google to keep a copy on Drive'}</small>
   <div class=sc-lb><button class=sc-b data-scn=la data-la=view data-lid=${x.id}>Open</button>${S.opt.onUse?`<button class=sc-b data-scn=la data-la=use data-lid=${x.id}>Use for reading</button>`:''}<button class=sc-b data-scn=la data-la=dl data-lid=${x.id}>Download</button><button class=sc-b data-scn=la data-la=ren data-lid=${x.id}>Rename</button><button class="sc-b sc-del" data-scn=la data-la=del data-lid=${x.id}>Delete</button></div></div></div>`).join(''):`<div class=sc-empty><p>No saved scans yet.</p><p class=sc-mut>Scan pages, then choose <b>Save to app</b>. They stay in the app so you can open them any time, on any device you sign in on.</p></div>`}
 function showLib(){camStop();show('lib');libHtml()}
-async function libAct(a,id){const c=cls(),x=c&&(c.scans||[]).find(y=>y.id==id&&!y.del);if(!x)return;
+async function libAct(a,id){const c=S.opt.classData||cls(),x=c&&(c.scans||[]).find(y=>y.id==id&&!y.del);if(!x)return;
  if(a=='ren'){const n=prompt('Rename this scan',x.name);if(n==null||!n.trim())return;x.name=n.trim().slice(0,120);x.u=Date.now();mark(c);libHtml();return}
  if(a=='del'){if(!confirm('Delete "'+x.name+'"? It will be removed from the app and from Google Drive.'))return;const r=x.r;fdel(x.id,r);Object.keys(x).forEach(k=>{if(k!='id')delete x[k]});x.del=1;x.u=Date.now();mark(c);libHtml();setTitle();return}
  status('Opening…');let bl=null;try{bl=await libBlob(x)}catch(e){console.error(e)}status('');
@@ -5673,7 +5685,7 @@ function onKey(e){if(!S)return;if(e.key=='Escape'){e.stopPropagation();if(!R('.s
  if(S.mode_=='ed'&&!/INPUT|SELECT|TEXTAREA/.test((D.activeElement||{}).tagName||'')){if(e.key=='ArrowRight'){e.preventDefault();go(S.cur+1,1)}else if(e.key=='ArrowLeft'){e.preventDefault();go(S.cur-1,-1)}}}
 async function output(a){if(!S.pages.length||S.busy)return;
  let name0=null;const stamp=(()=>{const d=new Date(),z=n=>String(n).padStart(2,'0');return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+'-'+z(d.getHours())+z(d.getMinutes())})();
- if(a=='app'){if(!cls()){toast_('Open a class first, then scan, so the scan can be saved with it.');return}const def=(S.opt.tag?S.opt.tag+' scan ':'Scan ')+fmtDt(Date.now());name0=prompt('Name this scan',def);if(name0==null)return;name0=name0.trim()||def}
+ if(a=='app'){if(!(S.opt.classData||cls())){toast_('Open a class first, then scan, so the scan can be saved with it.');return}const def=(S.opt.tag?S.opt.tag+' scan ':'Scan ')+fmtDt(Date.now());name0=prompt('Name this scan',def);if(name0==null)return;name0=name0.trim()||def}
  S.busy=1;const bs=S.root.querySelectorAll('.sc-act button');bs.forEach(x=>x.disabled=true);
  try{const O=QL[S.q],P=[];let thumbUrl='';for(let i=0;i<S.pages.length;i++){status('Page '+(i+1)+' of '+S.pages.length+'…');await new Promise(r=>setTimeout(r,0));const pg=S.pages[i],bm=await bmOf(pg.blob),o=renderPg(bm,pg,O.m);bm.close&&bm.close();
    if(i==0){const k=150/Math.max(o.width,o.height),t=cvs(Math.round(o.width*k),Math.round(o.height*k));t.getContext('2d').drawImage(o,0,0,t.width,t.height);thumbUrl=t.toDataURL('image/jpeg',.6)}
@@ -5690,7 +5702,7 @@ function close(force){if(!S)return;if(!force&&S.pages.length&&!confirm('Discard 
 
 window.scnOpen=function(opt){if(D.getElementById('scn'))return;S={pages:[],cur:0,q:'b',size:'orig',mode:'enh',boost:50,view:'crop',dn:true,autoRot:true,opt:opt||{},handle:-1};
  S.root=build();D.body.appendChild(S.root);if(innerWidth>=900&&innerHeight>=700)R('.sc-more').open=true;D.documentElement.classList.add('sc-lock');wire();sync();strip();if(S.opt.lib)showLib();else camStart()};
-window.scnCount=()=>libItems().length;
+window.scnCount=classData=>libItems(classData).length;
 window.scnApi={detect,warp,enhance,buildPdf,solveH,orientOf,rotQ,denoise,get state(){return S}};
 })();
 </script></body></html>

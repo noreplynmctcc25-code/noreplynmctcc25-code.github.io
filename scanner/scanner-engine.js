@@ -4,6 +4,7 @@
 const D=document,$=(s,r)=>(r||D).querySelector(s),clamp=(v,a,b)=>v<a?a:v>b?b:v;
 const QL={s:{q:.62,m:1600,n:'Small'},b:{q:.82,m:2400,n:'Balanced'},h:{q:.92,m:3200,n:'High'}};
 const testFrame=new URLSearchParams(location.search).get('mode')=='test'&&parent!==window;
+const testFileName=testFrame?new URLSearchParams(location.search).get('filename')||'Scan':'';
 const PS={orig:null,a4:[595.28,841.89],letter:[612,792],legal:[612,936],id2:[595.28,841.89],id4:[595.28,841.89]};
 const MODES=[['magic','Magic color'],['bw','B&W 1'],['bw2','B&W 2'],['gray','Grayscale'],['light','Lighten'],['board','Whiteboard'],['super','Super filter'],['orig','Original']];
 let S=null,pgid=0;
@@ -200,6 +201,7 @@ function build(){const r=D.createElement('div');r.id='scn';r.setAttribute('role'
  const mode=$('[data-seg=mode]',r),q=$('[data-seg=q]',r);MODES.forEach(([k,l])=>{const b=D.createElement('button');b.dataset.scn='mode';b.dataset.v=k;b.textContent=l;mode.appendChild(b)});
  Object.entries(QL).forEach(([k,o])=>{const b=D.createElement('button');b.dataset.scn='q';b.dataset.v=k;b.textContent=o.n;q.appendChild(b)});
  if(!(S.opt&&S.opt.onUse))$('[data-scn=use]',r).remove();
+ if(testFrame){$('[data-scn=app]',r).remove();$('[data-scn=lib]',r).remove();const use=$('[data-scn=use]',r);if(use)use.textContent='Save to Scan tab'}
  return r}
 const R=s=>$(s,S.root),status=t=>{const e=R('.sc-st');if(e)e.textContent=t||''};
 function setTitle(){const n=S.pages.length;R('.sc-t').textContent=S.mode_=='lib'?'Saved scans':'Scan documents'+(n?' \u00B7 '+n+' page'+(n>1?'s':''):'');R('.sc-sv').textContent='Saved ('+libItems().length+')'}
@@ -330,9 +332,9 @@ async function output(a){if(!S.pages.length||S.busy)return;
  try{const O=QL[S.q],P=[];let thumbUrl='';for(let i=0;i<S.pages.length;i++){status('Page '+(i+1)+' of '+S.pages.length+'…');await new Promise(r=>setTimeout(r,0));const pg=S.pages[i],bm=await pageBitmap(pg);let o=renderPg(bm,pg,O.m);bm.close&&bm.close();if(S.size=='id2'||S.size=='id4')o=printLayout(o,S.size);
    if(i==0){const k=150/Math.max(o.width,o.height),t=cvs(Math.round(o.width*k),Math.round(o.height*k));t.getContext('2d').drawImage(o,0,0,t.width,t.height);thumbUrl=t.toDataURL('image/jpeg',.6)}
    const bl=await tb(o,'image/jpeg',O.q);P.push({w:o.width,h:o.height,j:new Uint8Array(await bl.arrayBuffer())})}
-  const name='Scan-'+stamp+'.pdf',pdf=buildPdf(P,S.size,(name0||name).replace(/\.pdf$/i,'')),mb=fmtSz(pdf.size),file=new File([pdf],name,{type:'application/pdf'});
+  const name=(testFileName||'Scan-'+stamp)+'.pdf',pdf=buildPdf(P,S.size,(name0||name).replace(/\.pdf$/i,'')),mb=fmtSz(pdf.size),file=new File([pdf],name,{type:'application/pdf'});
   if(a=='app'){await libSave(file,P.length,thumbUrl,name0,S.opt.tag);toast_('Saved to the app: '+name0+' ('+P.length+' page'+(P.length>1?'s':'')+', '+mb+')');S.pages=[];S.cur=0;status('');showLib();return}
-  if(a=='use'&&S.opt.onUse){const fn=S.opt.onUse;close(true);fn(file);toast_('Scan added: '+P.length+' page'+(P.length>1?'s':'')+', '+mb);return}
+  if(a=='use'&&S.opt.onUse){const fn=S.opt.onUse,details={pages:P.length,thumbnail:thumbUrl};close(true);fn(file,details);toast_('Scan added: '+P.length+' page'+(P.length>1?'s':'')+', '+mb);return}
   if(a=='share'){try{await navigator.share({files:[file],title:name});status('')}catch(e){if(e&&e.name!='AbortError')toast_('Sharing is not available. Use Download.')}}
   else{dl(pdf,name);toast_('Downloaded '+name+' ('+P.length+' page'+(P.length>1?'s':'')+', '+mb+')')}
   status(P.length+' page'+(P.length>1?'s':'')+' \u00B7 '+mb)}
@@ -344,5 +346,5 @@ window.scnOpen=async function(opt){if(D.getElementById('scn'))return;S={pages:[]
  S.root=build();D.body.appendChild(S.root);if(innerWidth>=900&&innerHeight>=700)R('.sc-more').open=true;D.documentElement.classList.add('sc-lock');wire();sync();strip();if(S.opt.lib)showLib();else if(S.opt.initialFiles){show('ed');status('Importing files…');await addFiles(S.opt.initialFiles);if(S.pages.length)await openEditor(0);else camStart()}else camStart()};
 window.scnCount=()=>libItems().length;
 window.scnApi={detect,warp,enhance,buildPdf,solveH,orientOf,rotQ,denoise,get state(){return S}};
-if(testFrame)window.scnOpen({onUse:file=>{file.arrayBuffer().then(buffer=>parent.postMessage({type:'gradu-test-scan-result',name:file.name,buffer},location.origin,[buffer])).catch(error=>{console.error(error);parent.postMessage({type:'gradu-test-scan-error'},location.origin)})}});
+if(testFrame)window.scnOpen({onUse:(file,details)=>{file.arrayBuffer().then(buffer=>parent.postMessage({type:'gradu-test-scan-result',name:file.name,pages:details.pages,thumbnail:details.thumbnail,buffer},location.origin,[buffer])).catch(error=>{console.error(error);parent.postMessage({type:'gradu-test-scan-error'},location.origin)})}});
 })();
