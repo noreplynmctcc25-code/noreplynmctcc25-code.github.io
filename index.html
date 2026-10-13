@@ -22,19 +22,17 @@ html.gsw body>*:not(#gsp){visibility:hidden!important}
 @keyframes giB{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
 @keyframes giS{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
 @keyframes giU{0%,100%{transform:translateY(0)}50%{transform:translateY(-3%)}}
-@keyframes giThumb{0%,38%,100%{opacity:1;transform:rotate(-10deg) translateY(-4px)}48%,88%{opacity:0;transform:rotate(14deg) translateY(8px)}}
-@keyframes giOkay{0%,38%,100%{opacity:0;transform:rotate(12deg) translateY(8px)}48%,88%{opacity:1;transform:rotate(-8deg) translateY(-4px)}}
 @keyframes gwWake{0%,22%{transform:scaleY(.12)}26%{transform:scaleY(1.8)}31%{transform:scaleY(.72)}38%,100%{transform:scaleY(1)}}
 @keyframes gwSleep{0%,22%{opacity:1;transform:translateY(0) rotate(-8deg)}26%,38%,100%{opacity:0;transform:translateY(-.5rem) rotate(8deg)}}
 .gi-live{animation:giU 6s ease-in-out var(--gd,0s) infinite}
 .gi-live .gi-eR{animation:giW 9s ease-in-out var(--ga,0s) infinite}.gi-live .gi-wk{animation:giWk 9s ease-in-out var(--ga,0s) infinite}
 .gi-live .gi-hat{animation:giH 9s ease-in-out var(--ga,0s) infinite}.gi-live .gi-tas{animation:giT 9s ease-in-out var(--ga,0s) infinite}
 .gi-live .gi-eL{animation:giB 5.3s ease-in-out var(--gb,0s) infinite}.gi-live .gi-smile{animation:giS 4.2s ease-in-out var(--gc,0s) infinite}
-.gi-live .gi-th{transform-box:fill-box;transform-origin:center;animation:giThumb 8s ease-in-out var(--ga,0s) infinite}.gi-live .gi-ok{transform-box:fill-box;transform-origin:center;animation:giOkay 8s ease-in-out var(--ga,0s) infinite}
-.gi-once .gi-eR{animation:giW 1.2s ease-in-out both}.gi-once .gi-wk{animation:giWk 1.2s ease-in-out both}.gi-once .gi-hat{animation:giH 1.2s ease-in-out both}.gi-once .gi-tas{animation:giT 1.2s ease-in-out both}.gi-once .gi-th{animation:giThumb 1.2s ease-in-out both}.gi-once .gi-ok{animation:giOkay 1.2s ease-in-out both}
+
+.gi-once .gi-eR{animation:giW 1.2s ease-in-out both}.gi-once .gi-wk{animation:giWk 1.2s ease-in-out both}.gi-once .gi-hat{animation:giH 1.2s ease-in-out both}.gi-once .gi-tas{animation:giT 1.2s ease-in-out both}
 .gico.gi-live:hover .gi-hat,.gico.gi-live:active .gi-hat{animation:giH .9s ease-in-out 1}
 .gwmw,.gspww{position:relative}
-.gwmw::after,#gsp .gspww::after{content:"zZz";position:absolute;right:7%;top:-.72em;color:currentColor;font:700 .58em/1 system-ui,sans-serif;opacity:0;animation:gwSleep 6s ease-in-out infinite;pointer-events:none}
+.gwmw::after,#gsp .gspww::after{content:"zZz";position:absolute;right:-3%;top:-.72em;color:currentColor;font:700 .58em/1 system-ui,sans-serif;opacity:0;animation:gwSleep 6s ease-in-out infinite;pointer-events:none}
 .gwmw .gwm circle,#gsp .gspw circle{fill:currentColor;transform-box:fill-box;transform-origin:50% 50%;animation:gwWake 6s ease-in-out infinite}#gsp .gspw circle{fill:#fff}
 @media(prefers-reduced-motion:reduce){.gwmw::after,#gsp .gspww::after,.gwmw .gwm circle,#gsp .gspw circle{animation:none!important}}
 @media(prefers-reduced-motion:reduce){.gi-live,.gi-live *,.gi-once *{animation:none!important}}
@@ -2781,7 +2779,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)try{applyT
 addEventListener('focus',()=>{try{applyTheme()}catch(_){}});
 try{matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{try{applyTheme()}catch(_){}})}catch(_){}
 const gPh=()=>{const t=performance.now()/1000,f=n=>(-(t%n)).toFixed(2)+'s';return`--ga:${f(9)};--gb:${f(5.3)};--gc:${f(4.2)};--gd:${f(6)}`};
-const gIcon=(cls='',tile=false,lab='Gradu')=>tile?`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="0 0 1024 1024" role=img aria-label="${lab}"><rect width=1024 height=1024 rx=230 fill="var(--p)"/><g style="color:var(--sec)">${G_ICONG}</g></svg>`:`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="90 120 844 760" role=img aria-label="${lab}">${G_ICONG}<g transform="translate(512,0)" fill="currentColor"><g class=gi-th><path d="M-350 633 L-350 585 Q-350 560 -332 560 Q-314 560 -314 585 L-314 600 L-286 600 Q-265 600 -271 620 L-282 649 Q-287 664 -304 664 L-334 664 Q-350 662 -350 646Z"/></g><g class=gi-ok><path d="M300 625 Q300 604 319 604 Q338 604 338 625 L338 638 Q350 646 347 664 L341 683 Q337 695 323 695 L297 695 Q286 695 282 683 L273 660 Q268 645 284 639 L300 639Z"/><circle cx="319" cy="579" r="25" fill="none" stroke="currentColor" stroke-width="12"/></g></g></svg>`;
+const gIcon=(cls='',tile=false,lab='Gradu')=>tile?`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="0 0 1024 1024" role=img aria-label="${lab}"><rect width=1024 height=1024 rx=230 fill="var(--p)"/><g style="color:var(--sec)">${G_ICONG}</g></svg>`:`<svg class="${cls}" style="${/gi-live/.test(cls)?gPh():''}" viewBox="90 120 844 760" role=img aria-label="${lab}">${G_ICONG}</svg>`;
 const gWord=(cls='',tag=false)=>`<svg class="${cls}" viewBox="${tag?'44 86 522 244':'44 86 522 188'}" role=img aria-label="Gradu" fill="currentColor">${G_WMG}${tag?G_TAG:''}</svg>`;
 
 /* ---------- schools (add an entry and a logo file to add a school) ---------- */
