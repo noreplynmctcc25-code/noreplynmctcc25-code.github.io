@@ -4,10 +4,10 @@ Updated 2026-10-23
 
 ## Release state
 
-- The last confirmed published release is app version 206 with main cache key `eclass-v214`, commit `8fc4afd9dd49c33873f9102a0be1d74b681a0dd8` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
-- The current local app source is version 207 with cache key `eclass-v215`. It includes default section-restart test numbering, selectable continuous numbering, and preset palettes grouped into Classic, Pastel, and Vivid with pie-chart swatches. This version has not been pushed or verified on Pages.
+- The current published release is app version 207 with main cache key `eclass-v215`, commit `f94fb7af89820d92be21ab75a9e490e6a2d63819` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
+- GitHub Pages returned HTTP 200 and served version 207 with cache key `eclass-v215` after the push. The previous release was version 206/eclass-v214, commit `8fc4afd9dd49c33873f9102a0be1d74b681a0dd8`.
 - The main site is https://noreplynmctcc25-code.github.io/. GitHub Pages serves the repository root.
-- The local workspace surrounding this folder is an extracted copy and does not contain `.git` metadata. Use a Git-backed clone to commit or push.
+- The provided editing workspace is an extracted copy without `.git` metadata; the release was committed and pushed from a separate Git-backed clone.
 
 ## App structure
 
@@ -32,7 +32,7 @@ Before every commit and push:
 2. Bump `sw.js`'s cache key when files listed/cached by the main app service worker change. Bump `scanner/sw.js` only when scanner-cached files change.
 3. Update `README.md` with the current version/cache key and user-facing changes. Update this `HANDOFF.md` with implementation, checks, and deployment state.
 4. Run appropriate checks and inspect the complete diff and Git status. Commit only intended files, then push to `main`.
-5. Verify the remote commit and that GitHub Pages serves the expected version and cache key.
+5. Verify the remote commit and that GitHub Pages serves the expected version and cache key. For this release, commit `f94fb7a` was pushed and Pages served version 207/eclass-v215.
 
 README and HANDOFF are documentation; the app does not load them, so editing them does not change app behavior. Keep these documents aligned with the code before publishing.
 
