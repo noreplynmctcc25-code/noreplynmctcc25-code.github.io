@@ -4,16 +4,16 @@ Updated 2026-10-23
 
 ## Release state
 
-- The current published release is app version 209 with main cache key `eclass-v217`, app commit `4249b47330a8b80d55c03c60bd135a50ece088b9` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
-- GitHub Pages returned HTTP 200 and served `VER=209` with cache key `eclass-v217`; the live page includes Inter on test item numbers. The previous release was version 208/eclass-v216, app commit `84bc8c085322fcf77516384475e42d2d83353afb`.
+- The current published release is app version 210 with main cache key `eclass-v218`, app commit `844db8d` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
+- GitHub Pages returned HTTP 200 and, after reload, the live app showed `VER=210` with cache key `eclass-v218`. The previous release was version 209/eclass-v217, app commit `4249b47330a8b80d55c03c60bd135a50ece088b9`.
 - The main site is https://noreplynmctcc25-code.github.io/. GitHub Pages serves the repository root.
 - The provided editing workspace is an extracted copy without `.git` metadata; the release was committed and pushed from a separate Git-backed clone.
 
-## Current release candidate
+## Version 210 Test tab fix
 
-- Version 210 with main cache key `eclass-v218` fixes the Test tab's Answer key panel. The preceding deployed release is version 209/eclass-v217, app commit `4249b47330a8b80d55c03c60bd135a50ece088b9`.
+- Version 210 with main cache key `eclass-v218` fixes the Test tab's Answer key panel and was published in app commit `844db8d`.
 - The Key panel called `itemNo`, which is scoped inside the test-engine closure and unavailable to the outer panel renderer. The resulting `ReferenceError` stopped rendering after the tab navigation changed, leaving the previous panel visible. The renderer now calls the shared app-level `tbItemNo` helper.
-- Node.js syntax checking passed for all five inline JavaScript blocks. The pre-fix browser reproduction confirmed the Key activation raised `ReferenceError: itemNo is not defined` and left the previously rendered panel visible. Post-deployment browser verification is pending.
+- Node.js syntax checking passed for all five inline JavaScript blocks. The pre-fix browser reproduction confirmed the Key activation raised `ReferenceError: itemNo is not defined` and left the previously rendered panel visible. The deployed app was confirmed at version 210 after reload; a post-fix Key click-through was not repeated because the guest profile has no class/test data.
 
 ## App structure
 
