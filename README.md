@@ -1,20 +1,21 @@
 # Gradu · Class Record
 
-Gradu is a static, browser-based class record and teacher workbench. The current web app is in this repository root; it has no build step or server-side application. It can be served from any HTTPS static host. The main app is version 205 with cache key eclass-v212.
+Gradu is a static, browser-based class record and teacher workbench. The current web app is in this folder; it has no build step or server-side application. It can be served from any HTTPS static host. The last published app version is 206 with cache key eclass-v214 (commit 8fc4afd). The current local source is version 207 with cache key eclass-v215 and has not been pushed. See HANDOFF.md for release details.
 
 ## What the app does
 
 - Manage classes, student rosters, groups, attendance, and Prelim, Midterm, and Final grading periods.
 - Calculate grades from configurable class rules; review student and class performance, compare classes, and print or export records.
-- Create tests and answer keys, print answer sheets, scan marked responses, and review item analysis. New tests start with no selected subject, grading period, component, or date. Choosing a subject with multiple active sections opens a section picker with all sections selected by default. The test name, subject, section assignment, grading period, and component are required; the date is optional and prompts for confirmation if blank. The Setup tab lets you revise the subject and sections; scanning and score posting use the saved section selection.
+- Create tests and answer keys, print answer sheets, scan marked responses, and review item analysis. New tests start with no selected subject, grading period, component, or date. Choosing a subject with multiple active sections opens a section picker with all sections selected by default. The test name, subject, section assignment, grading period, and component are required; the date is optional and prompts for confirmation if blank. The Setup tab lets you revise the subject and sections; scanning and score posting use the saved section selection. Test numbering defaults to restarting at 1 within each test section; continuous numbering is available as an alternative. Visible labels include the test section and type, while scanning, answer checking, score adjustments, and response storage use stable internal item positions. This keeps repeated labels such as “Item 1” mapped to the correct test section.
 - Keep dated notes, syllabus files, a class diary, assignments, and a calendar derived from class schedules and due dates.
 - Generate student record PDFs, export the official DBME workbook, and send records or test results through the signed-in Gmail account.
+- Choose from 20 preset four-color pairings grouped into Classic, Pastel, and Vivid, each shown with a pie-chart color swatch. When no palette or custom theme is selected, the app picks the closest pairing to the configured school's logo colors. The TCC default is Blue & Orange. Toasts appear above dialogs and modals.
 - Sync class data and attachments to the signed-in user's Google Drive. Offline guest mode keeps data in the current browser profile.
 - Use the built-in document scanner to capture or import pages, crop and clean them, and create PDFs.
 - Use the Assistant with a user-provided Gemini or Anthropic API key. Requests go directly from the browser to the selected provider.
 - Provide optional department-head summaries, department settings, shared grading rules, and deadlines.
 
-The interface adapts between desktop navigation and a mobile layout. Some class tabs are grouped under More on narrow screens.
+The interface adapts between desktop navigation and a mobile layout. Some class tabs are grouped under More on narrow screens. On 1280–1440px fine-pointer desktop screens up to 900px high, base typography scales down to 13.5–14px. Headings use Montserrat and body text uses Lato when Google Fonts can be reached, with system fallbacks.
 
 ## Source layout
 
@@ -67,10 +68,11 @@ Image and PDF processing runs in the browser. The scanner can detect page edges,
 
 Publish the contents of this folder at the app's site root so the relative asset paths, manifests, and service-worker scope line up. The installer scripts in the sibling Google Play package point to https://noreplynmctcc25-code.github.io/.
 
-The app displays its release number from the VER constant in index.html. The main service worker has a separate cache key in sw.js; bump that key when changing cached assets so installed PWAs download a fresh cache. The scanner has its own cache key in scanner/sw.js.
+The current local app source is version 207 with main cache key eclass-v215. The last confirmed published version is 206/eclass-v214; version 207 has not been pushed yet. The app displays its release number from the VER constant in index.html. The main service worker has a separate cache key in sw.js; bump that key when changing cached app files so installed PWAs download a fresh cache. The scanner has its own cache key in scanner/sw.js and should only be bumped when scanner-cached files change.
+
+Before every commit and push, update this README with the current app version/cache key and user-facing changes, and update HANDOFF.md with implementation, checks, and deployment status. Then run appropriate checks, inspect the diff and status, commit only intended files, push, and verify the GitHub commit and deployed Pages version/cache key. README and HANDOFF files are documentation: they are not loaded by the app and changing them does not alter app behavior.
 
 For architecture, deployment, data handling, and maintenance notes, see [HANDOFF.md](HANDOFF.md).
-
 
 
 

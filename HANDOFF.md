@@ -2,40 +2,44 @@
 
 Updated 2026-10-23
 
-## Current release
+## Release state
 
-- This repository is the static-site source for [noreplynmctcc25-code.github.io](https://noreplynmctcc25-code.github.io/); `main` publishes the repository root through GitHub Pages.
-- The app displays version 205 in `index.html`. The main service worker uses cache key `eclass-v212` in `sw.js`; the standalone scanner has its own cache generation in `scanner/sw.js`.
-- The previous `main` release is `fddefe099fe70780ce249332d8f3975deb0fc990`, with app version 204 and main cache key `eclass-v210`. The earlier release used version 203 and `eclass-v208`.
-- The New test modal starts without a selected subject, grading period, component, or date. Selecting a subject with multiple active sections opens the section picker with all sections selected, so the teacher can confirm all or choose one or more. The test name, subject, section assignment, grading period, and component are required. The date is optional; leaving it blank prompts the teacher to confirm. The Setup tab allows changing subject and sections later. Scanning, response review, analysis, and score posting use the test's saved section selection.
+- The last confirmed published release is app version 206 with main cache key `eclass-v214`, commit `8fc4afd9dd49c33873f9102a0be1d74b681a0dd8` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
+- The current local app source is version 207 with cache key `eclass-v215`. It includes default section-restart test numbering, selectable continuous numbering, and preset palettes grouped into Classic, Pastel, and Vivid with pie-chart swatches. This version has not been pushed or verified on Pages.
+- The main site is https://noreplynmctcc25-code.github.io/. GitHub Pages serves the repository root.
+- The local workspace surrounding this folder is an extracted copy and does not contain `.git` metadata. Use a Git-backed clone to commit or push.
 
-## App layout
+## App structure
 
-This is a static browser app. There is no build step or server-side application. Most of the class-record UI, styles, business rules, and integrations are in `index.html`; scanner code is in `scanner/`. Other files include the service workers, manifests, school branding, the spreadsheet template, PDF.js, Mammoth, and the Android Trusted Web Activity association at `.well-known/assetlinks.json`.
+- `index.html` contains the main static class-record PWA, most styles and application logic, the Tests tab, and the integrated test scanner.
+- `scanner/` contains a separate scanner PWA. The main app also loads `scanner/scanner-engine.js`.
+- `sw.js` manages the main app's offline cache. `scanner/sw.js` has a separate cache generation.
+- `schools/`, icons, `logo.png`, and `city-seal.jpg` provide school identity and PWA assets. `templates/` contains the DBME workbook template.
+- The app has no build step or server-side application. Serve this folder over HTTP for local development (`py -m http.server 8000`).
 
-The main navigation includes class and student management, attendance, grading periods, assignments, diary, calendar, notes and syllabus files, tests and answer sheets, scanning and item analysis, reports, student-record PDFs, class comparisons, email actions, department sharing, and the browser-based Assistant. The standalone scanner captures or imports pages, edits crops and filters, stores scans in the browser, and exports PDFs. The test-scan workflow uses the shared scanner engine.
+## Test numbering and answer mapping
 
-## Develop and deploy
+- New tests default to restarting the visible item number at 1 in each test section. Setup also offers continuous numbering. Existing saved tests with no `numMode` use the section-restart default; tests saved as continuous remain continuous.
+- Each item keeps a stable internal `no` for scan flags and score-adjustment keys, plus its section/item position (`si`/`pi`). Objective answer strings and scoring follow the unchanged printed section/item order; essay scores follow essay item order. A separate display number `dn` controls the printed and visible label. Changing numbering mode therefore does not shift stored answers or change which answer is checked.
+- Labels and references include the test's section order and type (for example, “Test II · True / False · Item 1”). Scan review also shows a type label. This makes repeated visible numbers identifiable by their section/type.
+- Inline JavaScript syntax parsing and a targeted mixed-section mapping check passed for both modes, including essay items and stable IDs. A full browser-driven scan-to-score run was not performed, so verify with a sample printed answer sheet before relying on a production assessment.
 
-Serve the repository root over HTTP for local development:
+## Release procedure
 
-    py -m http.server 8000
+Before every commit and push:
 
-Open `http://localhost:8000/`. Use HTTPS or localhost for camera, service-worker, and PWA features. Publish the repository root; preserve the relative paths and `.well-known/assetlinks.json` for the Android TWA.
+1. Update the visible app version in `index.html` for an app release.
+2. Bump `sw.js`'s cache key when files listed/cached by the main app service worker change. Bump `scanner/sw.js` only when scanner-cached files change.
+3. Update `README.md` with the current version/cache key and user-facing changes. Update this `HANDOFF.md` with implementation, checks, and deployment state.
+4. Run appropriate checks and inspect the complete diff and Git status. Commit only intended files, then push to `main`.
+5. Verify the remote commit and that GitHub Pages serves the expected version and cache key.
 
-When preparing a release, update the visible `VER` constant in `index.html` and bump `V` in `sw.js` when cached app files change. The scanner's cache key in `scanner/sw.js` is managed separately. The service worker updates cached content in the background, so an installed PWA can show the new page after its next reload or launch.
+README and HANDOFF are documentation; the app does not load them, so editing them does not change app behavior. Keep these documents aligned with the code before publishing.
 
-Google sign-in uses a configured OAuth client ID. Drive sync needs the Google Drive API, and Gmail actions need Gmail API access. Department file picking also requires its API key and application ID. Assistant keys are entered by the user and stored in that browser profile; requests go directly from the browser to the selected provider. Do not commit credentials, personal API keys, student exports, or signing material.
+## Integrations and data
 
-## Data and limits
-
-Class data is stored in the browser. Signed-in sync writes the app's JSON and attachment files to the user's Google Drive; guest mode stays in the current browser profile. Clearing site data or switching profiles can make local records unavailable. Student data can include names, emails, grades, attendance, and notes; protect the device and connected accounts.
-
-The app has no authoritative server-side database or server-side role enforcement. Client-side checks are not a security boundary for high-impact decisions. Department summaries include student names, grades, status, and absences, but exclude emails, notes, and attachments. AI prompts may contain class-derived information, so review the content and provider before sending it.
-
-The scanner's measurement and count tools require manual calibration or marking. AI inpainting, handwriting removal, and learned dewarping are not implemented. PDF pages are rasterized for editing and export, so selectable text and annotations are not preserved. OCR may load Tesseract.js from a CDN and needs network access.
-
-## Verification notes
-
-This follow-up was reviewed in the app source. No automated or UI tests were run. For manual verification, open New test and confirm all four fields start blank; select a subject with multiple sections and choose the target sections; confirm the name, period, and component are required; then try saving with a blank date and confirm that Cancel returns to the form while the affirmative choice creates the test.
-
+- Class records are stored in the browser. Signed-in users can sync JSON and attachments to Google Drive; guest mode stays local to the current browser profile.
+- The app uses Google OAuth, Drive, and optional Gmail workflows. The Assistant accepts user-provided Gemini or Anthropic keys from the browser; do not put private keys or tokens in the repository.
+- Student records can include names, attendance, grades, emails, and notes. Protect device and account access and keep a backup for records that must be recoverable.
+- PDF and Word processing use bundled PDF.js and Mammoth. Some OCR flows load Tesseract.js from jsDelivr and need network access.
+- Android Trusted Web Activity association is configured in `.well-known/assetlinks.json`; Android release/signing files are stored separately from this site repository.
