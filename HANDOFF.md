@@ -9,6 +9,12 @@ Updated 2026-10-23
 - The main site is https://noreplynmctcc25-code.github.io/. GitHub Pages serves the repository root.
 - The provided editing workspace is an extracted copy without `.git` metadata; the release was committed and pushed from a separate Git-backed clone.
 
+## Current release candidate
+
+- Version 210 with main cache key `eclass-v218` fixes the Test tab's Answer key panel. The preceding deployed release is version 209/eclass-v217, app commit `4249b47330a8b80d55c03c60bd135a50ece088b9`.
+- The Key panel called `itemNo`, which is scoped inside the test-engine closure and unavailable to the outer panel renderer. The resulting `ReferenceError` stopped rendering after the tab navigation changed, leaving the previous panel visible. The renderer now calls the shared app-level `tbItemNo` helper.
+- Node.js syntax checking passed for all five inline JavaScript blocks. The pre-fix browser reproduction confirmed the Key activation raised `ReferenceError: itemNo is not defined` and left the previously rendered panel visible. Post-deployment browser verification is pending.
+
 ## App structure
 
 - `index.html` contains the main static class-record PWA, most styles and application logic, the Tests tab, and the integrated test scanner.
@@ -33,7 +39,7 @@ Before every commit and push:
 2. Bump `sw.js`'s cache key when files listed/cached by the main app service worker change. Bump `scanner/sw.js` only when scanner-cached files change.
 3. Update `README.md` with the current version/cache key and user-facing changes. Update this `HANDOFF.md` with implementation, checks, and deployment state.
 4. Run appropriate checks and inspect the complete diff and Git status. Commit only intended files, then push to `main`.
-5. Verify the remote commit and that GitHub Pages serves the expected version and cache key. Release 209 was pushed in app commit `4249b47`; Pages served version 209/eclass-v217 with Inter item numbers on the answer sheet.
+5. Verify the remote commit and that GitHub Pages serves the expected version and cache key; record the deployed release state here.
 
 README and HANDOFF are documentation; the app does not load them, so editing them does not change app behavior. Keep these documents aligned with the code before publishing.
 
