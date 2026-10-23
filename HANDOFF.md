@@ -4,9 +4,8 @@ Updated 2026-10-23
 
 ## Release state
 
-- The current published release is app version 208 with main cache key `eclass-v216`, app commit `84bc8c085322fcf77516384475e42d2d83353afb` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
-- GitHub Pages returned HTTP 200 and served `VER=208` with cache key `eclass-v216`. Both Fraunces files returned HTTP 200 with `font/woff2`. The previous release was version 207/eclass-v215, commit `f94fb7af89820d92be21ab75a9e490e6a2d63819`.
-- Release 209 is prepared with Inter item-number labels on the objective and essay answer sheets; it uses main cache key `eclass-v217` and has not been pushed yet.
+- The current published release is app version 209 with main cache key `eclass-v217`, app commit `4249b47330a8b80d55c03c60bd135a50ece088b9` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
+- GitHub Pages returned HTTP 200 and served `VER=209` with cache key `eclass-v217`; the live page includes Inter on test item numbers. The previous release was version 208/eclass-v216, app commit `84bc8c085322fcf77516384475e42d2d83353afb`.
 - The main site is https://noreplynmctcc25-code.github.io/. GitHub Pages serves the repository root.
 - The provided editing workspace is an extracted copy without `.git` metadata; the release was committed and pushed from a separate Git-backed clone.
 
@@ -34,7 +33,7 @@ Before every commit and push:
 2. Bump `sw.js`'s cache key when files listed/cached by the main app service worker change. Bump `scanner/sw.js` only when scanner-cached files change.
 3. Update `README.md` with the current version/cache key and user-facing changes. Update this `HANDOFF.md` with implementation, checks, and deployment state.
 4. Run appropriate checks and inspect the complete diff and Git status. Commit only intended files, then push to `main`.
-5. Verify the remote commit and that GitHub Pages serves the expected version and cache key. Release 208 was pushed in app commit `84bc8c0`; Pages served version 208/eclass-v216 and both bundled Fraunces assets returned HTTP 200. Release 209/eclass-v217 is prepared and awaits publication.
+5. Verify the remote commit and that GitHub Pages serves the expected version and cache key. Release 209 was pushed in app commit `4249b47`; Pages served version 209/eclass-v217 with Inter item numbers on the answer sheet.
 
 README and HANDOFF are documentation; the app does not load them, so editing them does not change app behavior. Keep these documents aligned with the code before publishing.
 
