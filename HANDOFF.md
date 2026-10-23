@@ -5,9 +5,9 @@ Updated 2026-10-23
 ## Current release
 
 - This repository is the static-site source for [noreplynmctcc25-code.github.io](https://noreplynmctcc25-code.github.io/); `main` publishes the repository root through GitHub Pages.
-- The app displays version 204 in `index.html`. The main service worker uses cache key `eclass-v210` in `sw.js`; the standalone scanner has its own cache generation in `scanner/sw.js`.
-- Before this update, `main` was at `3665201280196bcf2fa44e79dfe3415c6be16af7`, with app version 203 and main cache key `eclass-v208`.
-- Test creation now asks teachers to confirm the target sections when the selected subject has multiple active sections. All are selected initially, and the teacher can keep all or choose one or more. The test Setup tab allows changing both subject and sections later. Scanning, response review, analysis, and score posting use the test's saved section selection.
+- The app displays version 205 in `index.html`. The main service worker uses cache key `eclass-v212` in `sw.js`; the standalone scanner has its own cache generation in `scanner/sw.js`.
+- The previous `main` release is `fddefe099fe70780ce249332d8f3975deb0fc990`, with app version 204 and main cache key `eclass-v210`. The earlier release used version 203 and `eclass-v208`.
+- The New test modal starts without a selected subject, grading period, component, or date. Selecting a subject with multiple active sections opens the section picker with all sections selected, so the teacher can confirm all or choose one or more. The test name, subject, section assignment, grading period, and component are required. The date is optional; leaving it blank prompts the teacher to confirm. The Setup tab allows changing subject and sections later. Scanning, response review, analysis, and score posting use the test's saved section selection.
 
 ## App layout
 
@@ -37,4 +37,5 @@ The scanner's measurement and count tools require manual calibration or marking.
 
 ## Verification notes
 
-The section-selection change was reviewed in the app source. No automated or UI tests were run for this update. To verify manually, create a test for a subject with multiple active sections, confirm the initial all-selected section picker, save a subset, then change the subject and sections in Setup and confirm the resulting scan and score-posting target.
+This follow-up was reviewed in the app source. No automated or UI tests were run. For manual verification, open New test and confirm all four fields start blank; select a subject with multiple sections and choose the target sections; confirm the name, period, and component are required; then try saving with a blank date and confirm that Cancel returns to the form while the affirmative choice creates the test.
+

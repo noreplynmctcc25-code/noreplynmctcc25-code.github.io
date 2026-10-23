@@ -1,12 +1,12 @@
 # Gradu · Class Record
 
-Gradu is a static, browser-based class record and teacher workbench. The current web app is in this repository root; it has no build step or server-side application. It can be served from any HTTPS static host. The app displays version 204.
+Gradu is a static, browser-based class record and teacher workbench. The current web app is in this repository root; it has no build step or server-side application. It can be served from any HTTPS static host. The main app is version 205 with cache key eclass-v212.
 
 ## What the app does
 
 - Manage classes, student rosters, groups, attendance, and Prelim, Midterm, and Final grading periods.
 - Calculate grades from configurable class rules; review student and class performance, compare classes, and print or export records.
-- Create tests and answer keys, print answer sheets, scan marked responses, and review item analysis. For a subject with multiple active sections, new tests open a section picker with all sections selected by default. The Setup tab lets you revise the test's subject and target sections; scans and score posting use the saved section selection.
+- Create tests and answer keys, print answer sheets, scan marked responses, and review item analysis. New tests start with no selected subject, grading period, component, or date. Choosing a subject with multiple active sections opens a section picker with all sections selected by default. The test name, subject, section assignment, grading period, and component are required; the date is optional and prompts for confirmation if blank. The Setup tab lets you revise the subject and sections; scanning and score posting use the saved section selection.
 - Keep dated notes, syllabus files, a class diary, assignments, and a calendar derived from class schedules and due dates.
 - Generate student record PDFs, export the official DBME workbook, and send records or test results through the signed-in Gmail account.
 - Sync class data and attachments to the signed-in user's Google Drive. Offline guest mode keeps data in the current browser profile.
@@ -70,5 +70,7 @@ Publish the contents of this folder at the app's site root so the relative asset
 The app displays its release number from the VER constant in index.html. The main service worker has a separate cache key in sw.js; bump that key when changing cached assets so installed PWAs download a fresh cache. The scanner has its own cache key in scanner/sw.js.
 
 For architecture, deployment, data handling, and maintenance notes, see [HANDOFF.md](HANDOFF.md).
+
+
 
 
