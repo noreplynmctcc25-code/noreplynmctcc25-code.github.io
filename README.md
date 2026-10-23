@@ -1,6 +1,6 @@
 # Gradu · Class Record
 
-Gradu is a static, browser-based class record and teacher workbench. The current web app is in this folder; it has no build step or server-side application. It can be served from any HTTPS static host. The published app is version 207 with main cache key eclass-v215, in commit f94fb7a. Release 208 is prepared with locally bundled Fraunces and Inter fonts and cache key eclass-v216; it is not published yet. See HANDOFF.md for release details.
+Gradu is a static, browser-based class record and teacher workbench. The current web app is in this folder; it has no build step or server-side application. It can be served from any HTTPS static host. The published app is version 208 with main cache key eclass-v216, in commit 84bc8c0. GitHub Pages was verified serving version 208 and both Fraunces font files returned HTTP 200 as font/woff2. See HANDOFF.md for release details.
 
 ## What the app does
 
@@ -69,7 +69,7 @@ Image and PDF processing runs in the browser. The scanner can detect page edges,
 
 Publish the contents of this folder at the app's site root so the relative asset paths, manifests, and service-worker scope line up. The installer scripts in the sibling Google Play package point to https://noreplynmctcc25-code.github.io/.
 
-The current published app source is version 207 with main cache key eclass-v215. The prepared version 208 source uses main cache key eclass-v216 and bundles Fraunces and Inter for local browser loading. The app displays its release number from the VER constant in index.html. The main service worker has a separate cache key in sw.js; bump that key when changing cached app files so installed PWAs download a fresh cache. The scanner has its own cache key in scanner/sw.js and should only be bumped when scanner-cached files change.
+The current published app source is version 208 with main cache key eclass-v216. It bundles Fraunces and Inter for local browser loading. The app displays its release number from the VER constant in index.html. The main service worker has a separate cache key in sw.js; bump that key when changing cached app files so installed PWAs download a fresh cache. The scanner has its own cache key in scanner/sw.js and should only be bumped when scanner-cached files change.
 
 Before every commit and push, update this README with the current app version/cache key and user-facing changes, and update HANDOFF.md with implementation, checks, and deployment status. Then run appropriate checks, inspect the diff and status, commit only intended files, push, and verify the GitHub commit and deployed Pages version/cache key. README and HANDOFF files are documentation: they are not loaded by the app and changing them does not alter app behavior.
 
