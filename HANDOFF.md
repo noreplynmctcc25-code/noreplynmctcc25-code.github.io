@@ -6,6 +6,7 @@ Updated 2026-10-23
 
 - The current published release is app version 208 with main cache key `eclass-v216`, app commit `84bc8c085322fcf77516384475e42d2d83353afb` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
 - GitHub Pages returned HTTP 200 and served `VER=208` with cache key `eclass-v216`. Both Fraunces files returned HTTP 200 with `font/woff2`. The previous release was version 207/eclass-v215, commit `f94fb7af89820d92be21ab75a9e490e6a2d63819`.
+- Release 209 is prepared with Inter item-number labels on the objective and essay answer sheets; it uses main cache key `eclass-v217` and has not been pushed yet.
 - The main site is https://noreplynmctcc25-code.github.io/. GitHub Pages serves the repository root.
 - The provided editing workspace is an extracted copy without `.git` metadata; the release was committed and pushed from a separate Git-backed clone.
 
@@ -14,7 +15,7 @@ Updated 2026-10-23
 - `index.html` contains the main static class-record PWA, most styles and application logic, the Tests tab, and the integrated test scanner.
 - `scanner/` contains a separate scanner PWA. The main app also loads `scanner/scanner-engine.js`.
 - `sw.js` manages the main app's offline cache. `scanner/sw.js` has a separate cache generation.
-- `inter.woff2` and `fraunces-latin*.woff2` are locally loaded web fonts; `OFL-Fraunces.txt` records Fraunces's license. The main service worker precaches both Fraunces files.
+- `inter.woff2` and `fraunces-latin*.woff2` are locally loaded web fonts; `OFL-Fraunces.txt` records Fraunces's license. The main service worker precaches both Fraunces files. Test answer-sheet item labels and option glyphs use Inter while the circle layout remains fixed.
 - `schools/`, icons, `logo.png`, and `city-seal.jpg` provide school identity and PWA assets. `templates/` contains the DBME workbook template.
 - The app has no build step or server-side application. Serve this folder over HTTP for local development (`py -m http.server 8000`).
 
@@ -33,7 +34,7 @@ Before every commit and push:
 2. Bump `sw.js`'s cache key when files listed/cached by the main app service worker change. Bump `scanner/sw.js` only when scanner-cached files change.
 3. Update `README.md` with the current version/cache key and user-facing changes. Update this `HANDOFF.md` with implementation, checks, and deployment state.
 4. Run appropriate checks and inspect the complete diff and Git status. Commit only intended files, then push to `main`.
-5. Verify the remote commit and that GitHub Pages serves the expected version and cache key. Release 208 was pushed in app commit `84bc8c0`; Pages served version 208/eclass-v216 and both bundled Fraunces assets returned HTTP 200.
+5. Verify the remote commit and that GitHub Pages serves the expected version and cache key. Release 208 was pushed in app commit `84bc8c0`; Pages served version 208/eclass-v216 and both bundled Fraunces assets returned HTTP 200. Release 209/eclass-v217 is prepared and awaits publication.
 
 README and HANDOFF are documentation; the app does not load them, so editing them does not change app behavior. Keep these documents aligned with the code before publishing.
 
