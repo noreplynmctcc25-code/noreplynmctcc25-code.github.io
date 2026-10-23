@@ -6,6 +6,7 @@ Updated 2026-10-23
 
 - The current published release is app version 207 with main cache key `eclass-v215`, commit `f94fb7af89820d92be21ab75a9e490e6a2d63819` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
 - GitHub Pages returned HTTP 200 and served version 207 with cache key `eclass-v215` after the push. The previous release was version 206/eclass-v214, commit `8fc4afd9dd49c33873f9102a0be1d74b681a0dd8`.
+- Release 208 is prepared but not yet pushed. It switches headings to bundled Fraunces, uses bundled Inter for body text and numeric data, and bumps the main cache key to `eclass-v216`.
 - The main site is https://noreplynmctcc25-code.github.io/. GitHub Pages serves the repository root.
 - The provided editing workspace is an extracted copy without `.git` metadata; the release was committed and pushed from a separate Git-backed clone.
 
@@ -14,6 +15,7 @@ Updated 2026-10-23
 - `index.html` contains the main static class-record PWA, most styles and application logic, the Tests tab, and the integrated test scanner.
 - `scanner/` contains a separate scanner PWA. The main app also loads `scanner/scanner-engine.js`.
 - `sw.js` manages the main app's offline cache. `scanner/sw.js` has a separate cache generation.
+- `inter.woff2` and `fraunces-latin*.woff2` are locally loaded web fonts; `OFL-Fraunces.txt` records Fraunces's license. The main service worker precaches both Fraunces files.
 - `schools/`, icons, `logo.png`, and `city-seal.jpg` provide school identity and PWA assets. `templates/` contains the DBME workbook template.
 - The app has no build step or server-side application. Serve this folder over HTTP for local development (`py -m http.server 8000`).
 
@@ -32,7 +34,7 @@ Before every commit and push:
 2. Bump `sw.js`'s cache key when files listed/cached by the main app service worker change. Bump `scanner/sw.js` only when scanner-cached files change.
 3. Update `README.md` with the current version/cache key and user-facing changes. Update this `HANDOFF.md` with implementation, checks, and deployment state.
 4. Run appropriate checks and inspect the complete diff and Git status. Commit only intended files, then push to `main`.
-5. Verify the remote commit and that GitHub Pages serves the expected version and cache key. For this release, commit `f94fb7a` was pushed and Pages served version 207/eclass-v215.
+5. Verify the remote commit and that GitHub Pages serves the expected version and cache key. The last published release was commit `f94fb7a` at version 207/eclass-v215; version 208/eclass-v216 is prepared and awaits publication.
 
 README and HANDOFF are documentation; the app does not load them, so editing them does not change app behavior. Keep these documents aligned with the code before publishing.
 
