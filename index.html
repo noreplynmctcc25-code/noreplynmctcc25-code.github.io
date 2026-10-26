@@ -1528,7 +1528,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.27',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.28',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests'].includes(N.view))view=N.view}catch(_){}
@@ -4996,7 +4996,7 @@ async function goAuth(silent,more){
   if(silent)sessionStorage.silent=1;
   try{const result=await window.GraduDesktop.authorize(more?SC+' '+more:SC,CID(),!silent);tok=result.accessToken;exp=Date.now()+(+result.expiresIn||3600)*1e3-6e4;localStorage.tok=tok;localStorage.exp=exp;delete sessionStorage.silent;
    const response=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+tok}});if(!response.ok)throw Error('The selected Google account could not be verified.');const p=await response.json();U=localStorage.user=p.email;localStorage.gn=p.given_name||'';localStorage.fn=p.name||'';localStorage.pic=p.picture||'';cachePic(p.picture);localStorage.guest='';render();sync(1)
-  }catch(e){delete sessionStorage.silent;toast('Google sign-in failed: '+(e.message||'Check the Desktop OAuth setup.'))}return
+  }catch(e){delete sessionStorage.silent;if(!String(e.message||e).includes('This sign-in was replaced by a newer attempt.'))toast('Google sign-in failed: '+(e.message||'Check the Desktop OAuth setup.'))}return
  }if(!CID()){delete localStorage.cid;if(silent||!(await setCid()))return}
  const s=uid()+uid(),pr=silent?'none':U?'':'select_account';sessionStorage.oas=s;if(silent)sessionStorage.silent=1;
  location.href='https://accounts.google.com/o/oauth2/v2/auth?'+new URLSearchParams({client_id:CID(),redirect_uri:RU(),response_type:'token',scope:more?SC+' '+more:SC,state:s,include_granted_scopes:'true',...(pr?{prompt:pr}:{}),...(U?{login_hint:U}:{})})}
