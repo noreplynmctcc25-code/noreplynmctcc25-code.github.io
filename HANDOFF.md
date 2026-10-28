@@ -22,9 +22,9 @@ Updated 2026-10-29
 ## Packaging status (2026-10-29)
 
 - Windows installer `Gradu-Setup-1.44.exe` and its blockmap were built from the current app assets and saved in the workspace package folder. Electron Builder reported no Windows code-signing certificate, so this installer is unsigned.
-- AndroidStandalone is synced to the current web assets. `sync-web.ps1` now supports Windows PowerShell 5.1; the Gradle app version is 1.44 with version code 143. The signed APK was not rebuilt because the four `GRADU_SIGN_*` signing variables are absent from this execution environment. The existing signed APK was left untouched.
+- AndroidStandalone is synced to the current web assets. `sync-web.ps1` now supports Windows PowerShell 5.1; the Gradle app version is 1.44 with version code 143. The signed APK was not rebuilt because the four `GRADU_SIGN_*` signing variables are absent from this execution environment. The existing `Gradu-Offline-Standalone.apk` remains version 1.42/code 142.
 - Release workflow learnings are captured in the workspace skill `Design/skills/gradu-release-packaging/SKILL.md`, outside the published site.
-- The web release is published from `.publish-checkout/` as commit `fa7c352` and verified on GitHub Pages.
+- The web release is commit `fa7c352`; follow-up release documentation is commit `d8b8f4e`. Both are pushed to `main` and the release is verified on GitHub Pages.
 
 ## Version 211 opening voice update (historical local iteration)
 
