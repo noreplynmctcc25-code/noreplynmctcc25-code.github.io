@@ -4,27 +4,27 @@ Updated 2026-10-29
 
 ## Release state
 
-- The last recorded published release is app version 210 with main cache key `eclass-v218`, app commit `844db8d` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
-- At the last verification GitHub Pages returned HTTP 200 and, after reload, the live app showed `VER=210` with cache key `eclass-v218`. The live site was not rechecked during this local update. The previous release was version 209/eclass-v217, app commit `4249b47330a8b80d55c03c60bd135a50ece088b9`.
+- The current published release is app version 1.44 with main cache `eclass-v242` and scanner cache `clearscan-v10`, in commit `fa7c352` on [GitHub main](https://github.com/noreplynmctcc25-code/noreplynmctcc25-code.github.io/tree/main).
+- GitHub Pages returned HTTP 200 and served `VER=1.44` plus both expected cache keys on 2026-10-29. The previous source commit was `7644bdb` (version 1.42/cache eclass-v240, scanner cache clearscan-v8).
 - The main site is https://noreplynmctcc25-code.github.io/. GitHub Pages serves the repository root.
 - The provided editing workspace is an extracted copy without `.git` metadata; the release was committed and pushed from a separate Git-backed clone.
-- The latest local source is visible app version 1.44/cache eclass-v242 with scanner cache clearscan-v10 and the UX/accessibility changes recorded below. It has not been deployed; the version 211 voice update is a prior local iteration.
+- Version 1.44 is deployed; the version 211 voice update is a prior local iteration.
 
-## UX/accessibility implementation (local only — 2026-10-29)
+## UX/accessibility implementation (published 2026-10-29)
 
-- Local source is now visible app version 1.44, main offline cache `eclass-v242`, and standalone scanner cache `clearscan-v10`. The last recorded deployed release remains version 210/eclass-v218; these changes have not been deployed or checked against the live site.
+- The published app is visible version 1.44, main offline cache `eclass-v242`, and standalone scanner cache `clearscan-v10`, pushed in `fa7c352` and confirmed on GitHub Pages.
 - Main class cards now have separate native open/performance controls; note list/card actions are siblings instead of nested interactive controls. Note action and disclosure-menu hit areas use larger minimum sizes, including the final cascade rule, and focus is visible on native disclosures. Custom `role=button` controls receive Enter/Space activation and visible focus. The student toolbar prioritizes Add student and groups archive/delete under More; the duplicate New class item was removed from Quick actions. Mobile dashboard swipe cards now have an instruction.
 - Scanner text and action colors were darkened for legibility, including library/status labels and icon colors; focus indicators now work against both the light editor and dark camera. Supporting text was enlarged, phone quick actions now use two columns, and desktop gets a side navigation/workspace layout. Navigation, sorting, and view states now have accessible names/states. Scanner dialog focus is moved in on open, contained while open, and restored on close. Photo import labels are keyboard-operable.
 - Manual crop now has a corner selector and directional nudge controls as an alternative to dragging. Existing drag editing remains available.
 - Reusable findings are captured in the workspace skill `Design/skills/gradu-ux-accessibility/SKILL.md`, outside the published site. The installed `.agents/skills` tree is read-only in this workspace, so the existing web/mobile designer skills were not edited.
-- No runtime, keyboard-flow, screen-reader, or automated checks were run. A local browser preview was attempted, but workspace socket permissions blocked the localhost connection and browser policy disallowed file URLs. Before publishing, review at 320/390/768/1280px, verify the main class/test/scanner tasks, and recheck all main-app theme color combinations. WCAG 2.2 AA is a reference target, not a compliance claim.
+- No in-app interaction, keyboard-flow, screen-reader, or automated checks were run. A local browser preview was attempted, but workspace socket permissions blocked localhost and browser policy disallowed file URLs. A static HTTP request confirmed Pages serves version 1.44 and the expected cache keys; this was not a visual UX review. Before the next release, review at 320/390/768/1280px, verify the main class/test/scanner tasks, and recheck all main-app theme color combinations. WCAG 2.2 AA is a reference target, not a compliance claim.
 
 ## Packaging status (2026-10-29)
 
 - Windows installer `Gradu-Setup-1.44.exe` and its blockmap were built from the current app assets and saved in the workspace package folder. Electron Builder reported no Windows code-signing certificate, so this installer is unsigned.
 - AndroidStandalone is synced to the current web assets. `sync-web.ps1` now supports Windows PowerShell 5.1; the Gradle app version is 1.44 with version code 143. The signed APK was not rebuilt because the four `GRADU_SIGN_*` signing variables are absent from this execution environment. The existing signed APK was left untouched.
 - Release workflow learnings are captured in the workspace skill `Design/skills/gradu-release-packaging/SKILL.md`, outside the published site.
-- The `.publish-checkout/` branch was clean at `7644bdb` (app version 1.42/cache eclass-v240, scanner cache clearscan-v8) when release preparation began. The version 1.44 web release is pending push at this point in the handoff.
+- The web release is published from `.publish-checkout/` as commit `fa7c352` and verified on GitHub Pages.
 
 ## Version 211 opening voice update (historical local iteration)
 

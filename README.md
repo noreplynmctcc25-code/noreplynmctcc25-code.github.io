@@ -1,6 +1,6 @@
 # Gradu · Class Record
 
-Gradu is a static, browser-based class record and teacher workbench. The current web app is in this folder; it has no build step or server-side application. It can be served from any HTTPS static host. The last deployment record is version 210/eclass-v218; the site was not rechecked for this local change. The local source is now visible version 1.44/cache eclass-v242, with scanner cache clearscan-v10 and UX/accessibility updates recorded in HANDOFF.md. This extracted workspace has no Git metadata and these changes have not been deployed.
+Gradu is a static, browser-based class record and teacher workbench. The current web app is in this folder; it has no build step or server-side application. It can be served from any HTTPS static host. Version 1.44 is published in commit `fa7c352` with main cache `eclass-v242` and scanner cache `clearscan-v10`; GitHub Pages returned HTTP 200 and served these values on 2026-10-29. The Android offline APK has not been rebuilt because signing environment variables are unavailable; see HANDOFF.md. This editing workspace is an extracted folder without Git metadata.
 
 ## What the app does
 
@@ -70,7 +70,7 @@ Image and PDF processing runs in the browser. The scanner can detect page edges,
 
 Publish the contents of this folder at the app's site root so the relative asset paths, manifests, and service-worker scope line up. The installer scripts in the sibling Google Play package point to https://noreplynmctcc25-code.github.io/.
 
-The last recorded published release is version 210/eclass-v218 from app commit 844db8d; it was not checked again during this local update. Current local source reports VER=1.44 in index.html, uses main cache eclass-v242 and scanner cache clearscan-v10, and is not deployed. The opening audio and locally bundled Fraunces/Inter assets remain in place. Bump the main service-worker cache when its cached app files change and the scanner cache when scanner-cached files change.
+The current published release is version 1.44 with main cache `eclass-v242` and scanner cache `clearscan-v10`, pushed as commit `fa7c352`. GitHub Pages returned HTTP 200 and served `VER=1.44` with the expected cache keys on 2026-10-29. The opening audio and locally bundled Fraunces/Inter assets remain in place. Bump the main service-worker cache when its cached app files change and the scanner cache when scanner-cached files change.
 
 Before every commit and push, update this README with the current app version/cache key and user-facing changes, and update HANDOFF.md with implementation, checks, and deployment status. Then run appropriate checks, inspect the diff and status, commit only intended files, push, and verify the GitHub commit and deployed Pages version/cache key. README and HANDOFF files are documentation: they are not loaded by the app and changing them does not alter app behavior.
 
