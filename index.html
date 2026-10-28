@@ -1453,8 +1453,26 @@ td.gsk,.gsk{animation:gsk 2.4s ease forwards}@keyframes gsk{0%{box-shadow:inset 
  @media(max-width:899px){body.qvst .qfix{position:sticky;top:var(--cbh,0px);z-index:24;background:var(--bg);padding:.25rem 0 .35rem}body.qvst.hbo .qfix{top:calc(var(--hbh,3.6rem) + var(--cbh,0px))}body.qvst .qfix .qb{position:static;top:auto;flex-wrap:wrap}body.qvst .qfix .qct{display:flex;flex:1 0 100%;align-items:center;justify-content:center;gap:.4rem;white-space:nowrap;text-align:center;font-size:.72rem;line-height:1.2;padding:.1rem 0 .05rem}body.qvst .qfix .qpts{font-size:.68rem}}@media(max-width:360px){body.qvst .qfix .qct{gap:.25rem;font-size:.66rem}body.qvst .qfix .qpts{font-size:.62rem}}
 .nhfilters{display:grid;grid-template-columns:minmax(8rem,1fr) minmax(0,2fr);gap:.55rem .75rem;align-items:end}.nhfilters label{display:flex;flex-direction:column;align-items:stretch;gap:.25rem;margin:0;min-width:0}.nhfilters select,.nhfilters input{margin:0;width:100%;min-width:0}.nhfilters .nhsearch{min-width:0}.nhfilters.nhdetail{grid-template-columns:minmax(0,1fr)}.nhgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,17rem),1fr));gap:.6rem;margin:.6rem 0}.nhcard{display:flex;align-items:flex-start;flex-direction:column;gap:.45rem;text-align:left;padding:.8rem;min-height:8rem}.nhcard b{font-size:1.03rem}.nhcard p{margin:0;color:var(--mut);white-space:pre-wrap;overflow-wrap:anywhere}.nhcard small{margin-top:auto;color:var(--mut)}.nhdlg label{margin:.6rem 0}.nhcard .chip{font-size:.75rem}
 
-/* v1.41: compact Home actions and reliable Notes search results */
+/* v1.42: consistent phone card spacing, following the Test tab rhythm */
 .home-actions{display:flex;flex-wrap:nowrap;align-items:center;gap:.3rem}.home-actions>button{flex:1 1 0;min-width:0;justify-content:center;white-space:nowrap;padding:.42rem .32rem;font-size:.72rem}.home-actions>.mut{flex:0 0 auto;white-space:nowrap;font-size:.7rem}.nhitem[hidden]{display:none!important}
+@media(max-width:899px),(hover:none) and (pointer:coarse) and (max-height:540px){
+ :root{--mobile-card-gap:.55rem}
+ .card{margin-bottom:var(--mobile-card-gap)}
+ .md .card{margin:.55rem 0}
+ .md .pkl{gap:var(--mobile-card-gap);margin:.55rem 0}
+ .md .pki{min-height:2.75rem;padding:.55rem .65rem;border-radius:12px}
+ .md .bar{gap:var(--mobile-card-gap);margin:.55rem 0}
+ .md label{margin:.55rem 0}
+ .md p{margin:.4rem 0}
+ .pfm{display:flex;flex-direction:column;gap:.3rem;padding:.45rem}
+ .pfm .pfr{min-height:2.75rem;padding:.55rem .6rem}
+ .pfm .pfs{margin:.15rem 0 0;padding-top:.45rem}
+ .nhfilters{margin:0 0 var(--mobile-card-gap)}
+ .nhgrid{gap:var(--mobile-card-gap);margin:.55rem 0}
+ .nhgrid>.nhcard{margin:0;min-height:0;gap:.55rem}
+ .nhcard small{margin-top:.15rem}
+ .nhdlg label{margin:.55rem 0}
+}
 </style>
 
 <style id=scncss>html.sc-lock,html.sc-lock body{overflow:hidden}
@@ -1534,7 +1552,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.41',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.42',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
