@@ -15,7 +15,12 @@
 
   const setTab = name => {
     document.querySelectorAll('.app-view').forEach(view => { view.hidden = view.id !== name + 'View'; });
-    document.querySelectorAll('.nav-item[data-tab]').forEach(item => item.classList.toggle('active', item.dataset.tab === name));
+    document.querySelectorAll('.nav-item[data-tab]').forEach(item => {
+      const active = item.dataset.tab === name;
+      item.classList.toggle('active', active);
+      if (active) item.setAttribute('aria-current', 'page');
+      else item.removeAttribute('aria-current');
+    });
     if (name === 'docs') renderRecent();
   };
 
@@ -51,7 +56,7 @@
         : '<span class="recent-placeholder" aria-hidden="true"><i></i><i></i><i></i><i></i></span>';
       const pages = Number(item.pages) || 1;
       const date = item.t ? window.fmtDt(item.t) : 'Saved locally';
-      return '<button class="recent-card" type="button" aria-label="Open saved scans"><span class="recent-thumb">' + thumb + '</span><span class="recent-card-meta"><b>' + name + '</b><small>' + pages + ' page' + (pages === 1 ? '' : 's') + ' · ' + date + '</small></span></button>';
+      return '<button class="recent-card" type="button"><span class="recent-thumb">' + thumb + '</span><span class="recent-card-meta"><b>' + name + '</b><small>' + pages + ' page' + (pages === 1 ? '' : 's') + ' · ' + date + '</small></span></button>';
     }).join('');
   };
 
@@ -116,15 +121,24 @@
     renderRecent();
     search.focus();
   });
+  const updateSortButton = () => {
+    $('#sortButton').innerHTML = (sortByName ? 'Name' : 'Date added') + ' <span aria-hidden="true">⌄</span>';
+    $('#sortButton').setAttribute('aria-label', sortByName
+      ? 'Sorted by name. Activate to sort by date added.'
+      : 'Sorted by date added. Activate to sort by name.');
+  };
   $('#sortButton').addEventListener('click', () => {
     sortByName = !sortByName;
-    $('#sortButton').innerHTML = (sortByName ? 'Name' : 'Date added') + ' <span>⌄</span>';
+    updateSortButton();
     renderRecent();
   });
   $('#viewToggle').addEventListener('click', () => {
-    $('#recentList').classList.toggle('list-view');
-    $('#viewToggle').classList.toggle('selected');
+    const listView = $('#recentList').classList.toggle('list-view');
+    $('#viewToggle').classList.toggle('selected', listView);
+    $('#viewToggle').setAttribute('aria-pressed', String(listView));
+    $('#viewToggle').setAttribute('aria-label', listView ? 'Switch to grid view' : 'Switch to list view');
   });
+  updateSortButton();
   $('#recentList').addEventListener('click', event => {
     if (event.target.closest('.recent-card')) openScanner({ lib: true });
   });

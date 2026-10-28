@@ -1,6 +1,6 @@
 # Gradu · Class Record
 
-Gradu is a static, browser-based class record and teacher workbench. The current web app is in this folder; it has no build step or server-side application. It can be served from any HTTPS static host. The current published app is version 210 with main cache key eclass-v218, app commit 844db8d. It fixes the Test tab Answer key panel so it renders when selected. GitHub Pages serves VER=210; see HANDOFF.md for deployment and verification details.
+Gradu is a static, browser-based class record and teacher workbench. The current web app is in this folder; it has no build step or server-side application. It can be served from any HTTPS static host. The last deployment record is version 210/eclass-v218; the site was not rechecked for this local change. The local source is now visible version 1.44/cache eclass-v242, with scanner cache clearscan-v10 and UX/accessibility updates recorded in HANDOFF.md. This extracted workspace has no Git metadata and these changes have not been deployed.
 
 ## What the app does
 
@@ -26,6 +26,7 @@ The interface adapts between desktop navigation and a mobile layout. Some class 
 | scanner/storage.js | Scanner metadata in localStorage and PDF blobs in IndexedDB. |
 | scanner/app.js, tools.js | Scanner dashboard, navigation, manual count, and calibrated measurement tools. |
 | sw.js, scanner/sw.js | Offline caching for the main app and standalone scanner. |
+| gradu-voice.wav | Shared opening voice recording (Microsoft Zira Desktop) used across browsers. |
 | inter.woff2, fraunces-latin*.woff2, OFL-Fraunces.txt | Locally bundled Inter and Fraunces web fonts and the Fraunces license. |
 | manifest.json, scanner/manifest.json | Installable PWA settings. |
 | mammoth.min.js | Word document parsing used by syllabus and document workflows. |
@@ -69,7 +70,7 @@ Image and PDF processing runs in the browser. The scanner can detect page edges,
 
 Publish the contents of this folder at the app's site root so the relative asset paths, manifests, and service-worker scope line up. The installer scripts in the sibling Google Play package point to https://noreplynmctcc25-code.github.io/.
 
-The current published release is version 210 with main cache key eclass-v218 in app commit 844db8d. GitHub Pages returned HTTP 200 and served VER=210. The release fixes Answer key tab rendering. Fraunces and Inter are bundled for local browser loading, including on printed test item numbers and option glyphs. The app displays its release number from the VER constant in index.html. The main service worker has a separate cache key in sw.js; bump that key when changing cached app files so installed PWAs download a fresh cache. The scanner has its own cache key in scanner/sw.js and should only be bumped when scanner-cached files change.
+The last recorded published release is version 210/eclass-v218 from app commit 844db8d; it was not checked again during this local update. Current local source reports VER=1.44 in index.html, uses main cache eclass-v242 and scanner cache clearscan-v10, and is not deployed. The opening audio and locally bundled Fraunces/Inter assets remain in place. Bump the main service-worker cache when its cached app files change and the scanner cache when scanner-cached files change.
 
 Before every commit and push, update this README with the current app version/cache key and user-facing changes, and update HANDOFF.md with implementation, checks, and deployment status. Then run appropriate checks, inspect the diff and status, commit only intended files, push, and verify the GitHub commit and deployed Pages version/cache key. README and HANDOFF files are documentation: they are not loaded by the app and changing them does not alter app behavior.
 

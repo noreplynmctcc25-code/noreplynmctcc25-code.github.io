@@ -177,18 +177,22 @@ function build(){const r=D.createElement('div');r.id='scn';r.setAttribute('role'
  r.innerHTML=`<div class=sc-top><button class=sc-b data-scn=close aria-label=Close>&#x2715;</button><b class=sc-t>Scan documents</b><span class=sc-sp></span><span class=sc-st role=status></span><button class="sc-b sc-sv" data-scn=lib>Saved</button></div>
 <div class=sc-cam hidden><video playsinline muted autoplay></video><canvas class=sc-ov></canvas><div class=sc-hint>Lay the page flat. A green outline means the page edges were found.</div>
  <button class="sc-b sc-torch" data-scn=torch hidden>Light</button>
- <div class=sc-modes aria-label="Capture mode"><button class=on data-scn=cam-mode data-v=doc>Document</button><button data-scn=cam-mode data-v=id>ID card</button><button data-scn=cam-mode data-v=book>Book</button><button data-scn=cam-mode data-v=board>Board</button></div>
- <div class=sc-cb><label class="sc-b sc-gal" title="Choose photos or PDF">Photos / PDF<input type=file accept="image/*,application/pdf,.pdf" multiple hidden data-scn=gal></label><button class=sc-shut data-scn=shut aria-label="Take photo"></button><button class="sc-b sc-done" data-scn=done>Done</button></div>
+ <div class=sc-modes role=group aria-label="Capture mode"><button class=on aria-pressed=true data-scn=cam-mode data-v=doc>Document</button><button aria-pressed=false data-scn=cam-mode data-v=id>ID card</button><button aria-pressed=false data-scn=cam-mode data-v=book>Book</button><button aria-pressed=false data-scn=cam-mode data-v=board>Board</button></div>
+ <div class=sc-cb><label class="sc-b sc-gal" role="button" tabindex="0" data-scnupload title="Choose photos or PDF">Photos / PDF<input type=file accept="image/*,application/pdf,.pdf" multiple hidden data-scn=gal></label><button class=sc-shut data-scn=shut aria-label="Take photo"></button><button class="sc-b sc-done" data-scn=done>Done</button></div>
  <div class=sc-fb hidden><p>The camera is not available here. You can still take a photo with your phone's camera app or choose photos you already have.</p>
   <button class="sc-b" type=button data-scn=retry>Try camera again</button>
-  <label class="sc-b sc-pri">Take a photo<input type=file accept="image/*" capture=environment hidden data-scn=gal></label><label class=sc-b>Choose photos<input type=file accept="image/*" multiple hidden data-scn=gal></label></div></div>
+  <label class="sc-b sc-pri" role="button" tabindex="0" data-scnupload>Take a photo<input type=file accept="image/*" capture=environment hidden data-scn=gal></label><label class=sc-b role=button tabindex=0 data-scnupload>Choose photos<input type=file accept="image/*" multiple hidden data-scn=gal></label></div></div>
 <div class=sc-ed hidden>
- <div class=sc-stage><canvas class=sc-e></canvas><canvas class=sc-r hidden></canvas><canvas class=sc-lp width=220 height=220 hidden></canvas>
+ <div class=sc-stage><canvas class=sc-e role=img aria-label="Page crop preview. Choose a corner and use the nudge buttons to adjust it without dragging."></canvas><canvas class=sc-r hidden></canvas><canvas class=sc-lp width=220 height=220 hidden></canvas>
   <button class="sc-nv sc-nl" data-scn=prev aria-label="Previous page">&#x2039;</button><button class="sc-nv sc-nr" data-scn=next aria-label="Next page">&#x203A;</button><span class=sc-cnt></span></div>
  <div class=sc-panel>
   <div class=sc-tools><div class=sc-seg data-seg=view><button data-scn=vcrop class=on>Crop</button><button data-scn=vres>Result</button></div>
    <button class=sc-b data-scn=auto title="Find the page edges and the top again">Auto crop</button><button class=sc-b data-scn=book title="Split an open-book photo into two pages">Split book</button><button class=sc-b data-scn=rl aria-label="Turn left">&#x21BA;</button><button class=sc-b data-scn=rr aria-label="Turn right">&#x21BB;</button><button class=sc-b data-scn=flip aria-label="Upside down" title="Turn upside down">&#x21C5;</button><button class=sc-b data-scn=ml aria-label="Move earlier">&#x25C0;</button><button class=sc-b data-scn=mr aria-label="Move later">&#x25B6;</button><button class="sc-b sc-del" data-scn=del aria-label="Delete page">Delete</button></div>
   <div class=sc-strip></div>
+  <details class=sc-crop-adjust hidden><summary>Fine-tune crop corners without dragging</summary><div class=sc-crop-controls>
+   <div class=sc-corner-list role=group aria-label="Choose a crop corner"><button type=button data-scn=corner data-i=0 aria-pressed=true>Top left</button><button type=button data-scn=corner data-i=1 aria-pressed=false>Top right</button><button type=button data-scn=corner data-i=2 aria-pressed=false>Bottom right</button><button type=button data-scn=corner data-i=3 aria-pressed=false>Bottom left</button></div>
+   <div class=sc-nudge role=group aria-label="Move selected crop corner"><span></span><button type=button data-scn=nudge data-dx=0 data-dy=-1 aria-label="Move selected corner up">↑</button><span></span><button type=button data-scn=nudge data-dx=-1 data-dy=0 aria-label="Move selected corner left">←</button><span></span><button type=button data-scn=nudge data-dx=1 data-dy=0 aria-label="Move selected corner right">→</button><span></span><button type=button data-scn=nudge data-dx=0 data-dy=1 aria-label="Move selected corner down">↓</button><span></span></div>
+  </div><p class=sc-crop-help role=status aria-live=polite>Selected top left. Use the arrows to adjust in small steps.</p></details>
   <div class=sc-opt><div class=sc-row><span>Look</span><div class=sc-seg data-seg=mode></div></div>
    <details class=sc-more><summary>Contrast and PDF options</summary>
    <div class=sc-row><span>Contrast</span><input type=range min=0 max=100 value=50 data-scn=boost aria-label=Contrast></div>
@@ -208,8 +212,8 @@ function build(){const r=D.createElement('div');r.id='scn';r.setAttribute('role'
  return r}
 const R=s=>$(s,S.root),status=t=>{const e=R('.sc-st');if(e)e.textContent=t||''};
 function setTitle(){const n=S.pages.length;R('.sc-t').textContent=S.mode_=='lib'?'Saved scans':'Scan documents'+(n?' \u00B7 '+n+' page'+(n>1?'s':''):'');R('.sc-sv').textContent='Saved ('+libItems().length+')'}
-function sync(){R('.sc-seg[data-seg=mode]').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v==S.mode));R('.sc-seg[data-seg=q]').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v==S.q));R('[data-scn=boost]').value=S.boost;R('[data-scn=size]').value=S.size;R('[data-scn=dn]').checked=S.dn;R('[data-scn=arot]').checked=S.autoRot;
- R('[data-scn=boost]').disabled=S.mode=='orig';R('[data-scn=vcrop]').classList.toggle('on',S.view=='crop');R('[data-scn=vres]').classList.toggle('on',S.view=='res');setTitle();cnt()}
+function sync(){R('.sc-seg[data-seg=mode]').querySelectorAll('button').forEach(b=>{const on=b.dataset.v==S.mode;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});R('.sc-seg[data-seg=q]').querySelectorAll('button').forEach(b=>{const on=b.dataset.v==S.q;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on))});R('[data-scn=boost]').value=S.boost;R('[data-scn=size]').value=S.size;R('[data-scn=dn]').checked=S.dn;R('[data-scn=arot]').checked=S.autoRot;
+ R('[data-scn=boost]').disabled=S.mode=='orig';R('[data-scn=vcrop]').classList.toggle('on',S.view=='crop');R('[data-scn=vres]').classList.toggle('on',S.view=='res');R('[data-scn=vcrop]').setAttribute('aria-pressed',String(S.view=='crop'));R('[data-scn=vres]').setAttribute('aria-pressed',String(S.view=='res'));const ca=R('.sc-crop-adjust');if(ca)ca.hidden=S.view!='crop';R('.sc-corner-list').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.i===S.corner)));setTitle();cnt()}
 function cnt(){if(!S||!S.root)return;const n=S.pages.length,c=R('.sc-cnt');if(c)c.textContent=n?(S.cur+1)+' / '+n:'';const l=R('.sc-nl'),r=R('.sc-nr');if(l){l.hidden=n<2||S.cur<=0;r.hidden=n<2||S.cur>=n-1}}
 function strip(){if(!S||!S.root)return;const st=R('.sc-strip');if(!st)return;st.innerHTML=S.pages.map((p,i)=>`<button class="sc-th${i==S.cur?' on':''}" data-i=${i} aria-label="Page ${i+1}">${p.th?`<img src="${p.th}" alt="">`:'<i></i>'}<span>${i+1}</span></button>`).join('')+'<button class="sc-th sc-plus" data-scn=add aria-label="Add page">+</button>';const on=st.querySelector('.on');if(on&&on.scrollIntoView)on.scrollIntoView({block:'nearest',inline:'nearest'});cnt()}
 function show(w){S.mode_=w;R('.sc-cam').hidden=w!='cam';R('.sc-ed').hidden=w!='ed';R('.sc-lib').hidden=w!='lib';R('.sc-vw').hidden=true;setTitle()}
@@ -239,7 +243,7 @@ async function shoot(){const state=S,v=R('video');if(!v||!v.videoWidth||state.bu
   await addSource(src,sw,sh,state);if(S!==state)return;state.cur=state.pages.length-1;camLabels();setTitle()}finally{if(src&&src.close)src.close();if(S===state)state.busy=0}}
 
 /* editor */
-async function openEditor(i){camStop();S.cur=clamp(i==null?S.cur:i,0,S.pages.length-1);show('ed');sync();strip();await loadCur()}
+async function openEditor(i){camStop();S.cur=clamp(i==null?S.cur:i,0,S.pages.length-1);S.corner=0;show('ed');sync();strip();await loadCur()}
 async function loadCur(){const pg=S.pages[S.cur];if(!pg)return;if(S.bm&&S.bm.close)S.bm.close();S.bm=await pageBitmap(pg);S.handle=-1;layout();if(S.view=='res')await showRes();else draw();cnt()}
 const vis=()=>S.view=='res'?R('.sc-r'):R('.sc-e');
 async function go(i,dir,swipeEntry){if(!S||i<0||i>=S.pages.length||i==S.cur||S.navBusy)return;S.navBusy=1;try{S.cur=i;strip();await loadCur();const el=vis();if(el.animate&&dir){const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,start=swipeEntry?dir*R('.sc-stage').clientWidth:dir*58,animation=el.animate([{transform:'translate3d('+start+'px,0,0)',opacity:.2},{transform:'translate3d(0,0,0)',opacity:1}],{duration:reduced?1:230,easing:'cubic-bezier(.22,.8,.2,1)',fill:'forwards'});try{await animation.finished}catch(_){}el.style.transform='';el.style.opacity='';animation.cancel()}}finally{S.navBusy=0}}
@@ -254,7 +258,7 @@ function draw(){const G=geom();if(!G||!S.bm)return;const{c,w,h,k,ox,oy,dpr,pg}=G
  {const a=Q[0],b=Q[1],mx=(a.x+b.x)/2,my=(a.y+b.y)/2,cx=(Q[0].x+Q[1].x+Q[2].x+Q[3].x)/4,cy=(Q[0].y+Q[1].y+Q[2].y+Q[3].y)/4;
   g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.lineWidth=5;g.strokeStyle='#fbbf24';g.stroke();
   const dx=cx-mx,dy=cy-my,L=Math.hypot(dx,dy)||1,tx=mx+dx/L*18,ty=my+dy/L*18;g.font='700 11px system-ui,sans-serif';const tw=g.measureText('TOP').width+12;g.fillStyle='#fbbf24';g.beginPath();g.roundRect?g.roundRect(tx-tw/2,ty-9,tw,18,9):g.rect(tx-tw/2,ty-9,tw,18);g.fill();g.fillStyle='#3a2a00';g.textAlign='center';g.textBaseline='middle';g.fillText('TOP',tx,ty+.5)}
- Q.forEach((p,i)=>{g.beginPath();g.arc(p.x,p.y,i==S.handle?15:11,0,7);g.fillStyle='rgba(255,255,255,.95)';g.fill();g.lineWidth=3;g.strokeStyle='#10b981';g.stroke()})}
+ Q.forEach((p,i)=>{g.beginPath();g.arc(p.x,p.y,(i==(S.handle>=0?S.handle:S.corner)?15:11),0,7);g.fillStyle='rgba(255,255,255,.95)';g.fill();g.lineWidth=3;g.strokeStyle='#10b981';g.stroke()})}
 function lens(i){const G=geom(),lp=R('.sc-lp');if(!G||!S.bm||i<0){lp.hidden=true;return}const pg=G.pg,p=pg.quad[i],g=lp.getContext('2d'),R_=lp.width,z=3,sr=R_/z/2;lp.hidden=false;
  const left=(G.ox+p.x*G.k)<G.w/2;lp.style.left=left?'auto':'8px';lp.style.right=left?'8px':'auto';
  g.clearRect(0,0,R_,R_);g.save();g.beginPath();g.arc(R_/2,R_/2,R_/2-2,0,7);g.clip();g.fillStyle='#000';g.fillRect(0,0,R_,R_);g.drawImage(S.bm,p.x-sr,p.y-sr,sr*2,sr*2,0,0,R_,R_);g.restore();
@@ -288,9 +292,9 @@ async function libAct(a,id){const c=cls(),x=c&&(c.scans||[]).find(y=>y.id==id&&!
 function dl(blob,name){const u=URL.createObjectURL(blob),l=D.createElement('a');l.href=u;l.download=/\.pdf$/i.test(name)?name:name+'.pdf';D.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),30000)}
 
 function wire(){const r=S.root,e=R('.sc-e'),st=R('.sc-stage');
- e.addEventListener('pointerdown',ev=>{if(S.view!='crop')return;const P=pointer(ev);if(!P)return;const{G}=P;let bi=-1,bd=44*44;G.pg.quad.forEach((q,i)=>{const dx=G.ox+q.x*G.k-P.x,dy=G.oy+q.y*G.k-P.y,d=dx*dx+dy*dy;if(d<bd){bd=d;bi=i}});if(bi<0)return;S.handle=bi;S.dragOff={x:G.ox+G.pg.quad[bi].x*G.k-P.x,y:G.oy+G.pg.quad[bi].y*G.k-P.y};e.setPointerCapture(ev.pointerId);ev.preventDefault();draw();lens(bi)});
+ e.addEventListener('pointerdown',ev=>{if(S.view!='crop')return;const P=pointer(ev);if(!P)return;const{G}=P;let bi=-1,bd=44*44;G.pg.quad.forEach((q,i)=>{const dx=G.ox+q.x*G.k-P.x,dy=G.oy+q.y*G.k-P.y,d=dx*dx+dy*dy;if(d<bd){bd=d;bi=i}});if(bi<0)return;S.corner=bi;R('.sc-corner-list').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.i===bi)));S.handle=bi;S.dragOff={x:G.ox+G.pg.quad[bi].x*G.k-P.x,y:G.oy+G.pg.quad[bi].y*G.k-P.y};e.setPointerCapture(ev.pointerId);ev.preventDefault();draw();lens(bi)});
  e.addEventListener('pointermove',ev=>{if(S.handle<0)return;const P=pointer(ev);if(!P)return;const{G}=P,x=(P.x+S.dragOff.x-G.ox)/G.k,y=(P.y+S.dragOff.y-G.oy)/G.k;G.pg.quad[S.handle]={x:clamp(x,0,G.pg.w),y:clamp(y,0,G.pg.h)};G.pg.auto=false;draw();lens(S.handle)});
- const up=()=>{if(S.handle<0)return;S.handle=-1;lens(-1);draw();thumb(S.pages[S.cur])};e.addEventListener('pointerup',up);e.addEventListener('pointercancel',up);
+ const up=()=>{if(S.handle<0)return;S.corner=S.handle;S.handle=-1;lens(-1);draw();thumb(S.pages[S.cur])};e.addEventListener('pointerup',up);e.addEventListener('pointercancel',up);
  /* swipe left / right anywhere on the page area to go to the next / previous page */
  st.addEventListener('pointerdown',ev=>{if(ev.target.closest('.sc-nv')||S.handle>=0||S.navBusy)return;S.sw={x:ev.clientX,y:ev.clientY,t:performance.now(),act:0,id:ev.pointerId}});
  st.addEventListener('pointermove',ev=>{const w=S.sw;if(!w||ev.pointerId!=w.id)return;const dx=ev.clientX-w.x,dy=ev.clientY-w.y;if(!w.act){if(S.handle<0&&Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.35){w.act=1;try{st.setPointerCapture(ev.pointerId)}catch(_){}}else return}ev.preventDefault();
@@ -304,12 +308,14 @@ function wire(){const r=S.root,e=R('.sc-e'),st=R('.sc-stage');
  r.addEventListener('input',ev=>{if(ev.target.dataset.scn=='boost'){S.boost=+ev.target.value;refreshLook()}});
  r.addEventListener('click',async ev=>{const b=ev.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.scn;
   if(b.classList.contains('sc-th')&&b.dataset.i!=null){const i=+b.dataset.i;return go(i,i>S.cur?1:-1)}
+  if(a=='corner'){S.corner=clamp(+b.dataset.i||0,0,3);R('.sc-corner-list').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));R('.sc-crop-help').textContent='Selected '+['top left','top right','bottom right','bottom left'][S.corner]+'. Use the arrows to adjust in small steps.';draw();lens(S.corner);return}
+  if(a=='nudge'){const pg=S.pages[S.cur];if(!pg)return;const i=S.corner||0,step=Math.max(1,Math.round(Math.max(pg.w,pg.h)*.002));pg.quad[i].x=clamp(pg.quad[i].x+(+b.dataset.dx)*step,0,pg.w);pg.quad[i].y=clamp(pg.quad[i].y+(+b.dataset.dy)*step,0,pg.h);pg.auto=false;R('.sc-crop-help').textContent='Adjusted '+['top left','top right','bottom right','bottom left'][i]+' by '+step+' pixels.';draw();lens(i);await thumb(pg);return}
   if(a=='close')return close();
   if(a=='cam-mode'){
    S.camMode=b.dataset.v;
    S.size=S.camMode=='id'?'id2':'orig';
    S.mode=S.camMode=='board'?'board':'magic';
-   R('.sc-modes').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+   R('.sc-modes').querySelectorAll('button').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on))});
    R('.sc-hint').textContent=S.camMode=='book'?'Capture a spread, then choose Split book in the editor.':S.camMode=='id'?'Capture the card, then finish an A4 ID print sheet.':S.camMode=='board'?'Point at the board. Board contrast will be selected in the editor.':'Lay the page flat. A green outline means the page edges were found.';
    return
   }
@@ -320,7 +326,7 @@ function wire(){const r=S.root,e=R('.sc-e'),st=R('.sc-stage');
   if(a=='add')return camStart();
   if(a=='prev')return go(S.cur-1,-1);if(a=='next')return go(S.cur+1,1);
   if(a=='vcrop')return setView('crop');if(a=='vres')return setView('res');
-  if(a=='auto'){const pg=S.pages[S.cur];status('Looking for the page…');const ok=await autoDetect(pg);status('');if(!ok)toast_('Could not find the page edges. Drag the corners instead.');await loadCur();thumb(pg);return}
+  if(a=='auto'){const pg=S.pages[S.cur];status('Looking for the page…');const ok=await autoDetect(pg);status('');if(!ok)toast_('Could not find the page edges. Choose a corner and fine-tune it, or drag a corner.');await loadCur();thumb(pg);return}
   if(a=='book')return splitBook();
   if(a=='rl'||a=='rr'||a=='flip'){const pg=S.pages[S.cur];turnPage(pg,a=='rr'?1:a=='rl'?3:2);await loadCur();thumb(pg);return}
   if(a=='ml'||a=='mr'){const i=S.cur,j=i+(a=='mr'?1:-1);if(j<0||j>=S.pages.length)return;[S.pages[i],S.pages[j]]=[S.pages[j],S.pages[i]];S.cur=j;strip();return}
@@ -335,7 +341,8 @@ function wire(){const r=S.root,e=R('.sc-e'),st=R('.sc-stage');
   if(a=='save'||a=='share'||a=='use'||a=='app')return output(a)});
  addEventListener('resize',onResize);D.addEventListener('keydown',onKey,true)}
 function onResize(){if(!S||S.mode_!='ed')return;layout();S.view=='crop'?draw():0}
-function onKey(e){if(!S)return;if(e.key=='Escape'){e.stopPropagation();if(!R('.sc-vw').hidden){const box=R('.sc-vwb');if(box.dataset.objectUrl)URL.revokeObjectURL(box.dataset.objectUrl);box.dataset.objectUrl='';R('.sc-vw').hidden=true;return}close();return}
+function onKey(e){if(!S)return;if(e.key=='Tab'){const f=[...S.root.querySelectorAll('button:not([disabled]),label[role=button][tabindex="0"],input:not([disabled]):not([type=hidden]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x=>!x.closest('[hidden]')&&x.getClientRects().length);if(f.length){const first=f[0],last=f[f.length-1],active=D.activeElement;if(e.shiftKey&&(active===first||!S.root.contains(active))){e.preventDefault();last.focus()}else if(!e.shiftKey&&(active===last||!S.root.contains(active))){e.preventDefault();first.focus()}}else{e.preventDefault();R('[data-scn=close]').focus()}return}if(e.key=='Escape'){e.stopPropagation();if(!R('.sc-vw').hidden){const box=R('.sc-vwb');if(box.dataset.objectUrl)URL.revokeObjectURL(box.dataset.objectUrl);box.dataset.objectUrl='';R('.sc-vw').hidden=true;return}close();return}
+ if((e.key=='Enter'||e.key==' '||e.code=='Space')&&e.target.matches&&e.target.matches('[data-scnupload]')){e.preventDefault();const input=e.target.querySelector('input[type=file]');if(input)input.click();return}
  if(S.mode_=='ed'&&!/INPUT|SELECT|TEXTAREA/.test((D.activeElement||{}).tagName||'')){if(e.key=='ArrowRight'){e.preventDefault();go(S.cur+1,1)}else if(e.key=='ArrowLeft'){e.preventDefault();go(S.cur-1,-1)}}}
 function printLayout(src,mode){const copies=mode=='id4'?4:2,W=1240,H=1754,dpi=150,card=mode=='id2',slotW=(card?85.6:35)*dpi/25.4,slotH=(card?54:45)*dpi/25.4,cols=card?1:2,rows=2,c=cvs(W,H),g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,W,H);g.setLineDash([9,8]);g.strokeStyle='#aab2bc';g.lineWidth=2;
  for(let i=0;i<copies;i++){const col=i%cols,row=Math.floor(i/cols),cx=W/2+(col-(cols-1)/2)*(slotW+90),cy=H/2+(row-(rows-1)/2)*(slotH+120),scale=Math.min(slotW/src.width,slotH/src.height),w=src.width*scale,h=src.height*scale,x=cx-w/2,y=cy-h/2;g.drawImage(src,x,y,w,h);g.strokeRect(x,y,w,h)}return c}
@@ -354,10 +361,10 @@ async function output(a){if(!S.pages.length||S.busy)return;
   status(P.length+' page'+(P.length>1?'s':'')+' \u00B7 '+mb)}
  catch(e){console.error(e);toast_('Could not make the PDF.');status('')}
  finally{if(S){S.busy=0;bs.forEach(x=>x.disabled=false)}}}
-function close(force){if(!S)return;if(!force&&S.pages.length&&!confirm('Discard '+S.pages.length+' scanned page'+(S.pages.length>1?'s':'')+' that are not saved?'))return;camStop();const box=R('.sc-vwb');if(box&&box.dataset.objectUrl)URL.revokeObjectURL(box.dataset.objectUrl);removeEventListener('resize',onResize);D.removeEventListener('keydown',onKey,true);if(S.bm&&S.bm.close)S.bm.close();S.root.remove();D.documentElement.classList.remove('sc-lock');S=null;if(testFrame&&!force)parent.postMessage({type:'gradu-test-scan-close'},location.origin)}
+function close(force){if(!S)return;if(!force&&S.pages.length&&!confirm('Discard '+S.pages.length+' scanned page'+(S.pages.length>1?'s':'')+' that are not saved?'))return;camStop();const box=R('.sc-vwb');if(box&&box.dataset.objectUrl)URL.revokeObjectURL(box.dataset.objectUrl);removeEventListener('resize',onResize);D.removeEventListener('keydown',onKey,true);if(S.bm&&S.bm.close)S.bm.close();const restore=S.returnFocus;S.root.remove();D.documentElement.classList.remove('sc-lock');S=null;if(restore&&restore.isConnected)try{restore.focus({preventScroll:true})}catch(_){}if(testFrame&&!force)parent.postMessage({type:'gradu-test-scan-close'},location.origin)}
 
-window.scnOpen=async function(opt){if(D.getElementById('scn'))return;S={pages:[],cur:0,q:'b',size:'orig',mode:'magic',boost:50,view:'crop',dn:true,autoRot:true,opt:opt||{},handle:-1};
- S.root=build();D.body.appendChild(S.root);if(innerWidth>=900&&innerHeight>=700)R('.sc-more').open=true;D.documentElement.classList.add('sc-lock');wire();sync();strip();if(S.opt.lib)showLib();else if(S.opt.initialFiles){show('ed');status('Importing files…');await addFiles(S.opt.initialFiles);if(S.pages.length)await openEditor(0);else camStart()}else camStart()};
+window.scnOpen=async function(opt){if(D.getElementById('scn'))return;S={pages:[],cur:0,q:'b',size:'orig',mode:'magic',boost:50,view:'crop',dn:true,autoRot:true,opt:opt||{},handle:-1,corner:0,returnFocus:D.activeElement};
+ S.root=build();D.body.appendChild(S.root);if(innerWidth>=900&&innerHeight>=700)R('.sc-more').open=true;D.documentElement.classList.add('sc-lock');wire();sync();strip();R('[data-scn=close]').focus();if(S.opt.lib)showLib();else if(S.opt.initialFiles){show('ed');status('Importing files…');await addFiles(S.opt.initialFiles);if(S.pages.length)await openEditor(0);else camStart()}else camStart()};
 window.scnCount=classData=>libItems(classData).length;
 window.scnApi={detect,warp,enhance,buildPdf,solveH,orientOf,rotQ,denoise,get state(){return S}};
 if(testFrame)window.scnOpen({onUse:(file,details)=>{file.arrayBuffer().then(buffer=>parent.postMessage({type:'gradu-test-scan-result',name:file.name,pages:details.pages,thumbnail:details.thumbnail,buffer},location.origin,[buffer])).catch(error=>{console.error(error);parent.postMessage({type:'gradu-test-scan-error'},location.origin)})}});
