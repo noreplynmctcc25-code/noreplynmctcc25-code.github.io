@@ -1593,11 +1593,23 @@ body:has(#main>.edit-focus) #main>.edit-focus .st-edit-grid{height:min(68vh,calc
  body.hascb #main{grid-row:3}
  body:not(.hascb) #tabs{grid-row:2}
  body:not(.hascb) #main{grid-row:2}body:not(.hascb){grid-template-rows:auto minmax(0,1fr) 0}
- .priority-lead{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:.7rem;align-items:start;margin:.6rem 0}.priority-lead>.card{margin:0}.priority-lead>.upcoming-card{min-height:0}
- .hrow.priority-row{grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));grid-auto-flow:row;grid-auto-columns:initial;overflow:visible;scroll-snap-type:none;align-items:stretch}
- .hrow.priority-row>.card{height:auto;min-height:12rem;overflow:visible}
- .hrow.priority-row>.upcoming-card{grid-column:span 2;min-height:0}
+ .home-dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:.7rem;align-items:stretch;margin:.6rem 0 .4rem}
+ .home-dashboard-grid>.card{margin:0;min-width:0;height:auto;min-height:12rem;overflow:visible;padding:.75rem .85rem}
+ .home-dashboard-grid h3{font-size:.85rem!important}
+ .home-dashboard-grid .hfig>b{font-size:1.55rem}
+ .home-dashboard-grid .hspk{max-width:none;height:2.6rem}
+ .home-dashboard-grid .hpm{margin-top:.38rem;grid-template-columns:auto minmax(2.5rem,1fr) auto;gap:.45rem}
+ .home-dashboard-grid .hpm>span:first-child{max-width:4.6rem}
+ .home-dashboard-grid .paleg{display:none}
+ .home-dashboard-grid .hwk{max-height:7rem}
+ .home-dashboard-grid .hrings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.1rem .2rem;padding:.1rem 0}
+ .home-dashboard-grid .hring{padding:.15rem 0!important;gap:.1rem}
+ .home-dashboard-grid .hring svg{width:2.75rem!important;height:2.75rem!important}
+ .home-dashboard-grid .hring b{font-size:.68rem}
+ .home-dashboard-grid .hrt{font-size:16px}
+ .home-dashboard-grid .hinc ul{margin:.2rem 0 0;padding-left:1rem;font-size:.78rem;line-height:1.35;display:grid;gap:.3rem}
 }
+@media(min-width:1400px){.home-dashboard-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.home-dashboard-grid>.hinc{grid-column:span 2}.home-dashboard-grid>.hwkc{grid-column:span 3}}
 @media(max-width:899px),(hover:none) and (pointer:coarse) and (max-height:540px){
  body.pop .fab{display:none!important}
  .grp.pop>.subs{bottom:calc(4.7rem + env(safe-area-inset-bottom,0px));max-height:calc(100dvh - 10rem - env(safe-area-inset-top,0px));overscroll-behavior:contain}
@@ -1633,7 +1645,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.51',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.52',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
@@ -4285,21 +4297,17 @@ if(M){const more=`<details class="hd-more"><summary><b>More insights</b><small>A
 try{matchMedia('(max-width:899px)').addEventListener('change',()=>{if(view=='home')render()})}catch(_){}
 /* v182: web Home: every figure and chart in one compact row; the class list follows */
 function hRowW(L){const R=L.map(c=>({c,s:clsSum(c)})),ns=sum(L.map(c=>c.students.length)),G=R.filter(x=>x.s.n),tn=sum(G.map(x=>x.s.n)),pn=sum(G.map(x=>x.s.pass*x.s.n)),Bc=G.filter(x=>x.s.avg!=null).sort((a,b)=>(a.c.hi?-1:1)*(a.s.avg-b.s.avg))[0];
- const H=hData(L),LB=cmpLabs(L),lb=c=>LB.get(c.id)||cmpShort(c),av=H.aK.slice(-8).map(k=>H.pc(k)),allP=H.A.flatMap(a=>a.pts),nq=allP.filter(p=>p.a<75&&p.s<60).length,P=L.map(hProg).filter(x=>x.ex),ins=hIns(L,H),has=H.K.length;
+ const H=hData(L),LB=cmpLabs(L),lb=c=>LB.get(c.id)||cmpShort(c),av=H.aK.slice(-8).map(k=>H.pc(k)),allP=H.A.flatMap(a=>a.pts),nq=allP.filter(p=>p.a<75&&p.s<60).length,P=L.map(hProg).filter(x=>x.ex),ins=hIns(L,H);
 const stats=`<section class=home-stats role=group aria-label="Class overview"><div class="card hd hrc hmstat tap" data-a=opencmp role=button tabindex=0><small>Students</small><b>${ns}</b><small>Across active classes</small></div><div ${Bc?`class="card hd hrc hmstat tap" data-a=openp data-id=${Bc.c.id} role=button tabindex=0`:'class="card hd hrc hmstat"'}><small>Best class average</small><b>${Bc?g1(Bc.s.avg):'—'}</b><small>${Bc?esc(lb(Bc.c)):'No grades yet'}</small></div><div class="card hd hrc hmstat tap" data-a=opencmp role=button tabindex=0><small>Overall passing</small><b class=ok>${tn?Math.round(pn/tn*100)+'%':'—'}</b><small>${tn?tn+' graded students':'No grades yet'}</small></div><div class="card hd hrc hmstat"><small>Attendance this week</small><div class=hfig><b>${H.att==null?'—':paF(H.att)+'%'}</b>${hChg(H.att,H.attPrev)}</div><small>${H.cur?(H.isNow?'This week':'Week of '+paWl(H.cur)):'No sessions yet'}</small></div></section>`;
  const at=`<div class="card hd hrc"><h3>${I('cal')}Attendance</h3><div class=hfig><b>${H.att==null?'—':paF(H.att)+'%'}</b>${hChg(H.att,H.attPrev)}</div><small class=mut>${H.cur?(H.isNow?'This week':'Week of '+paWl(H.cur)):'No sessions yet'}</small>${hSpark(av,'#10b981')}</div>`;
 
  const hl=`<div class="card hd hrc"><h3>${I('award')}Class health</h3><div class=hrings>${H.A.map(a=>{const n=a.pts.length,g=a.pts.filter(p=>p.a>=75&&p.s>=60).length;return hRing(n?g/n*100:null,a.col,lb(a.c),a.c.id,cname(a.c)+(n?` — ${g} of ${n} attending at least 75% and averaging at least 60%`:''))}).join('')}</div></div>`;
- const top=H.A.filter(a=>a.risk).sort((a,b)=>b.risk-a.risk)[0];
  const na=`<div class="card hd hrc"><h3>${I('alert')}Needs attention</h3><div class=hfig><b>${nq}</b><small class=mut>of ${allP.length}</small></div>${H.A.slice(0,4).map(a=>{const n=a.pts.length,c2=a.pts.filter(p=>p.a<75&&p.s<60).length;return `<div class=hpm data-a=open data-id=${a.c.id} role=button tabindex=0 title="${esc(cname(a.c))}"><span>${esc(lb(a.c))}</span><span class=pahk><i style="width:${n?c2/n*100:0}%;background:#ef4444"></i></span><b>${c2}</b></div>`}).join('')}</div>`;
 
  const wk=`<div class="card hd hrc hwkc"><h3>${I('cal')}This week</h3>${hWork(L)}</div>`;
  const pg=`<div class="card hd hrc"><h3>${I('tasks')}Grading</h3>${P.slice(0,4).map(x=>`<div class=hpm data-a=open data-id=${x.c.id} role=button tabindex=0 title="${esc(cname(x.c))} · ${x.tl} · ${x.dn}/${x.ex}"><span>${esc(lb(x.c))}</span><span class=pahk><i style="width:${Math.min(100,x.p||0)}%"></i></span><b>${Math.round(x.p||0)}%</b></div>`).join('')||'<p class=mut>Nothing to encode yet.</p>'}</div>`;
  const hi=ins.length?`<div class="card hd hrc hinc"><h3>${I('info')}Highlights</h3><ul>${ins.map(t=>`<li>${t}</li>`).join('')}</ul></div>`:'';
-
- const more=`<details class="home-more"><summary><b>More class insights</b><small>Attendance trend · Class health · Weekly activity${ins.length?` · ${ins.length} highlight${ins.length==1?'':'s'}`:''}</small></summary><div class=home-more-grid>${hl}${at}${wk}${hi}</div></details>`;
- if(!has)return stats+'<div class="priority-lead">'+upcomingCard()+'</div><div class="hrow priority-row" role="region" aria-label="Home insights">'+more+'</div>';
- return stats+'<div class="priority-lead">'+na+upcomingCard()+'</div><div class="hrow priority-row" role="region" aria-label="Home overview">'+pg+more+'</div>'}
+ return stats+`<div class="home-dashboard-grid" role="region" aria-label="Home dashboard details">${na}${upcomingCard()}${pg}${hl}${at}${hi}${wk}</div>`}
 /* v182: About gradü */
 function aboutDlg(){const snd=localStorage['gradu.snd']!='0',y=new Date().getFullYear(),o=dlg(`<div class=abth><button class=pri data-a=upd>${I('refresh')}Check for updates</button><span class=abtv>v ${VER}</span></div>
  <div class=abtl><span class=abti>${gIcon('',false)}</span><span class=abtw><svg viewBox="44 86 522 188" aria-label="gradü"><g fill="currentColor">${G_WMG}</g></svg><sup>™</sup></span></div>
