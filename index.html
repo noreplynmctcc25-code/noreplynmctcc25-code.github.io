@@ -5682,7 +5682,8 @@ else if(U&&navigator.onLine){if(tok&&Date.now()<exp)sync();else if(!sessionStora
  const outSnd=()=>{if(!snd||!AC||AC.state!='running')return;const A=AC,T=A.currentTime,n=Math.ceil(A.sampleRate*.75),b=A.createBuffer(1,n,A.sampleRate),c2=b.getChannelData(0);for(let i=0;i<n;i++)c2[i]=Math.random()*2-1;const src=A.createBufferSource(),bp=A.createBiquadFilter(),g=A.createGain();src.buffer=b;bp.type='bandpass';bp.frequency.setValueAtTime(2600,T);bp.frequency.exponentialRampToValueAtTime(260,T+.7);g.gain.setValueAtTime(.0001,T);g.gain.exponentialRampToValueAtTime(.2,T+.18);g.gain.exponentialRampToValueAtTime(.0001,T+.72);src.connect(bp);bp.connect(g);g.connect(A.destination);src.start(T);src.stop(T+.8);setTimeout(()=>{try{A.close()}catch(_){}},1400)};
   const end=()=>{if(o.classList.contains('out'))return;ended=1;document.removeEventListener('keydown',activateSound,true);outSnd();o.classList.add('out');document.documentElement.classList.remove('gsw');cur='';view='home';comp='';try{navSave()}catch(_){}render();toTop();
   /* the home screen rises in behind the wipe, one block after another */
-  if(!rm){const M=document.getElementById('main');if(M)[...M.children].forEach((x,k)=>x.style.setProperty('--gi',Math.min(k,8)));document.body.classList.add('gspin');setTimeout(()=>document.body.classList.remove('gspin'),2000)}
+  if(!rm){const M=document.getElementById('main');if(M)[...M.children].forEach((x,k)=>x.style.setProperty('--gi',Math.min(k,8)))}
+  document.body.classList.add('gspin');setTimeout(()=>document.body.classList.remove('gspin'),rm?900:2000);
   setTimeout(()=>o.remove(),850)};
  setTimeout(end,rm?600:4300)})();
 </script>
