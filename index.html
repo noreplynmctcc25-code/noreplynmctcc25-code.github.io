@@ -13,6 +13,9 @@
 <style>
 :root{--p:#8a5a3b;--h1:#613f29;--pri:var(--p);--bg:#f3f5fa;--card:#fff;--ink:#0f1f3d;--mut:#64708a;--line:#dfe4ee;--head:#eaeff8;--field:#fff;--sec:#f2b705;--ter:#0e8f9c;--ok:#1e8a5a;--bad:#c93a3a;--hl:#fff6cf}
 html.gsw body>*:not(#gsp){visibility:hidden!important}
+html.gsw,html.gsw body,body.gspin{overflow:hidden!important;scrollbar-width:none!important}
+html.gsw *,body.gspin *{scrollbar-width:none!important}
+html.gsw::-webkit-scrollbar,body.gspin::-webkit-scrollbar,html.gsw *::-webkit-scrollbar,body.gspin *::-webkit-scrollbar{display:none!important}
 /* v187: cute logo: one eye winks, the hat tilts and the tassel swings; the other eye blinks, the smile breathes (subtle, off for reduced motion) */
 .gi-hat,.gi-tas,.gi-eL,.gi-eR,.gi-smile{transform-box:fill-box}.gi-hat{transform-origin:50% 100%}.gi-tas{transform-origin:50% 0}.gi-eL,.gi-eR,.gi-smile{transform-origin:50% 50%}.gi-wk{opacity:0}
 @keyframes giW{0%,8%,38%,100%{transform:scaleY(1)}13%,31%{transform:scaleY(0)}}
@@ -1651,7 +1654,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.62',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.63',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
@@ -3976,9 +3979,10 @@ async function ntCopy(c,items,targets){let n=0;st('Copying to other classes…')
     n++}
    mark(d)}}catch(e){console.error(e);st('');return toast('Could not copy everything.')}
  st('');toast(`Added to ${targets.length} class${targets.length==1?'':'es'}`);if(view=='notes')softRender()}
-function sumV(c,t){const T=c.terms[t],i=TERMS.findIndex(x=>x[0]==t),tot=sum(T.comps.map(x=>x.w)),pr=i&&T.prev,last=t=='final',pt=i?TERMS[i-1][0]:'';
+function sumV(c,t){const T=c.terms[t],i=TERMS.findIndex(x=>x[0]==t),tot=sum(T.comps.map(x=>x.w)),pr=i&&T.prev,last=t=='final',pt=i?TERMS[i-1][0]:'',lab=TERMS[i][1],prevLab=i?TERMS[i-1][1]:'';
+ const f1=v=>{if(v==null||v==='')return'—';const q=f(v,1);return Number.isFinite(+v)&&!q.includes('.')?q+'.0':q};
  return `<p class="${tot==100?'ok':'bad'}">${tot==100?'Component weights total 100%.':'Component weights total '+tot+'% — fix this under Rules & weights.'} Term grade = ${T.own}% of this term's score${pr?` + ${T.prev}% of the previous term's grade`:''}.</p>
- <div class="wrap gw"><table class="nmt${nmFull?' full':''}"><tr><th class=nm>Student ${nmB()}</th>${T.comps.map(x=>`<th>${esc(x.name)}<br>GE × ${x.w}%</th>`).join('')}<th>Term<br>score</th><th>Previous term<br>grade</th><th>Term<br>grade</th>${last?'<th>Remarks</th>':''}</tr>${c.students.map((s,r)=>{const g=grades(c,s.id,1);return `<tr>${nmC(s,r)}${T.comps.map(cp=>{const x=cmp(c,t,s.id,cp,1);return `<td>${f(x.g,1)} → ${f(x.w,1)}</td>`}).join('')}<td class=c>${f(g[t].x,1)}</td><td class=c>${f(pt?g[pt].g:null,1)}</td><td class=c>${f(g[t].g,1)}</td>${last?`<td>${g.rem?`<span class="chip ${g.rem=='PASSED'?'ok':'bad'}">${g.rem}</span>`:'—'}</td>`:''}</tr>`}).join('')}</table></div>`}
+ <div class="wrap gw"><table class="nmt${nmFull?' full':''}"><tr><th class=nm>Student ${nmB()}</th>${T.comps.map(x=>`<th>${esc(x.name)}<br>GE × ${x.w}%</th>`).join('')}<th>${lab}<br>Score</th><th>${i?prevLab:'No prior'}<br>Grade</th><th>${lab}<br>Grade</th>${last?'<th>Remarks</th>':''}</tr>${c.students.map((s,r)=>{const g=grades(c,s.id,1);return `<tr>${nmC(s,r)}${T.comps.map(cp=>{const x=cmp(c,t,s.id,cp,1);return `<td>${f(x.g,1)} → ${f(x.w,1)}</td>`}).join('')}<td class=c>${f1(g[t].x)}</td><td class=c>${f1(pt?g[pt].g:null)}</td><td class=c>${f1(g[t].g)}</td>${last?`<td>${g.rem?`<span class="chip ${g.rem=='PASSED'?'ok':'bad'}">${g.rem}</span>`:'—'}</td>`:''}</tr>`}).join('')}</table></div>`}
 let grTab='rev',grT='';const GRT=[['rev','Review','tasks'],['sum','Summary','grid'],['prn','Print','printer']];
 function gradV(c){const t=TERMS.some(z=>z[0]==grT)?grT:pvDefT(c),lab=TERMS.find(x=>x[0]==t)[1];grT=t;
  const tabs='',
@@ -4059,7 +4063,7 @@ function recHtml(c,t){const T=c.terms[t],m=c.meta,ti=TERMS.findIndex(x=>x[0]==t)
   h2+=`${to?'<th>TO</th>':''}<th>%EQ</th><th>GE</th><th class=c4>${(cp.w/100).toFixed(2)}</th>`;
   cols.forEach(x=>{r4+=`<td>${x.mx===''?'':tn(x.mx,dg)}</td>`});
   const g100=ge(100,c,t);r4+=`${to?`<td class=c1>${tm?tn(tm,1):''}</td>`:''}<td class=c2>${tm?100:''}</td><td class=c3>${tm?fx(g100,1):''}</td><td class=c4>${tm?fx(g100*cp.w/100,1):''}</td>`});
- const gh=mult?[`INITIAL<br>${L}<br>GRADE`,frac(T.own),`${TN[pt][2]}<br>GRADE`,frac(T.prev),`${L}<br>GRADE`]:[`${L}<br>GRADE`];if(last)gh.push('FNL_FINAL<br>GRADE','REMARKS');
+ const gh=mult?[`${L}<br>SCORE`,frac(T.own),`${TN[pt][2]}<br>GRADE`,frac(T.prev),`${L}<br>GRADE`]:[`${L}<br>GRADE`];if(last)gh.push('FNL_FINAL<br>GRADE','REMARKS');
  h1+=gh.map((x,j)=>{const narrow=mult?[0,2,4].includes(j):j===0;return `<th rowspan=2${narrow?' class=termh':''} style="${narrow?'width:.46in;min-width:.34in;max-width:.5in':'min-width:.42in'}">${x}</th>`}).join('');
  /* top row of the grade columns = the grade for a perfect score, like row 17 of the workbook */
  let gv=gh.map(()=>'');if(cs.every(z=>z.tm>0)){const P=perf(c,t),Q=mult?perf(c,pt):null;gv=mult?[fx(P.x,1),fx(P.x*T.own/100,1),fx(Q.g,1),fx(Q.g*T.prev/100,1),fx(P.g,1)]:[fx(P.g,1)];if(last)gv.push(fx(fnlG(c,P.g),1),remOf(c,P.g))}
