@@ -174,7 +174,7 @@ button.pri .gtag{background:#ffffff33;color:#fff}
 #pa .rd{text-align:center;font-weight:700;color:#0a2bd6;font-size:16pt;border-top:2px solid #000;border-bottom:1px solid #000;margin-top:.12in;padding:.02in 0}
 #pa table.ri{width:100%;border-collapse:collapse;font-size:11pt}#pa table.ri td{border:0;border-bottom:1.5px solid #000;padding:1px 6px;background:transparent;color:#000;text-align:center;font-weight:700}#pa table.ri td:first-child{width:1.8in;text-align:left;border-right:1.5px solid #000}
 #pa .rb{background:#FCDB7D;text-align:center;font:700 20pt "Perpetua Titling MT",Georgia,serif;letter-spacing:.05em;border:1px solid #000;padding:.02in 0;margin-top:.1in}
-#pa table.rt2{border-collapse:collapse;width:100%;font:7.5pt "Arial Narrow",Arial,sans-serif}#pa table.rt2 thead th{white-space:normal;line-height:1.05}#pa table.rt2 thead th small{display:block;font-size:5.5pt;font-weight:400;color:#444;max-width:.62in;margin:0 auto}
+#pa table.rt2{border-collapse:collapse;width:100%;font:7.5pt "Arial Narrow",Arial,sans-serif}#pa table.rt2 thead th{white-space:normal;line-height:1.05}#pa table.rt2 thead th.termh{overflow-wrap:anywhere;line-height:1.02;padding:1px 0}#pa table.rt2 thead th small{display:block;font-size:5.5pt;font-weight:400;color:#444;max-width:.62in;margin:0 auto}
 #pa table.rt2 th,#pa table.rt2 td{border:.6px solid #555;padding:1px;text-align:center;white-space:nowrap;color:#000;font-weight:400}
 #pa table.rt2 thead th{background:#FDB9B8;font-weight:700}#pa table.rt2 thead th.nmh{font-size:18pt}#pa table.rt2 thead th.ch{font-size:8pt}
 #pa table.rt2 thead th.c4{color:#f00}
@@ -1651,7 +1651,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.61',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.62',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
@@ -3976,9 +3976,9 @@ async function ntCopy(c,items,targets){let n=0;st('Copying to other classes…')
     n++}
    mark(d)}}catch(e){console.error(e);st('');return toast('Could not copy everything.')}
  st('');toast(`Added to ${targets.length} class${targets.length==1?'':'es'}`);if(view=='notes')softRender()}
-function sumV(c,t){const T=c.terms[t],i=TERMS.findIndex(x=>x[0]==t),tot=sum(T.comps.map(x=>x.w)),pr=i&&T.prev,last=t=='final';
+function sumV(c,t){const T=c.terms[t],i=TERMS.findIndex(x=>x[0]==t),tot=sum(T.comps.map(x=>x.w)),pr=i&&T.prev,last=t=='final',pt=i?TERMS[i-1][0]:'';
  return `<p class="${tot==100?'ok':'bad'}">${tot==100?'Component weights total 100%.':'Component weights total '+tot+'% — fix this under Rules & weights.'} Term grade = ${T.own}% of this term's score${pr?` + ${T.prev}% of the previous term's grade`:''}.</p>
- <div class="wrap gw"><table class="nmt${nmFull?' full':''}"><tr><th class=nm>Student ${nmB()}</th>${T.comps.map(x=>`<th>${esc(x.name)}<br>GE × ${x.w}%</th>`).join('')}<th>Term score</th><th>Term grade</th>${last?'<th>Remarks</th>':''}</tr>${c.students.map((s,r)=>{const g=grades(c,s.id,1);return `<tr>${nmC(s,r)}${T.comps.map(cp=>{const x=cmp(c,t,s.id,cp,1);return `<td>${f(x.g)} → ${f(x.w,2)}</td>`}).join('')}<td class=c>${f(g[t].x)}</td><td class=c>${f(g[t].g)}</td>${last?`<td>${g.rem?`<span class="chip ${g.rem=='PASSED'?'ok':'bad'}">${g.rem}</span>`:'—'}</td>`:''}</tr>`}).join('')}</table></div>`}
+ <div class="wrap gw"><table class="nmt${nmFull?' full':''}"><tr><th class=nm>Student ${nmB()}</th>${T.comps.map(x=>`<th>${esc(x.name)}<br>GE × ${x.w}%</th>`).join('')}<th>Term<br>score</th><th>Previous term<br>grade</th><th>Term<br>grade</th>${last?'<th>Remarks</th>':''}</tr>${c.students.map((s,r)=>{const g=grades(c,s.id,1);return `<tr>${nmC(s,r)}${T.comps.map(cp=>{const x=cmp(c,t,s.id,cp,1);return `<td>${f(x.g,1)} → ${f(x.w,1)}</td>`}).join('')}<td class=c>${f(g[t].x,1)}</td><td class=c>${f(pt?g[pt].g:null,1)}</td><td class=c>${f(g[t].g,1)}</td>${last?`<td>${g.rem?`<span class="chip ${g.rem=='PASSED'?'ok':'bad'}">${g.rem}</span>`:'—'}</td>`:''}</tr>`}).join('')}</table></div>`}
 let grTab='rev',grT='';const GRT=[['rev','Review','tasks'],['sum','Summary','grid'],['prn','Print','printer']];
 function gradV(c){const t=TERMS.some(z=>z[0]==grT)?grT:pvDefT(c),lab=TERMS.find(x=>x[0]==t)[1];grT=t;
  const tabs='',
@@ -4058,20 +4058,20 @@ function recHtml(c,t){const T=c.terms[t],m=c.meta,ti=TERMS.findIndex(x=>x[0]==t)
   cols.forEach(x=>{h2+=`<th>${x.lab}</th>`});
   h2+=`${to?'<th>TO</th>':''}<th>%EQ</th><th>GE</th><th class=c4>${(cp.w/100).toFixed(2)}</th>`;
   cols.forEach(x=>{r4+=`<td>${x.mx===''?'':tn(x.mx,dg)}</td>`});
-  const g100=ge(100,c,t);r4+=`${to?`<td class=c1>${tm?tn(tm,dg==0?0:2):''}</td>`:''}<td class=c2>${tm?100:''}</td><td class=c3>${tm?fx(g100,1):''}</td><td class=c4>${tm?fx(g100*cp.w/100,2):''}</td>`});
- const gh=mult?[`INITIAL ${L} GRADE`,frac(T.own),`${TN[pt][2]} GRADE`,frac(T.prev),`${L} GRADE`]:[`${L} GRADE`];if(last)gh.push('FNL_FINAL GRADE','REMARKS');
- h1+=gh.map(x=>`<th rowspan=2 style="min-width:.42in">${x}</th>`).join('');
+  const g100=ge(100,c,t);r4+=`${to?`<td class=c1>${tm?tn(tm,1):''}</td>`:''}<td class=c2>${tm?100:''}</td><td class=c3>${tm?fx(g100,1):''}</td><td class=c4>${tm?fx(g100*cp.w/100,1):''}</td>`});
+ const gh=mult?[`INITIAL<br>${L}<br>GRADE`,frac(T.own),`${TN[pt][2]}<br>GRADE`,frac(T.prev),`${L}<br>GRADE`]:[`${L}<br>GRADE`];if(last)gh.push('FNL_FINAL<br>GRADE','REMARKS');
+ h1+=gh.map((x,j)=>{const narrow=mult?[0,2,4].includes(j):j===0;return `<th rowspan=2${narrow?' class=termh':''} style="${narrow?'width:.46in;min-width:.34in;max-width:.5in':'min-width:.42in'}">${x}</th>`}).join('');
  /* top row of the grade columns = the grade for a perfect score, like row 17 of the workbook */
- let gv=gh.map(()=>'');if(cs.every(z=>z.tm>0)){const P=perf(c,t),Q=mult?perf(c,pt):null;gv=mult?[fx(P.x,1),fx(P.x*T.own/100,2),fx(Q.g,1),fx(Q.g*T.prev/100,2),fx(P.g,1)]:[fx(P.g,1)];if(last)gv.push(fx(fnlG(c,P.g),1),remOf(c,P.g))}
+ let gv=gh.map(()=>'');if(cs.every(z=>z.tm>0)){const P=perf(c,t),Q=mult?perf(c,pt):null;gv=mult?[fx(P.x,1),fx(P.x*T.own/100,1),fx(Q.g,1),fx(Q.g*T.prev/100,1),fx(P.g,1)]:[fx(P.g,1)];if(last)gv.push(fx(fnlG(c,P.g),1),remOf(c,P.g))}
  r4+=gv.map(x=>`<td class=gd>${x}</td>`).join('');
  const nc=5+cs.reduce((a,z)=>a+z.cols.length+(z.to?4:3),0),
  spc=`<tr class=spc>${'<td class=w></td>'.repeat(nc)}${gh.map(()=>'<td class=gd></td>').join('')}</tr>`,
  body=spc+c.students.map((u,i)=>{const g=grades(c,u.id,1);let r=`<tr data-pvn="${esc((u.last||'')+(u.first?', '+String(u.first).trim()[0]+'.':''))}"><td class=w>${i+1}</td><td class=nb>${esc(u.last)}</td><td class=w>,</td><td class=nb>${esc(u.first)}</td><td class=nb>${esc(u.mi)}</td>`;
   cs.forEach(({cp,cols,to,wt,dg,eq})=>{const q=cmp(c,t,u.id,cp,1);
    cols.forEach(x=>{r+=`<td>${tn(x.val(u),dg)}</td>`});
-   const any=q.subs.some(Boolean);r+=`${to?`<td class=c1>${any?(wt?tn(sum(cols.map(x=>+x.val(u)||0)),0):tn(sum(q.subs.filter(Boolean).map(z=>z.ct)),dg)):''}</td>`:''}<td class=c2>${q.p==null?'':fx(q.p,1)}</td><td class=c3>${fx(q.g,1)}</td><td class=c4>${fx(q.w,2)}</td>`});
+   const any=q.subs.some(Boolean);r+=`${to?`<td class=c1>${any?(wt?tn(sum(cols.map(x=>+x.val(u)||0)),1):tn(sum(q.subs.filter(Boolean).map(z=>z.ct)),1)):''}</td>`:''}<td class=c2>${q.p==null?'':fx(q.p,1)}</td><td class=c3>${fx(q.g,1)}</td><td class=c4>${fx(q.w,1)}</td>`});
   const x=g[t].x;
-  if(mult){const pv=g[pt].g;r+=`<td class=gd>${fx(x,1)}</td><td class=gd>${x==null?'':fx(x*T.own/100,2)}</td><td class=gd>${fx(pv,1)}</td><td class=gd>${pv==null?'':fx(pv*T.prev/100,2)}</td><td class=gd>${fx(g[t].g,1)}</td>`}
+  if(mult){const pv=g[pt].g;r+=`<td class=gd>${fx(x,1)}</td><td class=gd>${x==null?'':fx(x*T.own/100,1)}</td><td class=gd>${fx(pv,1)}</td><td class=gd>${pv==null?'':fx(pv*T.prev/100,1)}</td><td class=gd>${fx(g[t].g,1)}</td>`}
   else r+=`<td class=gd>${fx(g[t].g,1)}</td>`;
   if(last)r+=`<td class=gd>${fx(fnlG(c,g.final.g),1)}</td><td class=gd>${esc(g.rem)}</td>`;return r+'</tr>'}).join('');
  return `<section class="pg pr-rec"><div class=fitw><div class=rh><img src=logo.png alt=""><div class=rt><b>${esc(m.school||'TALISAY CITY COLLEGE')}</b><div>Poblacion, Talisay City, Cebu</div><small>${esc(m.sy)}</small></div><img src=city-seal.jpg alt=""></div><div class=rd>${esc(m.dept)}</div>
