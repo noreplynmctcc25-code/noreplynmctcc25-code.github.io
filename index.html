@@ -11,7 +11,7 @@
 <script>/* Gradu theme boot: applies the right colors before the page paints */
 (function(){try{var L=localStorage,h=document.documentElement,m=L.theme||'auto',hr=L.harm||((L.sch||L.sec||L.ter)?'x':L.pair?'x':'auto');var n=new Date(),hh=n.getHours(),night=m=='dark'||(m=='system'&&matchMedia('(prefers-color-scheme:dark)').matches)||(m=='auto'&&(hh<6||hh>=18));if(night)h.dataset.dark=1;if(hr=='auto'){var y=h.style;y.setProperty('--p','#1D4ED8');y.setProperty('--sec','#3882F6');y.setProperty('--ter','#F97316');if(!night){y.setProperty('--bg','#EBD4A4');y.setProperty('--ink','#111827')}return}if(hr!='gradu')return;var T=[['#0F766E','#FFEDD5','#FFF8F0','#134E4A'],['#1d4e89','#f2b632','#F5F8FC','#12263F'],['#E11D48','#FEF3C7','#FFFDF5','#4C0519'],['#3b3b98','#7ee0b5','#F6F7FD','#1E1E4B'],['#1F2937','#D9F66B','#FAFDEB','#111827'],['#1E1B4B','#FB923C','#FFF8F2','#1E1B4B'],['#5B21B6','#A3E635','#F7FBEA','#2E1065']][n.getDay()],y=h.style;h.dataset.gradu=1;if(night){y.setProperty('--p','#A78BFA');y.setProperty('--sec','#A78BFA');y.setProperty('--bg','#050506');y.setProperty('--onp','#050506')}else{y.setProperty('--p',T[0]);y.setProperty('--sec',T[1]);y.setProperty('--bg',T[2]);y.setProperty('--ink',T[3]);y.setProperty('--onp','#FFFFFF')}}catch(e){}})();</script>
 <style>
-:root{--p:#8a5a3b;--h1:#613f29;--pri:var(--p);--bg:#f3f5fa;--card:#fff;--ink:#0f1f3d;--mut:#64708a;--line:#dfe4ee;--head:#eaeff8;--field:#fff;--sec:#f2b705;--ter:#0e8f9c;--ok:#1e8a5a;--bad:#c93a3a;--hl:#fff6cf}
+:root{--p:#8a5a3b;--h1:#613f29;--pri:var(--p);--bg:#f3f5fa;--card:#fff;--ink:#0f1f3d;--mut:#64708a;--line:#dfe4ee;--table-line:color-mix(in srgb,var(--ink) 50%,var(--line));--head:#eaeff8;--field:#fff;--sec:#f2b705;--ter:#0e8f9c;--ok:#1e8a5a;--bad:#c93a3a;--hl:#fff6cf}
 html.gsw body>*:not(#gsp){visibility:hidden!important}
 html.gsw,html.gsw body,body.gspin{overflow:hidden!important;scrollbar-width:none!important}
 html.gsw *,body.gspin *{scrollbar-width:none!important}
@@ -82,16 +82,16 @@ main{grid-column:2;grid-row:2;min-width:0;width:100%;max-width:1300px;margin:0 a
 label{display:block;font-size:.78rem;color:var(--mut)}
 input,textarea,select{width:100%;border:1px solid var(--line);border-radius:8px;padding:.35rem .5rem;background:var(--field)}
 input:focus,textarea:focus,select:focus{outline:2px solid var(--pri);outline-offset:-1px}
-.wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}.wrap th{position:sticky;top:0;z-index:2}
+.wrap{overflow:auto;border:1px solid var(--table-line);border-radius:14px;background:var(--card)}.wrap th{position:sticky;top:0;z-index:2}
 table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
-th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:.2rem .35rem;text-align:center;white-space:nowrap}
+th,td{border-bottom:1px solid var(--table-line);border-right:1px solid var(--table-line);padding:.2rem .35rem;text-align:center;white-space:nowrap}
 th{background:var(--head);font-weight:600;font-size:.8rem}
 td.nm,th.nm{text-align:left;position:sticky;left:0;background:var(--card);min-width:13rem;z-index:3}th.nm{background:var(--head)}
 tr:focus-within>td{background:var(--hl)}
 .grid input{width:4.4rem;text-align:center}.grid .hn{font-weight:600;background:transparent;border-color:transparent}
 .grid input.over,.qr input.over{background:#c93a3a30;border-color:var(--bad)}
 td.c{font-weight:600;min-width:3.4rem;background:var(--head)}.grid td.c-partattendance{min-width:5.8rem}.grid td.c-partattendance small{display:block;color:var(--mut);font-size:.72rem;font-weight:500;line-height:1.2}tr.max th{font-weight:400}
-.revgrid:not(.show-details) .rvdetail{display:none}.revgrid th,.revgrid td{border-color:color-mix(in srgb,var(--ink) 28%,var(--line))}.revgrid th.rvdetail,.revgrid th.rvcomponent-group,.revgrid th.rvcomponent-total,.revgrid th.rvcomponent-pct{white-space:normal;min-width:6rem}.revgrid th.rvdetail-total,.revgrid td.rvdetail-total,.revgrid th.rvcomponent-total,.revgrid td.rvcomponent-total,.revgrid th.rvcomponent-pct,.revgrid td.rvcomponent-pct{font-weight:700}.revgrid td.rvdetail-total,.revgrid td.rvcomponent-total,.revgrid td.rvcomponent-pct{background:color-mix(in srgb,var(--pri) 6%,var(--head))}.revgrid th.rvcomponent-total,.revgrid td.rvcomponent-total{border-left:2px solid color-mix(in srgb,var(--pri) 55%,var(--line))}#review-details{border-collapse:separate;border-spacing:0}#review-details tr:first-child>th:not(.nm){z-index:5;box-shadow:inset 0 -2px 0 color-mix(in srgb,var(--ink) 42%,var(--line))}#review-details tr:nth-child(2)>th{z-index:4}#review-details th.nm{z-index:7}#review-details .rvsub-end{border-right:2px solid color-mix(in srgb,var(--ink) 45%,var(--line))}#review-details .rvcomp-end{border-right:3px solid color-mix(in srgb,var(--pri) 55%,var(--line))}
+.revgrid:not(.show-details) .rvdetail{display:none}.revgrid th,.revgrid td{border-color:var(--table-line)}.revgrid th.rvdetail,.revgrid th.rvcomponent-group,.revgrid th.rvcomponent-total,.revgrid th.rvcomponent-pct{white-space:normal;min-width:6rem}.revgrid th.rvdetail-total,.revgrid td.rvdetail-total,.revgrid th.rvcomponent-total,.revgrid td.rvcomponent-total,.revgrid th.rvcomponent-pct,.revgrid td.rvcomponent-pct{font-weight:700}.revgrid td.rvdetail-total,.revgrid td.rvcomponent-total,.revgrid td.rvcomponent-pct{background:color-mix(in srgb,var(--pri) 6%,var(--head))}.revgrid th.rvcomponent-total,.revgrid td.rvcomponent-total{border-left:2px solid var(--table-line)}#review-details{border-collapse:separate;border-spacing:0}#review-details tr:first-child>th:not(.nm){z-index:5;box-shadow:inset 0 -2px 0 var(--table-line)}#review-details tr:nth-child(2)>th{z-index:4}#review-details th.nm{z-index:7}#review-details .rvsub-end{border-right:2px solid var(--table-line)}#review-details .rvcomp-end{border-right:3px solid var(--table-line)}
 .ab{min-width:2.2rem;justify-content:center;padding:.25rem .5rem;font-weight:700;border-radius:8px;background:transparent;color:var(--mut)}
 .ab.P{background:#1e8a5a;border-color:#1e8a5a;color:#fff}.ab.L{background:#d99a00;border-color:#d99a00;color:#fff}.ab.A{background:#c93a3a;border-color:#c93a3a;color:#fff}
 .seg{display:flex;gap:.3rem}.seg .ab{min-width:3.2rem;padding:.6rem}.mini{padding:.05rem .3rem;font-size:.7rem;border-radius:6px}
@@ -338,7 +338,7 @@ th{font-size:.76rem;font-weight:650;letter-spacing:.02em}
 
 /* ---------- v37: frozen header takes the colour of the active bottom tab while scrolling ---------- */
 @media(max-width:899px),(hover:none) and (pointer:coarse) and (max-height:540px){.wrap.gw th.nm{z-index:6}.wrap.gw th{transition:background-color .25s ease,color .25s ease,box-shadow .25s ease}
-.wrap.gw.sc th,.wrap.gw.sc th.nm{background:var(--pri);color:#fff;border-color:color-mix(in srgb,#fff 28%,transparent)}
+.wrap.gw.sc th,.wrap.gw.sc th.nm{background:var(--pri);color:#fff;border-color:color-mix(in srgb,#fff 50%,var(--pri))}
 .wrap.gw.sc th small,.wrap.gw.sc th label,.wrap.gw.sc th span{color:#fff}
 .wrap.gw.sc tr:first-child th{box-shadow:0 3px 8px #0003}
 .wrap.gw.sc th .mini{background:#ffffff26;border-color:#ffffff66;color:#fff}}
@@ -1661,7 +1661,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.64',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.65',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
@@ -4653,6 +4653,7 @@ document.addEventListener('change',e=>{const t=e.target,d=t.dataset,c=C();if(d.p
  if(d.sg){const S=c.scales[d.sg.split('|')[0]],o=S.map(r=>r.join()).join();S.sort((a,b)=>a[0]-b[0]);if(S.map(r=>r.join()).join()!=o)render()}
  if(d.a=='atpre'&&t.value!='x'){const[p,l]=t.value.split(','),A=AT(c);A.p=+p;A.l=+l;const q=SPO.find(k=>SPW[k][0]==+p&&SPW[k][1]==+l);if(q&&!(SPW[c.meta.spw]&&SPW[c.meta.spw][0]==+p&&SPW[c.meta.spw][1]==+l))c.meta.spw=q;mark(c);render()}});
 document.addEventListener('focusin',e=>{if(e.target.matches('.grid td>input[type=number]'))e.target.select()});
+document.addEventListener('wheel',e=>{const n=e.target instanceof Element&&e.target.closest('input[type="number"]');if(n&&n===document.activeElement&&e.deltaY)n.blur()},{capture:true,passive:true});
 document.addEventListener('keydown',e=>{if(e.target.id=='aiq'&&e.key=='Enter'&&!e.shiftKey&&!e.isComposing&&!mob()){e.preventDefault();const c=C();if(c)aiSend(c,e.target.value);return}
 if(!['Enter','ArrowDown','ArrowUp'].includes(e.key)||!e.target.dataset.sc)return;const up=e.key=='ArrowUp';const qr=e.target.closest('.qr');if(qr){const q2=up?qr.previousElementSibling:qr.nextElementSibling,n=q2&&q2.querySelector('input');if(n){n.focus();n.select()}e.preventDefault();return}const td=e.target.closest('td'),i=[...td.parentNode.children].indexOf(td),n=up?td.parentNode.previousElementSibling:td.parentNode.nextElementSibling,nx=n&&n.dataset.sid&&n.children[i]&&n.children[i].querySelector('input');if(nx){nx.focus();nx.select()}e.preventDefault()});
 /* put column idx at its place by date; dated columns keep date order, undated ones stay where they are. Returns the new index. */
