@@ -40,7 +40,7 @@ html.gsw::-webkit-scrollbar,body.gspin::-webkit-scrollbar,html.gsw *::-webkit-sc
 @media(prefers-reduced-motion:reduce){.gwmw::after,#gsp .gspww::after,.gwmw .gwm circle,#gsp .gspw circle{animation:none!important}}
 @media(prefers-reduced-motion:reduce){.gi-live,.gi-live *,.gi-once *{animation:none!important}}
 
-html[data-dark="1"]{--pri:color-mix(in srgb,var(--p) 62%,#fff);--bg:#050506;--card:#121214;--ink:#f2f2f4;--mut:#9b9ba4;--line:#26262b;--head:#1b1b1f;--field:#0e0e10;--hl:#3a3410;--ok:#4cc38a;--bad:#ff7b7b;color-scheme:dark}
+html[data-dark="1"]{--pri:color-mix(in srgb,var(--p) 62%,#fff);--bg:#0b0d12;--card:#151920;--ink:#f4f6fa;--mut:#b4bdca;--line:#647080;--head:#242a34;--field:#1d232c;--hl:#413a18;--ok:#5dd39b;--bad:#ff8686;color-scheme:dark}
 *{box-sizing:border-box}
 ::-webkit-scrollbar{width:18px;height:18px}
 ::-webkit-scrollbar-track{background:color-mix(in srgb,var(--mut) 14%,transparent);border-radius:999px}
@@ -177,7 +177,7 @@ button.pri .gtag{background:#ffffff33;color:#fff}
 #pa .rd{text-align:center;font-weight:700;color:#0a2bd6;font-size:16pt;border-top:2px solid #000;border-bottom:1px solid #000;margin-top:.12in;padding:.02in 0}
 #pa table.ri{width:100%;border-collapse:collapse;font-size:11pt}#pa table.ri td{border:0;border-bottom:1.5px solid #000;padding:1px 6px;background:transparent;color:#000;text-align:center;font-weight:700}#pa table.ri td:first-child{width:1.8in;text-align:left;border-right:1.5px solid #000}
 #pa .rb{background:#FCDB7D;text-align:center;font:700 20pt "Perpetua Titling MT",Georgia,serif;letter-spacing:.05em;border:1px solid #000;padding:.02in 0;margin-top:.1in}
-#pa table.rt2{border-collapse:collapse;width:100%;font:7.5pt "Arial Narrow",Arial,sans-serif}#pa table.rt2 thead th{white-space:normal;line-height:1.05}#pa table.rt2 thead th.termh{overflow-wrap:anywhere;line-height:1.02;padding:1px 0}#pa table.rt2 thead th small{display:block;font-size:5.5pt;font-weight:400;color:#444;max-width:.62in;margin:0 auto}
+#pa table.rt2{border-collapse:collapse;width:100%;font:7.5pt "Arial Narrow",Arial,sans-serif}#pa table.rt2 thead th{white-space:normal;line-height:1.05}#pa table.rt2 thead th.termh{overflow-wrap:normal;word-break:normal;line-height:1.02;padding:1px 0}#pa table.rt2 thead th.termh .termw{display:inline-block;white-space:nowrap}#pa table.rt2 thead th small{display:block;font-size:5.5pt;font-weight:400;color:#444;max-width:.62in;margin:0 auto}
 #pa table.rt2 th,#pa table.rt2 td{border:.6px solid #555;padding:1px;text-align:center;white-space:nowrap;color:#000;font-weight:400}
 #pa table.rt2 thead th{background:#FDB9B8;font-weight:700}#pa table.rt2 thead th.nmh{font-size:18pt}#pa table.rt2 thead th.ch{font-size:8pt}
 #pa table.rt2 thead th.c4{color:#f00}
@@ -412,6 +412,13 @@ button.has{position:relative}button.has::after{content:"";position:absolute;top:
 .card.need{background:color-mix(in srgb,var(--bad) 7%,var(--card));border-color:color-mix(in srgb,var(--bad) 28%,var(--line))}
 .card.need .wrap{background:transparent}.card.need th{background:color-mix(in srgb,var(--bad) 10%,var(--card))}
 .rrw{display:flex;gap:.5rem;align-items:flex-end}.rrw label{flex:1;min-width:0}.rrw .dng{flex:none;white-space:nowrap}
+.cfg .form{grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr))!important;gap:.7rem;align-items:end}
+.cfg .form>label,.cfg .form>.rrw{width:100%;min-width:0}.cfg .form label{white-space:nowrap}
+.cfg .form input{width:100%;min-width:0;min-height:2.55rem;box-sizing:border-box}
+.cfg .form .rrw{display:flex;flex-direction:column;align-items:stretch;gap:.35rem;width:100%}
+.cfg .form .rrw label{flex:none;width:100%;min-width:0}.cfg .form .rrw .dng{align-self:flex-end}
+@media(max-width:899px),(hover:none) and (pointer:coarse) and (max-height:540px){.cfg .form{grid-template-columns:minmax(0,1fr)!important}}
+html[data-dark="1"] :is(input,select,textarea,button):disabled{opacity:.72}
 .srb{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}.srb label{display:flex;align-items:center;gap:.4rem;margin:0}
 @media(max-width:899px),(hover:none) and (pointer:coarse) and (max-height:540px){
 .wrap.free td:first-child{white-space:normal;word-break:break-word}.nmt td.nm{white-space:nowrap}
@@ -1654,7 +1661,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.63',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.64',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
@@ -4063,8 +4070,8 @@ function recHtml(c,t){const T=c.terms[t],m=c.meta,ti=TERMS.findIndex(x=>x[0]==t)
   h2+=`${to?'<th>TO</th>':''}<th>%EQ</th><th>GE</th><th class=c4>${(cp.w/100).toFixed(2)}</th>`;
   cols.forEach(x=>{r4+=`<td>${x.mx===''?'':tn(x.mx,dg)}</td>`});
   const g100=ge(100,c,t);r4+=`${to?`<td class=c1>${tm?tn(tm,1):''}</td>`:''}<td class=c2>${tm?100:''}</td><td class=c3>${tm?fx(g100,1):''}</td><td class=c4>${tm?fx(g100*cp.w/100,1):''}</td>`});
- const gh=mult?[`${L}<br>SCORE`,frac(T.own),`${TN[pt][2]}<br>GRADE`,frac(T.prev),`${L}<br>GRADE`]:[`${L}<br>GRADE`];if(last)gh.push('FNL_FINAL<br>GRADE','REMARKS');
- h1+=gh.map((x,j)=>{const narrow=mult?[0,2,4].includes(j):j===0;return `<th rowspan=2${narrow?' class=termh':''} style="${narrow?'width:.46in;min-width:.34in;max-width:.5in':'min-width:.42in'}">${x}</th>`}).join('');
+ const gh=mult?[`<span class=termw>${L}</span><br>SCORE`,frac(T.own),`<span class=termw>${TN[pt][2]}</span><br>GRADE`,frac(T.prev),`<span class=termw>${L}</span><br>GRADE`]:[`${L}<br>GRADE`];if(last)gh.push('FNL_FINAL<br>GRADE','REMARKS');
+ h1+=gh.map((x,j)=>{const narrow=mult?[0,2,4].includes(j):j===0;return `<th rowspan=2${narrow?' class=termh':''} style="${narrow?'width:.66in;min-width:.62in;max-width:.72in':'min-width:.42in'}">${x}</th>`}).join('');
  /* top row of the grade columns = the grade for a perfect score, like row 17 of the workbook */
  let gv=gh.map(()=>'');if(cs.every(z=>z.tm>0)){const P=perf(c,t),Q=mult?perf(c,pt):null;gv=mult?[fx(P.x,1),fx(P.x*T.own/100,1),fx(Q.g,1),fx(Q.g*T.prev/100,1),fx(P.g,1)]:[fx(P.g,1)];if(last)gv.push(fx(fnlG(c,P.g),1),remOf(c,P.g))}
  r4+=gv.map(x=>`<td class=gd>${x}</td>`).join('');
