@@ -58,7 +58,7 @@ header:empty,nav:empty{display:none}body:has(nav:empty) main{grid-column:1/3}
 .brand{display:flex;align-items:center;gap:.6rem}.brand img{width:2.7rem;height:2.7rem;background:#fff;border-radius:50%;padding:2px}
 .brand small{display:block;font-size:.65rem;opacity:.85;letter-spacing:.08em;text-transform:uppercase}.brand b{font-size:1.05rem}
 header select{width:auto;max-width:13rem;background:#ffffff1f;color:#fff;border-color:#ffffff50}option{color:#000}
-.sp{flex:1}#st{font-size:.75rem;background:#ffffff1f;padding:.2rem .65rem;border-radius:999px}#st:empty{display:none}.em{font-size:.8rem;opacity:.85}.hr{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;min-width:0;max-width:100%}.hl{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:.2rem .5rem;max-width:100%}.hb{display:flex;gap:.4rem;justify-content:flex-end}.hr .em{display:inline-block;max-width:16rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hl .em::after{content:'|';margin-left:.5rem;opacity:.7}.hl:has(#st:empty) .em::after{display:none}
+.sp{flex:1}#st{font-size:.75rem;background:#ffffff1f;padding:.2rem .65rem;border-radius:999px}#st:empty{display:none}#st[data-state=sending]{white-space:nowrap}.em{font-size:.8rem;opacity:.85}.hr{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;min-width:0;max-width:100%}.hl{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:.2rem .5rem;max-width:100%}.hb{display:flex;gap:.4rem;justify-content:flex-end}.hr .em{display:inline-block;max-width:16rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hl .em::after{content:'|';margin-left:.5rem;opacity:.7}.hl:has(#st:empty) .em::after{display:none}
 button,select,input,textarea{font:inherit;color:inherit}
 button{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:.45rem .8rem;font-weight:500;cursor:pointer;transition:.15s}
 :where(button,a,input,select,textarea,summary,[tabindex="0"]):focus-visible{outline:3px solid var(--ink);outline-offset:2px;box-shadow:0 0 0 2px var(--card)}
@@ -1686,7 +1686,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.72',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.73',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
@@ -2971,8 +2971,8 @@ const nm=s=>`${s.last||''}, ${s.first||''} ${s.mi||''}`.trim(),f=(v,d=2)=>{if(v=
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.remove('q');t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),3000)};
 /* v182: a small, low-key toast for background sync notices */
 toast.q=m=>{const t=$('#toast');t.textContent=m;t.classList.add('q','show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),3200)};
-const st=m=>{const e=$('#st');if(e)e.textContent=m;st.m=m;try{stPaint()}catch(_){}},isT=v=>TERMS.some(t=>t[0]==v);
-const stLabel=()=>{if(!U)return'Saved on this device';if(busy)return'Syncing';if(localStorage['eclass.syncError'])return'Needs attention';if(D.dirty||D.pnDirty||localStorage['eclass.tbpend'])return'Waiting to sync';return+localStorage['eclass.ls']?'Synced to Drive':'Saved on this device'},stTitle=()=>{const ls=+localStorage['eclass.ls']||0;return'Open sync details. Local records are saved on this device. Last successful Drive sync: '+(ls?new Date(ls).toLocaleString([],{dateStyle:'medium',timeStyle:'short'}):'none yet')},stPaint=()=>{const e=$('#st');if(!e)return;const t=stLabel();e.textContent=t;e.title=stTitle();e.dataset.state=t=='Needs attention'?'attention':t=='Waiting to sync'?'waiting':t=='Syncing'?'syncing':t=='Synced to Drive'?'synced':'device'};
+const st=m=>{const e=$('#st');if(e)e.textContent=m;st.m=m;try{stPaint()}catch(_){}},stTask=m=>{st.task=m||'';try{stPaint()}catch(_){}},isT=v=>TERMS.some(t=>t[0]==v);
+const stLabel=()=>{if(!U)return'Saved on this device';if(busy)return'Syncing';if(localStorage['eclass.syncError'])return'Needs attention';if(D.dirty||D.pnDirty||localStorage['eclass.tbpend'])return'Waiting to sync';return+localStorage['eclass.ls']?'Synced to Drive':'Saved on this device'},stTitle=()=>{const ls=+localStorage['eclass.ls']||0;return'Open sync details. Local records are saved on this device. Last successful Drive sync: '+(ls?new Date(ls).toLocaleString([],{dateStyle:'medium',timeStyle:'short'}):'none yet')},stPaint=()=>{const e=$('#st');if(!e)return;const task=st.task||'',t=task||stLabel();e.textContent=t;e.title=task?task:stTitle();e.dataset.state=task?'sending':t=='Needs attention'?'attention':t=='Waiting to sync'?'waiting':t=='Syncing'?'syncing':t=='Synced to Drive'?'synced':'device'};
 const mob=()=>matchMedia('(max-width:899px),(hover:none) and (pointer:coarse) and (max-height:540px)').matches;
 /* gender: males are listed first (A-Z); when the last names start again from A, the rows are female */
 const nextG=(pg,pl,l)=>!pg?'M':pg=='F'||!l||!pl?pg:(l.localeCompare(pl,undefined,{sensitivity:'base'})<0?'F':'M');
@@ -5207,17 +5207,17 @@ function srPub(c,id){const s=c.students.find(x=>x.id==id);if(!s||!srReady())retu
  if(!okMail(s))return toast('Type a valid email address for this student first.');
  const upto=srUpto(c);
  ask('Publish this record?',`Email <b>${esc(nm(s))}</b>'s <b>${tlab(upto)}</b> record as a PDF attachment to <b>${esc(s.email.trim())}</b>?<br><small>It is sent from your Google account (${esc(U)}).</small>`,'Publish &amp; email',async()=>{
-  try{st('Sending…');await srSend(c,s,upto);toast('Sent to '+s.email.trim())}catch(e){srFail(e)}
-  st('');keep()})}
+  try{stTask('Sending 1 of 1…');await srSend(c,s,upto);toast('Sent to '+s.email.trim())}catch(e){srFail(e)}
+  stTask('');keep()})}
 function srAll(c){if(!srReady())return;const upto=srUpto(c),
   todo=c.students.filter(s=>okMail(s)&&!(s.pub&&s.pub.upto==upto)),noMail=c.students.filter(s=>!okMail(s)).length,done=c.students.filter(s=>okMail(s)&&s.pub&&s.pub.upto==upto).length;
  if(!todo.length)return toast(done?'Every student with an email already has this record. Use Re-send for one student.':'No student has an email address yet.');
  ask('Publish to all?',`Send the <b>${tlab(upto)}</b> record to <b>${todo.length}</b> student${todo.length==1?'':'s'}? Each student gets their own email and PDF.${noMail?`<br><small>${noMail} without an email address will be skipped.</small>`:''}${done?`<br><small>${done} already published for this period will be skipped.</small>`:''}`,'Publish all',async()=>{
   let n=0;
-  for(const s of todo){st(`Sending ${n+1} of ${todo.length}…`);
-   try{await srSend(c,s,upto);n++}catch(e){st('');keep();toast(n+' sent before the problem.');return srFail(e)}
+  for(const s of todo){stTask(`Sending ${n+1} of ${todo.length}…`);
+   try{await srSend(c,s,upto);n++}catch(e){stTask('');keep();toast(n+' sent before the problem.');return srFail(e)}
    await new Promise(r=>setTimeout(r,400))}
-  st('');toast(`${n} record${n==1?'':'s'} sent`);keep()})}
+  stTask('');toast(`${n} record${n==1?'':'s'} sent`);keep()})}
 async function srPdfDl(c,id){const s=c.students.find(x=>x.id==id);if(!s)return;const upto=srUpto(c);
  try{toast('Preparing PDF…');const bin=await srPdf(c,s,upto);saveBlob(URL.createObjectURL(new Blob([pdfBytes(bin)],{type:'application/pdf'})),srFile(c,s,upto))}catch(e){console.error(e);toast('Could not make the PDF.')}}
 function srPrev(c,id){const s=c.students.find(x=>x.id==id);if(!s)return;
