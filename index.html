@@ -1686,7 +1686,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.71',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.72',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
@@ -4991,6 +4991,7 @@ const SRCLAUSE='This record is confidential and intended only for the student na
 const NOREPLY='This is an automated message sent from a no-reply address. Please do not reply to this email; replies are not monitored. For any question or correction, please see your instructor during consultation hours.';
 /* every period is always shown; periods after the one being released are marked off (greyed out) */
 const T3=R=>TERMS.map(([t,lab],i)=>R.terms[i]||{t,lab,off:1,grade:null});
+const srGrade=v=>v==null?'—':fx(v,1);
 const SRNOTE='Count: how many were taken out of how many were given (for attendance, sessions attended, present or late, out of sessions held; Late and Absent are plain counts). Score: points earned out of total points.';
 const sigHtml=lv=>lv?`<span class=sig title="${SIGN[lv]}" aria-label="${SIGN[lv]}">${[1,2,3,4].map(i=>`<i style="background:${i<=lv?SIGC[lv]:'color-mix(in srgb,var(--mut) 35%,transparent)'}"></i>`).join('')}</span>`:'';
 const pcs=v=>v==null?'—':f(v,1)+'%';          // percent text; f() is the app's number formatter
@@ -5001,9 +5002,9 @@ function srHtml(c,s,upto){
  return `<div class=srv><div class=srh><img src=logo.png alt=""><div><b>${esc(m.school||'')}</b><small>${esc(m.dept||'')}</small><h3>Individual Student Record</h3></div><img src=city-seal.jpg alt=""></div>
  <div class=clause><b>${SRTITLE}</b>${SRCLAUSE}</div>
  <div class=sri>${R.info.map(([k,v])=>`<span><small>${k}</small>${esc(v||'—')}</span>`).join('')}</div>
- <h4>Summary of grades</h4><div class=wrap><table class=cmpt><tr><th>Period</th><th>Term grade</th></tr>${T3(R).map(t=>t.off?`<tr><td class=off>${t.lab}</td><td class=off>Not yet released</td></tr>`:`<tr><td>${t.lab}</td><td><b>${f(t.grade)}</b></td></tr>`).join('')}</table></div>
+ <h4>Summary of grades</h4><div class=wrap><table class=cmpt><tr><th>Period</th><th>Term grade</th></tr>${T3(R).map(t=>t.off?`<tr><td class=off>${t.lab}</td><td class=off>Not yet released</td></tr>`:`<tr><td>${t.lab}</td><td><b>${srGrade(t.grade)}</b></td></tr>`).join('')}</table></div>
  ${R.rem?`<p>Final remarks: <span class="chip ${R.rem=='PASSED'?'ok':'bad'}">${R.rem}</span></p>`:''}
- <h4>Breakdown of scores</h4><div class=wrap><table class="cmpt srbk"><tr><th rowspan=2 class=srk>Component</th>${T3(R).map(t=>`<th colspan=3 class="${t.off?'off':''}" style="text-align:center">${t.lab}</th>`).join('')}</tr><tr>${T3(R).map(t=>`<th class="${t.off?'off':''}">Count</th><th class="${t.off?'off':''}">Score</th><th class="${t.off?'off':''}"></th>`).join('')}</tr>${R.rows.map(r=>`<tr${r.sub?'':' style="font-weight:600"'}><td>${r.sub?'&nbsp;&nbsp;':''}${esc(r.name)}</td>${T3(R).map((t,ti)=>{const x=r.cells[ti];return t.off?'<td class=off></td><td class=off></td><td class=off></td>':x?`<td>${x.cnt}</td><td>${x.sc}</td><td>${sigHtml(x.lv)}</td>`:'<td></td><td></td><td></td>'}).join('')}</tr>`).join('')}<tr style="font-weight:700"><td>Term grade</td>${T3(R).map(t=>t.off?'<td class=off></td><td class=off></td><td class=off></td>':`<td></td><td>${t.grade==null?'—':f(t.grade)}</td><td></td>`).join('')}</tr></table></div>
+ <h4>Breakdown of scores</h4><div class=wrap><table class="cmpt srbk"><tr><th rowspan=2 class=srk>Component</th>${T3(R).map(t=>`<th colspan=3 class="${t.off?'off':''}" style="text-align:center">${t.lab}</th>`).join('')}</tr><tr>${T3(R).map(t=>`<th class="${t.off?'off':''}">Count</th><th class="${t.off?'off':''}">Score</th><th class="${t.off?'off':''}"></th>`).join('')}</tr>${R.rows.map(r=>`<tr${r.sub?'':' style="font-weight:600"'}><td>${r.sub?'&nbsp;&nbsp;':''}${esc(r.name)}</td>${T3(R).map((t,ti)=>{const x=r.cells[ti];return t.off?'<td class=off></td><td class=off></td><td class=off></td>':x?`<td>${x.cnt}</td><td>${x.sc}</td><td>${sigHtml(x.lv)}</td>`:'<td></td><td></td><td></td>'}).join('')}</tr>`).join('')}<tr style="font-weight:700"><td>Term grade</td>${T3(R).map(t=>t.off?'<td class=off></td><td class=off></td><td class=off></td>':`<td></td><td>${srGrade(t.grade)}</td><td></td>`).join('')}</tr></table></div>
  <p class=mut style="display:flex;flex-wrap:wrap;gap:.3rem .9rem;align-items:center">${[4,3,2,1].map(l=>`<span>${sigHtml(l)} ${SIGN[l]}</span>`).join('')}</p>
  <p class=mut>${SRNOTE}${T3(R).some(t=>t.off)?' Greyed columns are periods not yet released.':''}</p>
  <p class=mut>${passNote(c)}</p></div>`}
@@ -5093,13 +5094,13 @@ async function srPdf(c,s,upto){
  /* student and class details box */
  const left=R.info.slice(0,4),right=R.info.slice(4),bh=Math.max(left.length,right.length)*16+12;
  P.rect(L,y,CW,bh,soft);
- left.forEach(([k,v],i)=>{P.text(L+10,y+17+i*16,k+':',9,{b:1,c:mut});P.text(L+78,y+17+i*16,pdfFit(v||'-',215,i?10:11,i==0),i?10:11,{b:i==0})});
+ left.forEach(([k,v],i)=>{const wide=k=='Course, year and section',label=wide?'Course / Year / Section:':k+':',vx=L+(wide?126:78),lw=vx-(L+16),vw=wide?174:215;P.text(L+10,y+17+i*16,pdfFit(label,lw,9,1),9,{b:1,c:mut});P.text(vx,y+17+i*16,pdfFit(v||'-',vw,i?10:11,i==0),i?10:11,{b:i==0})});
  right.forEach(([k,v],i)=>{P.text(L+310,y+17+i*16,k+':',9,{b:1,c:mut});P.text(L+385,y+17+i*16,pdfFit(v||'-',160,10),10)});
  y+=bh+14;
  /* summary */
  head('SUMMARY OF GRADES');
  table([{w:200,h:'Period'},{w:110,h:'Term grade',al:'r'}],
-  T3(R).map(t=>t.off?{c:[t.lab,'Not yet released'],fill:'#ececec',col:'#9a9a9a',sz:8.5}:{c:[t.lab,f(t.grade)],b:1}));
+  T3(R).map(t=>t.off?{c:[t.lab,'Not yet released'],fill:'#ececec',col:'#9a9a9a',sz:8.5}:{c:[t.lab,srGrade(t.grade)],b:1}));
  if(R.rem){need(24);P.text(L,y+10,'Final remarks:',10,{b:1});P.text(L+72,y+10,R.rem,10,{b:1,c:R.rem=='PASSED'?'#1e8a5a':'#c93a3a'});y+=18}
  need(20);P.text(L,y+8,passNote(c),8.5,{c:mut});y+=22;
  /* breakdown: ONE table, Count + Score + signal for each period */
@@ -5107,7 +5108,7 @@ async function srPdf(c,s,upto){
   T3(R).forEach((t,ti)=>cols.push({w:36,h:'Count',al:'r',g:t.lab,off:t.off},{w:60,h:'Score',al:'r',g:t.lab,off:t.off},{w:26,h:'',g:t.lab,sg:ti,off:t.off}));
   head('BREAKDOWN OF SCORES');
   const rows=R.rows.map(r=>({c:[r.name,...c3(r).flatMap(x=>x?[x.cnt,x.sc,'']:['','',''])],lv:c3(r).map(x=>x?x.lv:0),...(r.sub?{ind:10,sz:8.5,col:'#555555'}:{b:1,fill:soft})}));
-  rows.push({c:['Term grade',...T3(R).flatMap(t=>t.off?['','','']:['',t.grade==null?'-':f(t.grade),''])],b:1,fill:soft});
+  rows.push({c:['Term grade',...T3(R).flatMap(t=>t.off?['','','']:['',srGrade(t.grade),''])],b:1,fill:soft});
   table(cols,rows);
   /* what the signals mean */
   need(30);let lx=L;[4,3,2,1].forEach(l=>{sigBars(lx+8,y,l);P.text(lx+22,y+10,SIGN[l],8,{c:mut});lx+=64});y+=18;
@@ -5125,7 +5126,7 @@ async function srPdf(c,s,upto){
  return P.done()}
 const pdfBytes=bin=>Uint8Array.from(bin,ch=>ch.charCodeAt(0)&255);        // binary string -> bytes
 /* file name without spaces or accents, e.g. Student-Record_Bacalso_Helen_Midterm.pdf */
-const srFile=(s,upto)=>('Student-Record_'+[s.last,s.first,tlab(upto)].filter(Boolean).join(' · ')).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9_-]+/g,'_').replace(/_+/g,'_')+'.pdf';
+const srFile=(c,s,upto)=>{const clean=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9-]+/g,'_').replace(/^_+|_+$/g,'');return[clean(tlab(upto)+'Grade'),clean(c.meta&&c.meta.subj),clean(s.last),clean(s.first)].filter(Boolean).join('_')+'.pdf'};
 
 /* ---------- 4. the email ---------- */
 function srMail(c,s,upto){
@@ -5133,7 +5134,7 @@ function srMail(c,s,upto){
   period=R.terms.length>1?R.terms[0].lab+' to '+R.terms[R.terms.length-1].lab:R.terms[0].lab,
   term=`${sOf(c)}${aOf(c)?', A.Y. '+aOf(c):''}`,
   subject=`Individual Student Record - ${[m.subj,m.section].filter(Boolean).join(' · ')} - ${tlab(upto)} (${term})`,
-  sum=R.terms.map(t=>`${t.lab}: ${f(t.grade)}`).join('  |  ');
+  sum=R.terms.map(t=>`${t.lab}: ${srGrade(t.grade)}`).join('  |  ');
  const text=`Dear ${who},
 
 Good day!
@@ -5141,7 +5142,7 @@ Good day!
 Attached is your individual student record for ${course}${m.section?' ('+m.section+')':''}, ${term}. It covers your ${period} grades.
 
 Summary of grades
-${T3(R).map(t=>`  ${t.lab}: ${t.off?'(not yet released)':f(t.grade)}`).join('\n')}${R.rem?`\n  Final remarks: ${R.rem}`:''}
+${T3(R).map(t=>`  ${t.lab}: ${t.off?'(not yet released)':srGrade(t.grade)}`).join('\n')}${R.rem?`\n  Final remarks: ${R.rem}`:''}
 
 Please review the attached PDF carefully. If you notice any error or have a question about your record, please see me during consultation hours.
 
@@ -5163,7 +5164,7 @@ ${m.dept||''}`;
  <p style="margin:0 0 12px">Dear ${esc(who)},</p><p style="margin:0 0 12px">Good day!</p>
  <p style="margin:0 0 12px">Attached is your individual student record for <b>${esc(course)}</b>${m.section?' ('+esc(m.section)+')':''}, ${esc(term)}. It covers your <b>${esc(period)}</b> grades.</p>
  <table style="border-collapse:collapse;width:auto;min-width:300px;margin:0 0 14px;font-size:13px"><tr><th style="text-align:left;background:#f5efe9;padding:6px 10px;border:1px solid #e3d9d0">Period</th><th style="text-align:right;background:#f5efe9;padding:6px 10px;border:1px solid #e3d9d0">Term grade</th></tr>
- ${T3(R).map(t=>t.off?`<tr><td style="padding:6px 10px;border:1px solid #e3d9d0;background:#eeeeee;color:#999">${t.lab}</td><td style="padding:6px 10px;border:1px solid #e3d9d0;background:#eeeeee;color:#999;text-align:right;font-size:12px">Not yet released</td></tr>`:`<tr><td style="padding:6px 10px;border:1px solid #e3d9d0">${t.lab}</td><td style="padding:6px 10px;border:1px solid #e3d9d0;text-align:right"><b>${f(t.grade)}</b></td></tr>`).join('')}
+ ${T3(R).map(t=>t.off?`<tr><td style="padding:6px 10px;border:1px solid #e3d9d0;background:#eeeeee;color:#999">${t.lab}</td><td style="padding:6px 10px;border:1px solid #e3d9d0;background:#eeeeee;color:#999;text-align:right;font-size:12px">Not yet released</td></tr>`:`<tr><td style="padding:6px 10px;border:1px solid #e3d9d0">${t.lab}</td><td style="padding:6px 10px;border:1px solid #e3d9d0;text-align:right"><b>${srGrade(t.grade)}</b></td></tr>`).join('')}
  ${R.rem?`<tr><td style="padding:6px 10px;border:1px solid #e3d9d0">Final remarks</td><td style="padding:6px 10px;border:1px solid #e3d9d0;text-align:right;font-weight:bold;color:${R.rem=='PASSED'?'#1e8a5a':'#c93a3a'}">${R.rem}</td></tr>`:''}</table>
  <p style="margin:0 0 12px"><p style="margin:0 0 12px;border:1px solid #c93a3a;background:#fdf1f1;border-radius:6px;padding:10px 12px;font-size:13px"><b style="color:#c93a3a">${SRTITLE}</b><br>${esc(SRCLAUSE)}</p><p style="margin:0 0 12px;border:1px solid #e0a100;background:#fff8e0;border-radius:6px;padding:10px 12px;font-size:13px"><b>Please do not reply to this email.</b><br>${esc(NOREPLY)}</p><p style="margin:0 0 12px">Please review the attached PDF carefully. If you notice any error or have a question about your record, please see me during consultation hours.</p>
  <p style="margin:0 0 12px">Thank you.</p>
@@ -5192,7 +5193,7 @@ async function gmailSend(raw){await tk();
 async function srSend(c,s,upto){
  if(!okMail(s))throw Object.assign(Error('noemail'),{noemail:1});
  const pdf=await srPdf(c,s,upto);
- await gmailSend(b64u(srMsg(s.email.trim(),srMail(c,s,upto),srFile(s,upto),pdf,srFrom(c))));
+ await gmailSend(b64u(srMsg(s.email.trim(),srMail(c,s,upto),srFile(c,s,upto),pdf,srFrom(c))));
  s.pub={t:Date.now(),to:s.email.trim(),upto};mark(c)}
 /* explain what went wrong in plain words */
 function srFail(e){
@@ -5218,7 +5219,7 @@ function srAll(c){if(!srReady())return;const upto=srUpto(c),
    await new Promise(r=>setTimeout(r,400))}
   st('');toast(`${n} record${n==1?'':'s'} sent`);keep()})}
 async function srPdfDl(c,id){const s=c.students.find(x=>x.id==id);if(!s)return;const upto=srUpto(c);
- try{toast('Preparing PDF…');const bin=await srPdf(c,s,upto);saveBlob(URL.createObjectURL(new Blob([pdfBytes(bin)],{type:'application/pdf'})),srFile(s,upto))}catch(e){console.error(e);toast('Could not make the PDF.')}}
+ try{toast('Preparing PDF…');const bin=await srPdf(c,s,upto);saveBlob(URL.createObjectURL(new Blob([pdfBytes(bin)],{type:'application/pdf'})),srFile(c,s,upto))}catch(e){console.error(e);toast('Could not make the PDF.')}}
 function srPrev(c,id){const s=c.students.find(x=>x.id==id);if(!s)return;
  const up=srUpto(c),o=dlg(`<div class=srpvh><span class=ic>${I('file')}</span><div><b>Record preview</b><small>${esc(nm(s))} · up to ${tlab(up)}</small></div></div>${srHtml(c,s,up)}<div class="fabbar srfab" role=toolbar aria-label="Record actions"><button data-x=0>${I('x')}Close</button><button data-x=1>${I('download')}PDF</button><button class=pri data-x=2>${I('mail')}Publish</button></div>`,'vw srpv');{const fb=o.querySelector('.srfab');if(fb)o.appendChild(fb)}/* keep the bar on screen while the record scrolls */
  o.onclick=e=>{if(o.classList.contains('out'))return;const b=e.target.closest('[data-x]'),x=b?b.dataset.x:(e.target===o?'0':null);if(x===null)return;
