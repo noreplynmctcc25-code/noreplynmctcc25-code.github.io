@@ -1686,7 +1686,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.70',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.71',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
@@ -4096,7 +4096,7 @@ function recHtml(c,t){const T=c.terms[t],m=c.meta,ti=TERMS.findIndex(x=>x[0]==t)
   cols.forEach(x=>{h2+=`<th>${x.lab}</th>`});
   h2+=`${to?'<th>TO</th>':''}<th>%EQ</th><th>GE</th><th class=c4>${(cp.w/100).toFixed(2)}</th>`;
   cols.forEach(x=>{r4+=`<td>${x.mx===''?'':tn(x.mx,dg)}</td>`});
-  const g100=ge(100,c,t);r4+=`${to?`<td class=c1>${tm?tn(tm,1):''}</td>`:''}<td class=c2>${tm?100:''}</td><td class=c3>${tm?fx(g100,1):''}</td><td class=c4>${tm?fx(g100*cp.w/100,1):''}</td>`});
+  const g100=ge(100,c,t);r4+=`${to?`<td class=c1>${tm?tn(tm,cp.id=='cw'?0:1):''}</td>`:''}<td class=c2>${tm?100:''}</td><td class=c3>${tm?fx(g100,1):''}</td><td class=c4>${tm?fx(g100*cp.w/100,1):''}</td>`});
  const gh=mult?[`<span class=termw>${L}</span><br>SCORE`,frac(T.own),`<span class=termw>${TN[pt][2]}</span><br>GRADE`,frac(T.prev),`<span class=termw>${L}</span><br>GRADE`]:[`${L}<br>GRADE`];if(last)gh.push('FNL_FINAL<br>GRADE','REMARKS');
  h1+=gh.map((x,j)=>{const narrow=mult?[0,2,4].includes(j):j===0;return `<th rowspan=2${narrow?' class=termh':''} style="${narrow?'width:.66in;min-width:.62in;max-width:.72in':'min-width:.42in'}">${x}</th>`}).join('');
  /* top row of the grade columns = the grade for a perfect score, like row 17 of the workbook */
@@ -4107,14 +4107,14 @@ function recHtml(c,t){const T=c.terms[t],m=c.meta,ti=TERMS.findIndex(x=>x[0]==t)
  body=spc+c.students.map((u,i)=>{const g=grades(c,u.id,1);let r=`<tr data-pvn="${esc((u.last||'')+(u.first?', '+String(u.first).trim()[0]+'.':''))}"><td class=w>${i+1}</td><td class=nb>${esc(u.last)}</td><td class=w>,</td><td class=nb>${esc(u.first)}</td><td class=nb>${esc(u.mi)}</td>`;
   cs.forEach(({cp,cols,to,wt,dg,eq})=>{const q=cmp(c,t,u.id,cp,1);
    cols.forEach(x=>{r+=`<td>${tn(x.val(u),dg)}</td>`});
-   const any=q.subs.some(Boolean);r+=`${to?`<td class=c1>${any?(wt?tn(sum(cols.map(x=>+x.val(u)||0)),1):tn(sum(q.subs.filter(Boolean).map(z=>z.ct)),1)):''}</td>`:''}<td class=c2>${q.p==null?'':fx(q.p,1)}</td><td class=c3>${fx(q.g,1)}</td><td class=c4>${fx(q.w,1)}</td>`});
+   const any=q.subs.some(Boolean);r+=`${to?`<td class=c1>${any?(wt?tn(sum(cols.map(x=>+x.val(u)||0)),cp.id=='cw'?0:1):tn(sum(q.subs.filter(Boolean).map(z=>z.ct)),cp.id=='cw'?0:1)):''}</td>`:''}<td class=c2>${q.p==null?'':fx(q.p,1)}</td><td class=c3>${fx(q.g,1)}</td><td class=c4>${fx(q.w,1)}</td>`});
   const x=g[t].x;
   if(mult){const pv=g[pt].g;r+=`<td class=gd>${fx(x,1)}</td><td class=gd>${x==null?'':fx(x*T.own/100,1)}</td><td class=gd>${fx(pv,1)}</td><td class=gd>${pv==null?'':fx(pv*T.prev/100,1)}</td><td class=gd>${fx(g[t].g,1)}</td>`}
   else r+=`<td class=gd>${fx(g[t].g,1)}</td>`;
   if(last)r+=`<td class=gd>${fx(fnlG(c,g.final.g),1)}</td><td class=gd>${esc(g.rem)}</td>`;return r+'</tr>'}).join('');
  return `<section class="pg pr-rec"><div class=fitw><div class=rh><img src=logo.png alt=""><div class=rt><b>${esc(m.school||'TALISAY CITY COLLEGE')}</b><div>Poblacion, Talisay City, Cebu</div><small>${esc(m.sy)}</small></div><img src=city-seal.jpg alt=""></div><div class=rd>${esc(m.dept)}</div>
  <table class=ri>${[['Instructor :',m.instructor],['Subject Code:',[m.subj,ysec(m)].filter(Boolean).join(' · ')],['Descriptive Title:',m.title],['Schedule:',m.sched]].map(([a,b])=>`<tr><td>${a}</td><td>${esc(b)}</td></tr>`).join('')}</table><div class=rb>${TN[t][1]}</div>
- <table class=rt2><thead><tr>${h1}</tr><tr>${h2}</tr><tr class=mxr>${r4}</tr></thead><tbody>${body}</tbody></table>
+ <table class=rt2><thead><tr>${h1}</tr><tr>${h2}</tr></thead><tbody><tr class=mxr>${r4}</tr>${body}</tbody></table>
  <div class=sg><div><small>Prepared by:</small><b>${esc(m.instructor)}</b><span>Faculty</span></div><div><small>Checked by:</small><b>${esc(m.head===OLDHEAD?HEAD:(m.head??HEAD))}</b><span>${esc(hpos(m))}</span></div>${m.nd?'':`<div><small>Checked by:</small><b>${esc(m.dean??DEAN)}</b><span>${esc(m.deanpos??DEANPOS)}</span></div>`}<div><small>Noted by:</small><b>${esc(m.pres??PRES)}</b><span>${esc(m.prespos||'College President')}</span></div></div></div></section>`}
 function gsHtml(c,t){const m=c.meta,ti=TERMS.findIndex(x=>x[0]==t),last=t=='final',hp=c.students.some(u=>String(u.prog||'').trim());
  const rows=`<tr><td colspan=${hp?7:6} style="height:.17in"></td></tr>`+c.students.map((u,i)=>{const g=grades(c,u.id,1);return `<tr data-pvn="${esc((u.last||'')+(u.first?', '+String(u.first).trim()[0]+'.':''))}"><td>${i+1}</td><td class=l><b>${esc(nm(u))}</b></td>${TERMS.map(([k],j)=>`<td><b>${j<=ti?fx(k=='final'?fnlG(c,g[k].g):g[k].g,1):''}</b></td>`).join('')}<td>${last?esc(g.rem):''}</td>${hp?`<td>${esc(u.prog||'')}</td>`:''}</tr>`}).join('');
