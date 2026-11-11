@@ -1686,7 +1686,7 @@ const I=n=>`<svg class=i><use href="#i-${n}"/></svg>`;
 const K='eclass.v2',FN='DBME-eclass-records.json',SC='openid email profile https://www.googleapis.com/auth/drive.file';
 const $=(s,e=document)=>e.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4),sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const VER='1.76',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
+const VER='1.77',TERMS=[['prelim','Prelim'],['midterm','Midterm'],['final','Final']],NTERMS=[['general','General'],...TERMS];
 let D=JSON.parse(localStorage[K]||'null')||{classes:[]},cur='',view='home',comp='',tp=0,pop=null,U=localStorage.user||'',fid=localStorage.fid||'',tok=localStorage.tok,exp=+localStorage.exp||0,auth=0;D.dirty=D.dirty||0;D.personalNotes=D.personalNotes||[];D.pnDirty=D.pnDirty||0;
 /* v108: reopen on the same screen (class, tab and column) after a refresh or restart */
 try{const N=JSON.parse(localStorage['eclass.nav']||'null');if(N&&N.cur&&D.classes.some(x=>x.id==N.cur&&!x.d)){cur=N.cur;view=N.view||'students';comp=N.comp||''}else if(N&&!N.cur&&['compare','cal','dept','dsh','tests','notes'].includes(N.view))view=N.view}catch(_){}
@@ -4558,7 +4558,8 @@ function cmpAn(cl,sc){const LBL=cmpLabs(cl),A=cl.map((c,k)=>({...cmpAgg(c),col:P
  if(!K.length)return `<div class=pahd><h2>${I('trend')}${ttl}</h2></div><div class="card empty"><p class=mut>Mark attendance and enter dated scores to see the cumulative charts.</p></div>`;
  const bands=TERMS.map(([t,l])=>{const R=A.map(a=>a.TR[t]).filter(Boolean);if(!R.length)return null;return{a:R.reduce((m,r)=>r.a<m?r.a:m,R[0].a),b:R.reduce((m,r)=>r.b>m?r.b:m,R[0].b),lab:l,col:PBC[t]}}).filter(Boolean);
  const att=A.map(a=>({name:a.lab,col:a.col,vals:(()=>{let p=0,n=0;return K.map(k=>{const w=a.W[k];if(w){p+=w.p;n+=w.n}return n?p/n*100:null})})()})),
-  scr=A.map(a=>({name:a.lab,col:a.col,vals:(()=>{let s=0,n=0;return K.map(k=>{const w=a.W[k];if(w){s+=w.s;n+=w.sn}return n?s/n:null})})()}));
+  scr=A.map(a=>({name:a.lab,col:a.col,vals:(()=>{let s=0,n=0;return K.map(k=>{const w=a.W[k];if(w){s+=w.s;n+=w.sn}return n?s/n:null})})()})),
+  weeklyAttendance=A.map(a=>({name:a.lab,col:a.col,vals:K.map(k=>{const w=a.W[k];return w&&w.n?w.p/w.n*100:null})}));
  const ins=[],ok=A.filter(a=>a.att!=null),okS=A.filter(a=>a.sc!=null);
  if(ok.length>1){const b=ok.reduce((m,a)=>a.att>m.att?a:m),w=ok.reduce((m,a)=>a.att<m.att?a:m);ins.push(`Best overall attendance: <b>${esc(cmpShort(b.c))}</b> (${paF(b.att)}%); lowest: <b>${esc(cmpShort(w.c))}</b> (${paF(w.att)}%), a gap of ${paF(b.att-w.att)} points.`)}
  if(okS.length>1){const b=okS.reduce((m,a)=>a.sc>m.sc?a:m),w=okS.reduce((m,a)=>a.sc<m.sc?a:m);ins.push(`Highest average score: <b>${esc(cmpShort(b.c))}</b> (${paF(b.sc)}%); lowest: <b>${esc(cmpShort(w.c))}</b> (${paF(w.sc)}%).`)}
@@ -4574,7 +4575,8 @@ function cmpAn(cl,sc){const LBL=cmpLabs(cl),A=cl.map((c,k)=>({...cmpAgg(c),col:P
  const ci=t=>t?`<div class=cmpin>${I('info')}<span>${t}</span></div>`:'',B=t=>`<b>${esc(t)}</b>`,lastV=s=>{for(let i=s.vals.length-1;i>=0;i--)if(s.vals[i]!=null)return s.vals[i];return null},firstV=s=>s.vals.find(v=>v!=null),one=A.length==1;
  const inCum=(S,what)=>{const L2=S.map((s,k)=>({s,a:A[k],l:lastV(s),f:firstV(s)})).filter(x=>x.l!=null);if(!L2.length)return'';
   if(one){const x=L2[0],d=x.l-x.f;return `${what} is at ${B(paF(x.l)+'%')} so far${Math.abs(d)>=1?`, ${d>0?'up':'down'} ${paF(Math.abs(d))} points since the first week`:', steady since the first week'}.`}
-  return `${B(hi.a.lab)} leads with ${paF(hi.l)}%, ${paF(hi.l-lo.l)} points ahead of ${B(lo.a.lab)}.${Math.abs(mv.d)>=1?` Biggest change since the start: ${B(mv.a.lab)} (${mv.d>0?'+':'−'}${paF(Math.abs(mv.d))} pts).`:' All classes have stayed close to where they started.'}`};
+  const hi=L2.reduce((m,x)=>x.l>m.l?x:m),lo=L2.reduce((m,x)=>x.l<m.l?x:m),mv=L2.map(x=>({...x,d:x.l-x.f})).reduce((m,x)=>!m||Math.abs(x.d)>Math.abs(m.d)?x:m,null);
+  return `${B(hi.a.lab)} leads with ${paF(hi.l)}%, ${paF(hi.l-lo.l)} points ahead of ${B(lo.a.lab)}.${mv&&Math.abs(mv.d)>=1?` Biggest change since the start: ${B(mv.a.lab)} (${mv.d>0?'+':'−'}${paF(Math.abs(mv.d))} pts).`:' All classes have stayed close to where they started.'}`};
  const allP2=A.flatMap(a=>a.pts.map(p=>({...p,a2:a}))),qOf=p=>p.a>=75?(p.s>=60?0:2):(p.s>=60?1:3),QN=['attending and scoring well','scoring despite absences','attending but struggling','low on both'];
  const inQuad=(()=>{if(allP2.length<3)return'';const c=[0,0,0,0];allP2.forEach(p=>c[qOf(p)]++);const top=c.indexOf(Math.max(...c)),n=allP2.length;let t=`Most students are ${B(QN[top])} (${Math.round(c[top]/n*100)}%).`;
   if(c[2])t+=` ${c[2]} ${c[2]==1?'attends':'attend'} regularly but still ${c[2]==1?'scores':'score'} below 60%, which points to learning gaps rather than absences.`;if(c[1])t+=` ${c[1]} ${c[1]==1?'scores':'score'} well despite missing classes.`;return t})();
@@ -4583,8 +4585,8 @@ function cmpAn(cl,sc){const LBL=cmpLabs(cl),A=cl.map((c,k)=>({...cmpAgg(c),col:P
  const inSlope=(()=>{const per=TERMS.filter(([t])=>A.some(a=>a.TS[t]&&a.TS[t].n));if(per.length<2)return'';const R=A.map(a=>{const v=per.map(([t])=>a.TS[t]&&a.TS[t].n?a.TS[t].s/a.TS[t].n:null).filter(x=>x!=null);return v.length>1?{a,d:v[v.length-1]-v[0]}:null}).filter(Boolean);if(!R.length)return'';
   const up=R.filter(x=>x.d>=1),dn=R.filter(x=>x.d<=-1),b=R.reduce((m,x)=>x.d>m.d?x:m);if(one)return `Average ${R[0].d>=0?'rose':'fell'} ${paF(Math.abs(R[0].d))} points from ${per[0][1]} to ${per[per.length-1][1]}.`;
   return `${up.length} of ${R.length} classes improved from ${per[0][1]} to ${per[per.length-1][1]}${b.d>0?`; ${B(b.a.lab)} gained the most (+${paF(b.d)} pts)`:''}.${dn.length?` ${dn.map(x=>B(x.a.lab)).join(', ')} slipped.`:''}`})();
- const inWk=(()=>{const avgW=K.map((k,i)=>{const v=wk.map(s=>s.vals[i]).filter(x=>x!=null);return v.length?avg(v):null}),ok=avgW.map((v,i)=>[v,i]).filter(z=>z[0]!=null);if(ok.length<2)return'';const lo=ok.reduce((m,z)=>z[0]<m[0]?z:m),la=ok[ok.length-1],pr=ok[ok.length-2],d=la[0]-pr[0];
-  let t=`Lowest week overall: ${B(paWl(K[lo[1]]))} (${paF(lo[0])}% average).`;const dips=wk.map((s,k)=>{const v=s.vals.filter(x=>x!=null);return v.length?{a:A[k],m:Math.min(...v)}:null}).filter(Boolean);if(!one&&dips.length){const dp=dips.reduce((m,x)=>x.m<m.m?x:m);t+=` Deepest single dip: ${B(dp.a.lab)} at ${paF(dp.m)}%.`}
+ const inWk=(()=>{const avgW=K.map((k,i)=>{const v=weeklyAttendance.map(s=>s.vals[i]).filter(x=>x!=null);return v.length?avg(v):null}),ok=avgW.map((v,i)=>[v,i]).filter(z=>z[0]!=null);if(ok.length<2)return'';const lo=ok.reduce((m,z)=>z[0]<m[0]?z:m),la=ok[ok.length-1],pr=ok[ok.length-2],d=la[0]-pr[0];
+  let t=`Lowest week overall: ${B(paWl(K[lo[1]]))} (${paF(lo[0])}% average).`;const dips=weeklyAttendance.map((s,k)=>{const v=s.vals.filter(x=>x!=null);return v.length?{a:A[k],m:Math.min(...v)}:null}).filter(Boolean);if(!one&&dips.length){const dp=dips.reduce((m,x)=>x.m<m.m?x:m);t+=` Deepest single dip: ${B(dp.a.lab)} at ${paF(dp.m)}%.`}
   if(Math.abs(d)>=2)t+=` The latest week is ${d>0?'up':'down'} ${paF(Math.abs(d))} points from the week before.`;return t})();
  const inBox=(()=>{const R=box.filter(b=>b.q1!=null&&b.q3!=null).map(b=>({...b,iqr:b.q3-b.q1}));if(!R.length)return'';if(one)return `The middle half of students averages between ${paF(R[0].q1)}% and ${paF(R[0].q3)}% (a ${paF(R[0].iqr)}-point spread).`;
   const w=R.reduce((m,x)=>x.iqr>m.iqr?x:m),n=R.reduce((m,x)=>x.iqr<m.iqr?x:m);return `${B(w.name)} is the most uneven (middle half spans ${paF(w.iqr)} pts), so mixed-level support may help there. ${B(n.name)} is the most consistent (${paF(n.iqr)} pts).`})();
@@ -4602,7 +4604,7 @@ function cmpAn(cl,sc){const LBL=cmpLabs(cl),A=cl.map((c,k)=>({...cmpAgg(c),col:P
  <div class="card pa"><h3>${I('users')}Student quadrant</h3><p class=mut>Every student placed by attendance and average score, coloured by class. The four corners show where students stand.</p>${cmpQuad(A,75,60)}${ci(inQuad)}</div>
  <div class="card pa"><h3>${I('layers')}Quadrant mix per class</h3><p class=mut>Share of each class's students in each quadrant.</p>${cmpQbar(A,75,60)}${ci(inQbar)}</div>
  <div class="card pa"><h3>${I('flag')}Average score by grading period</h3><p class=mut>How each class moved from one period to the next.</p>${cmpSlope(A)}${ci(inSlope)}</div>
- <div class="card pa"><h3>${I('cal')}Week-on-week attendance</h3><p class=mut>Attendance each week (not cumulative), to spot dips and recoveries.</p>${cmpLine(K,wk,bands,'Weekly attendance by class',A.length==1)}${bl}${ci(inWk)}</div>
+ <div class="card pa"><h3>${I('cal')}Week-on-week attendance</h3><p class=mut>Attendance each week (not cumulative), to spot dips and recoveries.</p>${cmpLine(K,weeklyAttendance,bands,'Weekly attendance by class',A.length==1)}${bl}${ci(inWk)}</div>
  <div class="card pa"><h3>${I('sliders')}Spread of student averages</h3><p class=mut>How far apart students are within each class.</p>${paRange(box)}${ci(inBox)}</div>
  <div class="card pa"><h3>${I('users')}Attendance and scores by class</h3><p class=mut>Where each class sits overall.</p>${cmpBub(A)}${ci(inBub)}</div>
  <div class="card pa wide"><h3>${I('chart')}Overall figures</h3><p class=mut>Start to latest, per class.</p>${bars}${ci(inBars)}</div>
